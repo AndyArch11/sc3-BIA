@@ -49,7 +49,7 @@ To get started with this project, follow these steps:
 ### `git clone https://github.com/AndyArch11/sc3-BIA.git`
 
 change to the project directory
-### `npm install`
+### `cd sc3-bia`
 
 ### Install dependencies
 
