@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 
-const VERSION = "v0.1.0"; // Update as needed
+const VERSION = "v0.1.1"; // Update as needed
 
 // SC3.com.au theme colours
 const SC3_PRIMARY = "#003366";      // Deep blue
@@ -89,6 +89,7 @@ const BIAForm = () => {
   const [entries, setEntries] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
+  const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
   const [fieldsOpen, setFieldsOpen] = useState(true);
   const [criticalityDefaults, setCriticalityDefaults] = useState({
     1: { mtpd: "168", rto: "72", rpo: "48", sla: "90%" },
@@ -97,6 +98,32 @@ const BIAForm = () => {
     4: { mtpd: "48", rto: "12", rpo: "6", sla: "99.9%" },
     5: { mtpd: "24", rto: "4", rpo: "1", sla: "99.95%" }
   });
+
+  // Helper function to format impact score display
+  const formatImpactScore = (score) => {
+    if (!score) return '';
+    const impactLabels = {
+      '1': 'Negligible Impact',
+      '2': 'Low Impact',
+      '3': 'Moderate Impact',
+      '4': 'High Impact',
+      '5': 'Critical Impact'
+    };
+    return `${score} (${impactLabels[score] || 'Unknown'})`;
+  };
+
+  // Helper function to format criticality rating display
+  const formatCriticalityRating = (rating) => {
+    if (!rating) return '';
+    const criticalityLabels = {
+      '1': 'None',
+      '2': 'Bronze',
+      '3': 'Silver',
+      '4': 'Gold',
+      '5': 'Platinum'
+    };
+    return `${rating} (${criticalityLabels[rating] || 'Unknown'})`;
+  };
 
   // Helper to calculate process criticality fields
   const calculateCriticalityFields = (f) => {
@@ -386,15 +413,32 @@ const BIAForm = () => {
     XLSX.utils.book_append_sheet(wb, wsGuidance, "BIA Guidance");
     XLSX.utils.book_append_sheet(wb, wsEntries, "BIA Entries");
 
+    // Generate filename with current date and time
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const filename = `bia-entries-${timestamp}.xlsx`;
+
     // Export with cell styles (requires xlsx-style or SheetJS Pro)
-    XLSX.writeFile(wb, "bia-entries.xlsx", { cellStyles: true });
+    XLSX.writeFile(wb, filename, { cellStyles: true });
   };
 
   const handleRowClick = (idx) => {
-    setForm(entries[idx]);
-    setEditIndex(idx);
-    setSubmitted(false);
-    setFieldsOpen(true); // Expand the BIA Form Fields when a row is clicked
+    // If clicking on the row that's already being edited, save the changes
+    if (editIndex === idx) {
+      const updatedEntries = entries.map((entry, entryIdx) =>
+        entryIdx === editIndex ? form : entry
+      );
+      setEntries(updatedEntries);
+      setEditIndex(null);
+      setSubmitted(true);
+      setFieldsOpen(false); // Collapse form fields after save
+    } else {
+      // If clicking on a different row, load it for editing
+      setForm(entries[idx]);
+      setEditIndex(idx);
+      setSubmitted(false);
+      setFieldsOpen(true); // Expand the BIA Form Fields when a row is clicked
+    }
   };
 
   // Move row up handler
@@ -475,7 +519,7 @@ const BIAForm = () => {
                       style={{ color: SC3_SECONDARY }}
                     >
                       ISO/TS 22301</a>
-                    </em> Security and Resilience — Business Continuity Management Systems — Requirements</li>
+                    </em>&nbsp;Security and Resilience — Business Continuity Management Systems — Requirements</li>
                   <li><em>
                     <a 
                       href="https://www.iso.org/standard/75107.html" 
@@ -484,7 +528,7 @@ const BIAForm = () => {
                       style={{ color: SC3_SECONDARY }}
                     >
                       ISO/TS 22313</a>
-                    </em> Security and Resilience — Business Continuity Management Systems — Guidance on the use of ISO 22301</li>
+                    </em>&nbsp;Security and Resilience — Business Continuity Management Systems — Guidance on the use of ISO 22301</li>
                   <li><em>
                     <a 
                       href="https://www.iso.org/standard/79000.html" 
@@ -493,13 +537,9 @@ const BIAForm = () => {
                       style={{ color: SC3_SECONDARY }}
                     >
                       ISO/TS 22317</a>
-                    </em> Security and Resilience — Business Continuity Management Systems — Guidelines for Business Impact Analysis</li>
+                    </em>&nbsp;Security and Resilience — Business Continuity Management Systems — Guidelines for Business Impact Analysis</li>
                 </ul>
-              <p>
-                <a href="https://cdn.standards.iteh.ai/samples/79000/1c0f02d98ec647a8b1661e6c949a4bc2/ISO-TS-22317-2021.pdf" target="_blank" rel="noopener noreferrer" style={{ color: SC3_SECONDARY }}>
-                  ISO-TS-22317-2021.pdf
-                </a>
-              </p>
+              {/* Primer on BIAs: https://cdn.standards.iteh.ai/samples/79000/1c0f02d98ec647a8b1661e6c949a4bc2/ISO-TS-22317-2021.pdf */}
               <p>Before commencing the BIA process:</p>
               <ul>
                 <li>Identify the context, scope and objectives of the BIA.</li>
@@ -519,9 +559,9 @@ const BIAForm = () => {
                 <li>Identify and document the potential impacts of disruptions to the business processes.</li>
                 <li>Assess the impact against the most important period of activity</li>
                 <li>Consider both quantitative and qualitative factors in the assessment.</li>
-                <li>Engage stakeholders and subject matter experts to validate the assessment.</li>
               </ul>
-              <p><b>Impact Score:</b></p>
+              <p><b>Impact Assessment:</b></p>
+              <p>Assess the potential impact of disruptions on business processes using the following scale:</p>
               <ul>
                 <li>1: <b>Negligible</b> - no significant impact</li>
                 <li>2: <b>Low</b> - may cause minor disruptions</li>
@@ -529,10 +569,12 @@ const BIAForm = () => {
                 <li>4: <b>High</b> - highly probable to have a significant impact</li>
                 <li>5: <b>Critical</b> - will have a major impact on the organisation</li>
               </ul>
+              <p>The resultant <b>Impact Score</b> can be used to determine the criticality of the business processes and corresponding recovery priorities.</p>
               <p>It is important to note that the BIA is an iterative process and should be revisited regularly to ensure it remains aligned with the business objectives and the changing environment. 
                 These requirements feed into the overall risk assessment process and the Business Continuity Planning (BCP) process.</p>
                             
               {/* Criticality Defaults Settings */}
+              <p><b>Process Criticality:</b></p>
               <div style={{ 
                 margin: "2em 0", 
                 padding: "1em", 
@@ -540,7 +582,7 @@ const BIAForm = () => {
                 border: "2px solid #7b1fa2", // Deep purple border
                 borderRadius: SC3_BORDER_RADIUS 
               }}>
-                <h4 style={{ color: "#7b1fa2", marginTop: 0 }}>Set Default MTPD, RTO, RPO, and SLA for Each Criticality Level</h4>
+                <h4 style={{ color: "#7b1fa2", marginTop: 0 }}>Set Default SLA, MTPD, RTO, and RPO for Each Criticality Level</h4>
                 <table style={{ width: "100%", marginBottom: "1em" }}>
                   <thead>
                     <tr>
@@ -643,11 +685,132 @@ const BIAForm = () => {
                   Reset to Initial Defaults
                 </button>
               </div>
-              <p>N.B. These Non-Functional Requirements (NFRs) are naive blunt instruments and do not usually account for the scenarios that they are meant to address and those that they don't address, 
-                whether they are applicable equally or not for nodal scoped events, locale scoped events, or regional scoped events, or for outages vs data corruption, etc.</p>
-              <p>RTOs and RPOs are business objectives. Recovery Time Actuals (RTAs) and Recovery Point Actuals (RPAs) are the actual metrics that are measured and reported against these objectives which may be significantly less than or greater than the stated objectives. 
+              <p>Service Level Agreements (SLAs) are formal agreements that define the expected level of service between a service provider and a consumer or customer. 
+                They typically include Service Level Objectives (SLOs) covering metrics such as availability, throughput, performance, quality, and response times etc. 
+                Here the SLA is really just the SLO for the availability objectives of the process. The availability downtime objectives should be defined over a specific time period, 
+                such as daily or monthly etc, but they seldom include the relevant time increment that they are applicable to. The following is an example for an availability downtime SLO over different time periods, 
+                with each increase in <i>nines</i> being increasingly more expensive and challenging to achieve:</p>
+              <table style={{ 
+                width: "100%", 
+                borderCollapse: "collapse", 
+                margin: "1rem 0",
+                border: "1px solid #ccc"
+              }}>
+                <thead>
+                  <tr>
+                    <th style={{ 
+                      border: "1px solid #ccc", 
+                      padding: "0.5rem", 
+                      backgroundColor: "#f5f5f5",
+                      textAlign: "left"
+                    }}>
+                      SLA Percentage
+                    </th>
+                    <th style={{ 
+                      border: "1px solid #ccc", 
+                      padding: "0.5rem", 
+                      backgroundColor: "#f5f5f5",
+                      textAlign: "left"
+                    }}>
+                      Common Name
+                    </th>
+                    <th style={{ 
+                      border: "1px solid #ccc", 
+                      padding: "0.5rem", 
+                      backgroundColor: "#f5f5f5",
+                      textAlign: "left"
+                    }}>
+                      Downtime Per Day
+                    </th>
+                    <th style={{ 
+                      border: "1px solid #ccc", 
+                      padding: "0.5rem", 
+                      backgroundColor: "#f5f5f5",
+                      textAlign: "left"
+                    }}>
+                      Downtime Per Week
+                    </th>
+                    <th style={{ 
+                      border: "1px solid #ccc", 
+                      padding: "0.5rem", 
+                      backgroundColor: "#f5f5f5",
+                      textAlign: "left"
+                    }}>
+                      Downtime Per Month
+                    </th>
+                    <th style={{ 
+                      border: "1px solid #ccc", 
+                      padding: "0.5rem", 
+                      backgroundColor: "#f5f5f5",
+                      textAlign: "left"
+                    }}>
+                      Downtime Per Year
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>90%</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
+                      <i>"one nine"</i>
+                    </td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>2.4 hours</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>16.8 hours</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>73 hours</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>36.5 days</td>
+                  </tr>
+                  <tr>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>95%</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
+                      <i>"one nine five"</i>
+                    </td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>1.2 hours</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>8.4 hours</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>36.5 hours</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>18.3 days</td>
+                  </tr>
+                  <tr>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>99%</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
+                      <i>"two nines"</i>
+                    </td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>14.4 minutes</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>1.68 hours</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>7.3 hours</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>3.65 days</td>
+                  </tr>
+                  <tr>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>99.9%</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
+                      <i>"three nines"</i>
+                    </td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>1.44 minutes</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>10.08 minutes</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>43.8 minutes</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>8.77 hours</td>
+                  </tr>
+                  <tr>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>99.95%</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>
+                      <i>"three nines five"</i>
+                    </td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>43.2 seconds</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>5.04 minutes</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>21.92 minutes</td>
+                    <td style={{ border: "1px solid #ccc", padding: "0.5rem" }}>4.38 hours</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>Maximum Tolerable Period of Disruption (MTPD) is the maximum amount of time that a business process can be disrupted before it causes irreparable harm to the organization. It is a critical metric for business continuity planning.</p>
+              <p>Recovery Time Objectives (RTOs) and Recovery Point Objectives (RPOs) are business objectives. Recovery Time Actuals (RTAs) and Recovery Point Actuals (RPAs) are the actual metrics that are measured and reported against these objectives which may be significantly less than or greater than the stated objectives. 
                 RTAs and RPAs are often mistakenly conflated with RTOs and RPOs, but they serve different purposes in the BCP process.</p>
+              <p>N.B. These Non-Functional Requirements (NFRs) are naive blunt instruments and do not usually account for the scenarios that they are meant to address and those that they don't address, 
+                whether they are applicable equally or not for nodal scoped events, locale scoped events, or regional scoped events, or for outages vs data corruption events, etc, and they are usually incorrectly defined.</p>
               <p>It is important to regularly review and update the NFRs to ensure that they remain relevant and effective in addressing the evolving business landscape.</p>
+              
+              <p><b>Dependencies and Obligations:</b></p>
+              <p>Identify and document the dependencies and obligations related to the business processes. These may contribute towards planning and executing effective business continuity strategies and the recovery from any process disruptions.</p>
+
               <p><b>Disclaimer:</b> The information provided here is for general informational purposes only and will require adaptation for specific businesses and maturity capabilities and is not intended as legal advice. 
                 Please consult with a qualified legal professional for specific legal advice tailored to your situation.</p>
             </div>
@@ -685,7 +848,7 @@ const BIAForm = () => {
                       <table style={{ width: "100%" }}>
                         <tbody>
                           <tr title="A unique identifier for this business process (e.g. FIN-001, HR-002)">
-                            <td><label>Business Process ID:<span style={{color: "red"}}>*</span></label></td>
+                            <td style={{ width: "25%" }}><label>Business Process ID:<span style={{color: "#d32f2f"}}>*</span></label></td>
                             <td>
                               <input
                                 type="text"
@@ -693,92 +856,166 @@ const BIAForm = () => {
                                 value={form.processId}
                                 onChange={handleChange}
                                 required
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem"
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="The name of the business process (e.g. Payroll Processing)"> 
-                            <td><label>Business Process Name:<span style={{color: "red"}}>*</span></label></td>                            
+                            <td style={{ width: "25%" }}><label>Business Process Name:<span style={{color: "#d32f2f"}}>*</span></label></td>                            
                             <td>
                               <input
                                 type="text"
                                 name="processName"
                                 value={form.processName}
                                 onChange={handleChange}
-                                required                                
+                                required  
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem"
+                                }}                  
                               />
                             </td>
                           </tr>
                           <tr title="The business unit or department responsible for this process">
-                            <td><label>Business Unit:</label></td>
+                            <td style={{ width: "25%" }}><label>Business Unit:</label></td>
                             <td>
                               <input
                                 type="text"
                                 name="businessUnit"
                                 value={form.businessUnit}
-                                onChange={handleChange}                                
+                                onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem"
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="The person accountable for this process">
-                            <td><label>Process Owner:</label></td>
+                            <td style={{ width: "25%" }}><label>Process Owner:</label></td>
                             <td>
                               <input
                                 type="text"
                                 name="owner"
                                 value={form.owner}
-                                onChange={handleChange}                                
+                                onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem"
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="Briefly describe the purpose and scope of this process">
-                            <td><label>Description:</label></td>
+                            <td style={{ width: "25%" }}><label>Description:</label></td>
                             <td>
                               <textarea
                                 name="description"
                                 value={form.description}
-                                onChange={handleChange}                                
+                                onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="List scenarios or events that are considered in-scope for this BIA (e.g. system outage, data loss)">
-                            <td><label>In Scope Scenarios:</label></td>
+                            <td style={{ width: "25%" }}><label>In Scope Scenarios:</label></td>
                             <td>
                               <textarea
                                 name="inScopeScenarios"
                                 value={form.inScopeScenarios}
-                                onChange={handleChange}                                
+                                onChange={handleChange}  
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}                              
                               />
                             </td>
                           </tr>
                           <tr title="List scenarios or events that are not considered in-scope for this BIA">
-                            <td><label>Out of Scope Scenarios:</label></td>
+                            <td style={{ width: "25%" }}><label>Out of Scope Scenarios:</label></td>
                             <td>
                               <textarea
                                 name="outOfScopeScenarios"
                                 value={form.outOfScopeScenarios}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="Name of the person completing this form">
-                            <td><label>Created By:</label></td>
+                            <td style={{ width: "25%" }}><label>Created By:</label></td>
                             <td>
                               <input
                                 type="text"
                                 name="createdBy"
                                 value={form.createdBy}
-                                onChange={handleChange}                                
+                                onChange={handleChange}  
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem"
+                                }}                              
                               />
                             </td>
                           </tr>
                           <tr title="Date this entry was created">
-                            <td><label>Date Created:</label></td>
+                            <td style={{ width: "25%" }}><label>Date Created:</label></td>
                             <td>
                               <input
                                 type="date"
                                 name="dateCreated"
                                 value={form.dateCreated}
-                                onChange={handleChange}                                
+                                onChange={handleChange}   
+                                style={{
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                }}                        
                               />
                             </td>
                           </tr>
@@ -807,14 +1044,21 @@ const BIAForm = () => {
                       <table style={{ width: "100%" }}>
                         <tbody>
                           <tr title="The overall impact for this process">
-                            <td><label>Impact of Disruption:</label></td>
+                            <td style={{ width: "40%" }}><label>Impact of Disruption:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                               <select
                                 name="impactScore"
                                 value={form.impactScore}
                                 onChange={handleChange}
-                                style={{ marginRight: "0.5rem" }}
+                                style={{
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  marginRight: "0.5rem"
+                                }}
                               >
                                 <option value="1">1 (Neglible Impact)</option>
                                 <option value="2">2 (Low Impact)</option>
@@ -826,19 +1070,35 @@ const BIAForm = () => {
                                 name="impact"
                                 value={form.impact}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                               </div>  
                             </td>
                           </tr>
                           <tr title="The financial impact of disruption to this process, which may also be a factor of the duration of the disruption">
-                            <td><label>Financial Impact:</label></td>
+                            <td style={{ width: "40%" }}><label>Financial Impact:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                                 <select
                                   name="financialImpactScore"
                                   value={form.financialImpactScore}
                                   onChange={handleChange}
-                                  style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                                 >
                                   <option value="1">1 (Neglible Impact)</option>
                                   <option value="2">2 (Low Impact)</option>
@@ -850,7 +1110,14 @@ const BIAForm = () => {
                                   name="financialImpactCurrency"
                                   value={form.financialImpactCurrency}
                                   onChange={handleChange}
-                                  style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                                 >
                                   <option value="dollar">$ (dollar)</option>
                                   <option value="euro">€ (euro)</option>
@@ -872,20 +1139,35 @@ const BIAForm = () => {
                                   min="0"
                                   step="any"
                                   placeholder="Amount"
-                                  style={{ flex: 1 }}
+                                  style={{
+                                    width: "100%",
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    resize: "vertical",
+                                  }}
                                 />
                               </div>
                             </td>
                           </tr>
                           <tr title="The operational impact of disruption to this process, which may also be a factor of the duration of the disruption">
-                            <td><label>Operational Impact:</label></td>
+                            <td style={{ width: "40%" }}><label>Operational Impact:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                               <select
                                 name="operationalImpactScore"
                                 value={form.operationalImpactScore}
                                 onChange={handleChange}
-                                style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                               >
                                 <option value="1">1 (Neglible Impact)</option>
                                 <option value="2">2 (Low Impact)</option>
@@ -897,19 +1179,35 @@ const BIAForm = () => {
                                 name="operationalImpact"
                                 value={form.operationalImpact}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                               </div>
                             </td>
                           </tr>
                           <tr title="The impact on employee health and safety due to disruption of this process">
-                            <td><label>Occupational Health & Safety Impact:</label></td>
+                            <td style={{ width: "40%" }}><label>Occupational Health & Safety Impact:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                                 <select
                                   name="ohsImpactScore"
                                   value={form.ohsImpactScore}
                                   onChange={handleChange}
-                                  style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                                 >
                                   <option value="1">1 (Negligible Impact)</option>
                                   <option value="2">2 (Low Impact)</option>
@@ -921,19 +1219,35 @@ const BIAForm = () => {
                                   name="ohsImpact"
                                   value={form.ohsImpact}
                                   onChange={handleChange}
+                                  style={{
+                                    width: "100%",
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    resize: "vertical",
+                                  }}
                                 />
                               </div>
                             </td>
                           </tr>
                           <tr title="The impact on staff due to disruption of this process">
-                            <td><label>Number of Staff Impacted:</label></td>
+                            <td style={{ width: "40%" }}><label>Number of Staff Impacted:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                                 <select
                                   name="staffImpactScore"
                                   value={form.staffImpactScore}
                                   onChange={handleChange}
-                                  style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                                 >
                                   <option value="1">1 (Negligible Impact)</option>
                                   <option value="2">2 (Low Impact)</option>
@@ -948,19 +1262,34 @@ const BIAForm = () => {
                                   onChange={handleChange}
                                   min="0"
                                   placeholder="Number"
+                                  style={{
+                                    flex: 1,
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                  }}
                               />
                               </div>
                             </td>
                           </tr>
                           <tr title="The impact on sites due to disruption of this process">
-                            <td><label>Number of Sites Impacted:</label></td>
+                            <td style={{ width: "40%" }}><label>Number of Sites Impacted:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                                 <select
                                   name="sitesImpactScore"
                                   value={form.sitesImpactScore}
                                   onChange={handleChange}
-                                  style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                                 >
                                   <option value="1">1 (Negligible Impact)</option>
                                   <option value="2">2 (Low Impact)</option>
@@ -975,19 +1304,34 @@ const BIAForm = () => {
                                   onChange={handleChange}
                                   min="0"
                                   placeholder="Number"
+                                  style={{
+                                    flex: 1,
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                  }}
                               />
                               </div>
                             </td>
                           </tr>
                           <tr title="The impact on customers and their loyalty to the brand due to disruption of this process">
-                            <td><label>Reputational Impact:</label></td>
+                            <td style={{ width: "40%" }}><label>Reputational Impact:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                                 <select
                                   name="reputationalImpactScore"
                                   value={form.reputationalImpactScore}
                                   onChange={handleChange}
-                                  style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                                 >
                                   <option value="1">1 (Negligible Impact)</option>
                                   <option value="2">2 (Low Impact)</option>
@@ -999,19 +1343,35 @@ const BIAForm = () => {
                                 name="reputationalImpact"
                                 value={form.reputationalImpact}
                                 onChange={handleChange}
+                                style={{
+                                  flex: 1,
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                               </div>
                             </td>
                           </tr>
                           <tr title="The impact on statutory and regulatory compliance due to disruption of this process">
-                            <td><label>Statutory / Regulatory Impact:</label></td>
+                            <td style={{ width: "40%" }}><label>Statutory / Regulatory Impact:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                                 <select
                                   name="statutoryImpactScore"
                                   value={form.statutoryImpactScore}
                                   onChange={handleChange}
-                                  style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                                 >
                                   <option value="1">1 (Negligible Impact)</option>
                                   <option value="2">2 (Low Impact)</option>
@@ -1023,19 +1383,35 @@ const BIAForm = () => {
                                   name="statutoryImpact"
                                   value={form.statutoryImpact}
                                   onChange={handleChange}
+                                  style={{
+                                    flex: 1,
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    resize: "vertical",
+                                  }}
                                 />
                               </div>
                             </td>
                           </tr>
                           <tr title="The impact on information security due to disruption of this process">
-                            <td><label>Information Security Impact:</label></td>
+                            <td style={{ width: "40%" }}><label>Information Security Impact:</label></td>
                             <td>
                               <div style={{ display: "flex", alignItems: "center" }}>
                                 <select
                                   name="infosecImpactScore"
                                   value={form.infosecImpactScore}
                                   onChange={handleChange}
-                                  style={{ marginRight: "0.5rem" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem"
+                                  }}
                                 >
                                   <option value="1">1 (Negligible Impact)</option>
                                   <option value="2">2 (Low Impact)</option>
@@ -1047,6 +1423,15 @@ const BIAForm = () => {
                                   name="infosecImpact"
                                   value={form.infosecImpact}
                                   onChange={handleChange}
+                                  style={{
+                                    flex: 1,
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    resize: "vertical",
+                                  }}
                                 />
                               </div>
                             </td>
@@ -1076,13 +1461,21 @@ const BIAForm = () => {
                       <table style={{ width: "100%" }}>
                         <tbody>
                           <tr title="The importance of this process to the organisation">
-                            <td><label>Criticality Rating:</label></td>
+                            <td style={{ width: "40%" }}><label>Criticality Rating:</label></td>
                             <td>
                               <select
                                 name="criticality"
                                 value={form.criticality}
                                 onChange={handleChange}
-                                style={{ color: "#4a148c" }}
+                                  style={{
+                                    boxSizing: "border-box",
+                                    padding: SC3_INPUT_PADDING,
+                                    borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                    border: `1px solid ${SC3_SECONDARY}`,
+                                    fontSize: "1rem",
+                                    marginRight: "0.5rem",
+                                    color: "#4a148c"
+                                  }}
                               >
                                 <option value="1">1 (None)</option>
                                 <option value="2">2 (Bronze)</option>
@@ -1092,8 +1485,8 @@ const BIAForm = () => {
                               </select>
                             </td>
                           </tr>
-                          <tr>
-                            <td><label>SLA (%):</label></td>
+                          <tr title="The service level agreement for this process (actually the Availability Service Level Objective - SLO), defining the percentage of time this process should be available">
+                            <td style={{ width: "40%" }}><label>SLA (%):</label></td>
                             <td>
                               <input
                                 type="text"
@@ -1101,12 +1494,20 @@ const BIAForm = () => {
                                 value={form.sla}
                                 onChange={handleChange}
                                 placeholder="e.g. 99.9%"
-                                style={{ color: "#4a148c" }}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  color: "#4a148c"
+                                }}          
                               />
                             </td>
                           </tr>
                           <tr title="The maximum tolerable period of disruption for this process">
-                            <td><label>MTPD - Maximum Tolerable Period of Disruption (hours):</label></td>
+                            <td style={{ width: "40%" }}><label>MTPD - Maximum Tolerable Period of Disruption (hours):</label></td>
                             <td>
                               <input
                                 type="number"
@@ -1116,12 +1517,20 @@ const BIAForm = () => {
                                 placeholder="Hours"
                                 min="0"
                                 step="0.01"
-                                style={{ color: "#4a148c" }}    // dark purple text for input
+                                style={{
+                                  flex: 1,
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  color: "#4a148c"
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="The recovery time objective for this process">
-                            <td><label>RTO - Recovery Time Objective (hours):</label></td>
+                            <td style={{ width: "40%" }}><label>RTO - Recovery Time Objective (hours):</label></td>
                             <td>
                               <input
                                 type="number"
@@ -1131,12 +1540,20 @@ const BIAForm = () => {
                                 placeholder="Hours"
                                 min="0"
                                 step="0.01"
-                                style={{ color: "#4a148c" }}    // dark purple text for input
+                                style={{
+                                  flex: 1,
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  color: "#4a148c"
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="The actual recovery time achieved for this process">
-                            <td><label>RTA - Recovery Time Actual (hours):</label></td>
+                            <td style={{ width: "40%" }}><label>RTA - Recovery Time Actual (hours):</label></td>
                             <td>
                               <input
                                 type="number"
@@ -1146,12 +1563,20 @@ const BIAForm = () => {
                                 placeholder="Hours"
                                 min="0"
                                 step="0.01"
-                                style={{ color: "#4a148c" }}
+                                style={{
+                                  flex: 1,
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  color: "#4a148c"
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="The recovery point objective for this process">
-                            <td><label>RPO - Recovery Point Objective (hours):</label></td>
+                            <td style={{ width: "40%" }}><label>RPO - Recovery Point Objective (hours):</label></td>
                             <td>
                               <input
                                 type="number"
@@ -1161,12 +1586,20 @@ const BIAForm = () => {
                                 placeholder="Hours"
                                 min="0"
                                 step="0.01"
-                                style={{ color: "#4a148c" }}    //dark purple text for input
+                                style={{
+                                  flex: 1,
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  color: "#4a148c"
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="The actual recovery point achieved for this process">
-                            <td><label>RPA - Recovery Point Actual (hours):</label></td>
+                            <td style={{ width: "40%" }}><label>RPA - Recovery Point Actual (hours):</label></td>
                             <td>
                               <input
                                 type="number"
@@ -1176,7 +1609,15 @@ const BIAForm = () => {
                                 placeholder="Hours"
                                 min="0"
                                 step="0.01"
-                                style={{ color: "#4a148c" }}
+                                style={{
+                                  flex: 1,
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  color: "#4a148c"
+                                }}
                               />
                             </td>
                           </tr>
@@ -1204,72 +1645,135 @@ const BIAForm = () => {
                       <table style={{ width: "100%" }}>
                         <tbody>
                           <tr title="Legal, regulatory, and contractual obligations that this process must comply with">
-                            <td><label>Legal, Regulatory, and Contractual Obligations:</label></td>
+                            <td style={{ width: "40%" }}><label>Legal, Regulatory, and Contractual Obligations:</label></td>
                             <td>
                               <textarea
                                 name="legalObligations"
                                 value={form.legalObligations}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="The resources required to recover this process">
-                            <td><label>Resources Required for Recovery:</label></td>
+                            <td style={{ width: "40%" }}><label>Resources Required for Recovery:</label></td>
                             <td>
                               <textarea
                                 name="resources"
                                 value={form.resources}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="Key dependencies, including suppliers and third parties">
-                            <td><label>Key Dependencies, including Suppliers and Third Parties:</label></td>
+                            <td style={{ width: "40%" }}><label>Key Dependencies, including Suppliers and Third Parties:</label></td>
                             <td>
                               <textarea
                                 name="dependencies"
                                 value={form.dependencies}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="Dependencies on IT Systems and Applications">
-                            <td><label>Dependencies on IT Systems and Applications:</label></td>
+                            <td style={{ width: "40%" }}><label>Dependencies on IT Systems and Applications:</label></td>
                             <td>
                               <textarea
                                 name="itDependencies"
                                 value={form.itDependencies}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="Dependencies on people and skills">
-                            <td><label>Dependencies on people and skills:</label></td>
+                            <td style={{ width: "40%" }}><label>Dependencies on people and skills:</label></td>
                             <td>
                               <textarea
                                 name="peopleDependencies"
                                 value={form.peopleDependencies}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="Dependencies on facilities and infrastructure">
-                            <td><label>Dependencies on facilities and infrastructure:</label></td>
+                            <td style={{ width: "40%" }}><label>Dependencies on facilities and infrastructure:</label></td>
                             <td>
                               <textarea
                                 name="facilitiesDependencies"
                                 value={form.facilitiesDependencies}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
                           <tr title="Dependencies on other business processes">
-                            <td><label>Dependencies on other business processes:</label></td>
+                            <td style={{ width: "40%" }}><label>Dependencies on other business processes:</label></td>
                             <td>
                               <textarea
                                 name="processDependencies"
                                 value={form.processDependencies}
                                 onChange={handleChange}
+                                style={{
+                                  width: "100%",
+                                  boxSizing: "border-box",
+                                  padding: SC3_INPUT_PADDING,
+                                  borderRadius: SC3_INPUT_BORDER_RADIUS,
+                                  border: `1px solid ${SC3_SECONDARY}`,
+                                  fontSize: "1rem",
+                                  resize: "vertical",
+                                }}
                               />
                             </td>
                           </tr>
@@ -1388,50 +1892,50 @@ const BIAForm = () => {
                   </tr>
                   <tr>
                     {/* Column headers */}
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>Process ID</th>
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>Name</th>
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>Business Unit</th>
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>Owner</th>
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>Description</th>
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>In Scope Scenarios</th>
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>Out of Scope Scenarios</th>
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>Created By</th>
-                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff" }}>Date Created</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>Process ID</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>Name</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>Business Unit</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>Owner</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>Description</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>In Scope Scenarios</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>Out of Scope Scenarios</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>Created By</th>
+                    <th style={{ border: `3px solid ${SC3_PRIMARY}`, borderTop: "none", background: "#f5faff", minWidth: "120px" }}>Date Created</th>
 
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Impact Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Impact</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Financial Impact Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Financial Impact</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Operational Impact Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Operational Impact</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>OH&S Impact Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>OH&S Impact</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Staff Impacted Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}># Staff Impacted</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Sites Impacted Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}># Sites Impacted</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Reputational Impact Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Reputational Impact</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Statutory Impact Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Statutory Impact</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Information Security Impact Score</th>
-                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5" }}>Information Security Impact</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>Impact Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}>Impact</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>Financial Impact Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}>Financial Impact</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>Operational Impact Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}>Operational Impact</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>OH&S Impact Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}>OH&S Impact</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>Staff Impacted Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}># Staff Impacted</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>Sites Impacted Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}># Sites Impacted</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>Reputational Impact Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}>Reputational Impact</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>Statutory Impact Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}>Statutory Impact</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "150px" }}>Information Security Impact Score</th>
+                    <th style={{ border: `3px solid ${SC3_GREEN}`, borderTop: "none", background: "#f8fff5", minWidth: "120px" }}>Information Security Impact</th>
 
-                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2" }}>Criticality Rating</th>
-                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2" }}>SLA</th>
-                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2" }}>MTPD</th>
-                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2" }}>RTO</th>
-                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2" }}>RTA</th>
-                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2" }}>RPO</th>
-                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2" }}>RPA</th>
+                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2", minWidth: "100px" }}>Criticality Rating</th>
+                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2", minWidth: "50px" }}>SLA</th>
+                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2", minWidth: "50px" }}>MTPD</th>
+                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2", minWidth: "50px" }}>RTO</th>
+                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2", minWidth: "50px" }}>RTA</th>
+                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2", minWidth: "50px" }}>RPO</th>
+                    <th style={{ border: `3px solid #7b1fa2`, borderTop: "none", background: "#ede7f6", color: "#7b1fa2", minWidth: "50px" }}>RPA</th>
 
-                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea" }}>Legal</th>
-                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea" }}>Resources</th>
-                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea" }}>Key Dependencies</th>
-                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea" }}>IT</th>
-                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea" }}>People</th>
-                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea" }}>Facilities</th>
-                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea" }}>Process</th>
+                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea", minWidth: "120px" }}>Legal</th>
+                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea", minWidth: "120px" }}>Resources</th>
+                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea", minWidth: "120px" }}>Key Dependencies</th>
+                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea", minWidth: "120px" }}>IT</th>
+                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea", minWidth: "120px" }}>People</th>
+                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea", minWidth: "120px" }}>Facilities</th>
+                    <th style={{ border: `3px solid ${SC3_ACCENT}`, borderTop: "none", background: "#fffbea", minWidth: "120px" }}>Process</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1440,68 +1944,74 @@ const BIAForm = () => {
                       key={idx}
                       style={{
                         cursor: "pointer",
-                        outline: editIndex === idx ? `2px solid ${SC3_SECONDARY}` : undefined,
-                        background: editIndex === idx ? SC3_TABLE_ROW_HIGHLIGHT : undefined,
-                        transition: SC3_TABLE_TRANSITION
+                        outline: editIndex === idx ? `3px solid ${SC3_SECONDARY}` : undefined,
+                        background: editIndex === idx ? "#e8f4f8" : (hoveredRowIndex === idx ? "#f0f8ff" : undefined),
+                        transition: "all 0.2s ease",
+                        boxShadow: editIndex === idx ? `0 0 8px ${SC3_SECONDARY}33` : (hoveredRowIndex === idx ? `0 2px 4px rgba(0,0,0,0.1)` : undefined)
                       }}
                       onClick={() => handleRowClick(idx)}
-                      title="Click to edit this entry"
+                      onMouseEnter={() => setHoveredRowIndex(idx)}
+                      onMouseLeave={() => setHoveredRowIndex(null)}
+                      title={editIndex === idx ? 
+                        `Currently editing: ${entry.processId} - ${entry.processName} (click to save changes)` : 
+                        `${entry.processId} - ${entry.processName} (click to edit this entry)`
+                      }
                     >
                       {/* ...existing <td> cells for entry fields... */}
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.processId}</td>
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.processName}</td>
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.businessUnit}</td>
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.owner}</td>
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.description}</td>
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.inScopeScenarios}</td>
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.outOfScopeScenarios}</td>
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.createdBy}</td>
-                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, background: "#f5faff" }}>{entry.dateCreated}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.impactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.impact}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.financialImpactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>
-                        {entry.financialImpactCurrency === "dollar" && "$"}
-                        {entry.financialImpactCurrency === "euro" && "€"}
-                        {entry.financialImpactCurrency === "pound" && "£"}
-                        {entry.financialImpactCurrency === "yen" && "¥"}
-                        {entry.financialImpactCurrency === "rupee" && "₹"}
-                        {entry.financialImpactCurrency === "peso" && "₱"}
-                        {entry.financialImpactCurrency === "won" && "₩"}
-                        {entry.financialImpactCurrency === "lira" && "₺"}
-                        {entry.financialImpactCurrency === "franc" && "₣"}
-                        {entry.financialImpactCurrency === "shekel" && "₪"}
-                        {entry.financialImpactCurrency === "other" && "¤"}
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.processId}</td>
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.processName}</td>
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.businessUnit}</td>
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.owner}</td>
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.description}</td>
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.inScopeScenarios}</td>
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.outOfScopeScenarios}</td>
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.createdBy}</td>
+                      <td style={{ border: `2px solid ${SC3_PRIMARY}`, minWidth: "120px" }}>{entry.dateCreated}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{formatImpactScore(entry.impactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{entry.impact}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{formatImpactScore(entry.financialImpactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>
+                        {entry.financialImpact && entry.financialImpactCurrency === "dollar" && "$"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "euro" && "€"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "pound" && "£"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "yen" && "¥"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "rupee" && "₹"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "peso" && "₱"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "won" && "₩"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "lira" && "₺"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "franc" && "₣"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "shekel" && "₪"}
+                        {entry.financialImpact && entry.financialImpactCurrency === "other" && "¤"}
                         {entry.financialImpact}
                       </td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.operationalImpactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.operationalImpact}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.ohsImpactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.ohsImpact}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.staffImpactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.numberOfStaffImpacted}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.sitesImpactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.numberOfSitesImpacted}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.reputationalImpactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.reputationalImpact}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.statutoryImpactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.statutoryImpact}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.infosecImpactScore}</td>
-                      <td style={{ border: `2px solid ${SC3_GREEN}`, background: "#f8fff5" }}>{entry.infosecImpact}</td>
-                      <td style={{ border: `2px solid #7b1fa2`, background: "#ede7f6"}}>{entry.criticality}</td>
-                      <td style={{ border: `2px solid #7b1fa2`, background: "#ede7f6"}}>{entry.sla}</td>
-                      <td style={{ border: `2px solid #7b1fa2`, background: "#ede7f6"}}>{entry.mtpd}</td>
-                      <td style={{ border: `2px solid #7b1fa2`, background: "#ede7f6" }}>{entry.recoveryTimeObjective}</td>
-                      <td style={{ border: `2px solid #7b1fa2`, background: "#ede7f6" }}>{entry.recoveryTimeActual}</td>
-                      <td style={{ border: `2px solid #7b1fa2`, background: "#ede7f6" }}>{entry.recoveryPointObjective}</td>
-                      <td style={{ border: `2px solid #7b1fa2`, background: "#ede7f6" }}>{entry.recoveryPointActual}</td>
-                      <td style={{ border: `2px solid ${SC3_ACCENT}`, background: "#fffbea" }}>{entry.legalObligations}</td>
-                      <td style={{ border: `2px solid ${SC3_ACCENT}`, background: "#fffbea" }}>{entry.resources}</td>
-                      <td style={{ border: `2px solid ${SC3_ACCENT}`, background: "#fffbea" }}>{entry.dependencies}</td>
-                      <td style={{ border: `2px solid ${SC3_ACCENT}`, background: "#fffbea" }}>{entry.itDependencies}</td>
-                      <td style={{ border: `2px solid ${SC3_ACCENT}`, background: "#fffbea" }}>{entry.peopleDependencies}</td>
-                      <td style={{ border: `2px solid ${SC3_ACCENT}`, background: "#fffbea" }}>{entry.facilitiesDependencies}</td>
-                      <td style={{ border: `2px solid ${SC3_ACCENT}`, background: "#fffbea" }}>{entry.processDependencies}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "150px" }}>{formatImpactScore(entry.operationalImpactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{entry.operationalImpact}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "150px" }}>{formatImpactScore(entry.ohsImpactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{entry.ohsImpact}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "150px" }}>{formatImpactScore(entry.staffImpactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{entry.numberOfStaffImpacted}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "150px" }}>{formatImpactScore(entry.sitesImpactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{entry.numberOfSitesImpacted}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "150px" }}>{formatImpactScore(entry.reputationalImpactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{entry.reputationalImpact}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "150px" }}>{formatImpactScore(entry.statutoryImpactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{entry.statutoryImpact}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "150px" }}>{formatImpactScore(entry.infosecImpactScore)}</td>
+                      <td style={{ border: `2px solid ${SC3_GREEN}`, minWidth: "120px" }}>{entry.infosecImpact}</td>
+                      <td style={{ border: `2px solid #7b1fa2`, minWidth: "100px" }}>{formatCriticalityRating(entry.criticality)}</td>
+                      <td style={{ border: `2px solid #7b1fa2`, minWidth: "60px" }}>{entry.sla}</td>
+                      <td style={{ border: `2px solid #7b1fa2`, minWidth: "60px" }}>{entry.mtpd}</td>
+                      <td style={{ border: `2px solid #7b1fa2`, minWidth: "60px" }}>{entry.recoveryTimeObjective}</td>
+                      <td style={{ border: `2px solid #7b1fa2`, minWidth: "60px" }}>{entry.recoveryTimeActual}</td>
+                      <td style={{ border: `2px solid #7b1fa2`, minWidth: "60px" }}>{entry.recoveryPointObjective}</td>
+                      <td style={{ border: `2px solid #7b1fa2`, minWidth: "60px" }}>{entry.recoveryPointActual}</td>
+                      <td style={{ border: `2px solid ${SC3_ACCENT}`, minWidth: "120px" }}>{entry.legalObligations}</td>
+                      <td style={{ border: `2px solid ${SC3_ACCENT}`, minWidth: "120px" }}>{entry.resources}</td>
+                      <td style={{ border: `2px solid ${SC3_ACCENT}`, minWidth: "120px" }}>{entry.dependencies}</td>
+                      <td style={{ border: `2px solid ${SC3_ACCENT}`, minWidth: "120px" }}>{entry.itDependencies}</td>
+                      <td style={{ border: `2px solid ${SC3_ACCENT}`, minWidth: "120px" }}>{entry.peopleDependencies}</td>
+                      <td style={{ border: `2px solid ${SC3_ACCENT}`, minWidth: "120px" }}>{entry.facilitiesDependencies}</td>
+                      <td style={{ border: `2px solid ${SC3_ACCENT}`, minWidth: "120px" }}>{entry.processDependencies}</td>
                       {/* Move Up/Down buttons at the end */}
                       <td style={{ background: "#fff", border: "none", padding: 0, minWidth: 32, whiteSpace: "nowrap" }}>
                         <button
@@ -1511,7 +2021,7 @@ const BIAForm = () => {
                           style={{
                             background: "none",
                             border: "none",
-                            color: SC3_SECONDARY,
+                            color: idx === 0 ? "#ccc" : SC3_SECONDARY,
                             cursor: idx === 0 ? "not-allowed" : "pointer",
                             fontSize: "1.1em",
                             padding: "0 4px"
@@ -1525,7 +2035,7 @@ const BIAForm = () => {
                           style={{
                             background: "none",
                             border: "none",
-                            color: SC3_SECONDARY,
+                            color: idx === entries.length - 1 ? "#ccc" : SC3_SECONDARY,
                             cursor: idx === entries.length - 1 ? "not-allowed" : "pointer",
                             fontSize: "1.1em",
                             padding: "0 4px"
@@ -1550,6 +2060,7 @@ const BIAForm = () => {
                   ))}
                 </tbody>
               </table>
+              <p></p> {/* Empty paragraph to ensure the table has some space below */}
             </div>
             {/* Button row: Create New Entry and Export to Excel */}
             <div style={{ display: "flex", gap:  12, margin: "1.5em 0 2em 0" }}>

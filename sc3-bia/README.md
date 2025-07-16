@@ -10,7 +10,7 @@ This project provides a Business Impact Assessment (BIA) form in a simple Single
 ## Project Structure
 
 ```
-spa-project
+sc3-bia
 ├── build
 │   ├── static        
 │   │   ├── css  
@@ -56,6 +56,7 @@ change to the project directory
 In the project folder
 
 ### `npm install`
+### `npm install xlsx --save`
 
 ## Available Scripts
 
