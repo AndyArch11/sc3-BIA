@@ -1,0 +1,1363 @@
+/* SC3 BIA Form Styles */
+
+/* SC3.com.au theme colors */
+:root {
+  --sc3-primary: #003366;
+  --sc3-secondary: #0099cc;
+  --sc3-accent: #fbc02d;
+  --sc3-bg: #f4f8fb;
+  --sc3-green: #388e3c;
+  --sc3-table-bg: #fff;
+  --sc3-table-header-bg: #e5eef5;
+  --sc3-purple: #7b1fa2;
+  --sc3-purple-light: #ede7f6;
+  --sc3-yellow-light: #fffbea;
+  --sc3-green-light: #f8fff5;
+  --sc3-blue-light: #f5faff;
+  --sc3-error: #d32f2f;
+  --sc3-gray: #757575;
+  --sc3-delete: #c00;
+  
+  /* Layout constants */
+  --sc3-border-radius: 6px;
+  --sc3-form-padding: 12px;
+  --sc3-section-margin: 16px;
+  --sc3-btn-radius: 4px;
+  --sc3-btn-font-weight: bold;
+  --sc3-btn-font-size: 1em;
+  --sc3-btn-padding: 0.6em 1.5em;
+  --sc3-table-border-radius: 8px;
+  --sc3-table-header-font-size: 1.05em;
+  --sc3-table-header-font-weight: bold;
+  --sc3-input-border-radius: 4px;
+  --sc3-input-padding: 0.4em 0.6em;
+}
+
+/* Main container */
+.bia-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: var(--sc3-bg);
+  border-radius: var(--sc3-table-border-radius);
+  box-shadow: 0 2px 12px rgba(0, 51, 102, 0.13);
+  padding: 24px;
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--sc3-primary);
+}
+
+/* Main heading */
+.bia-main-heading {
+  color: var(--sc3-primary);
+  border-bottom: 3px solid var(--sc3-accent);
+  padding-bottom: 8px;
+  margin: 0 0 1rem 0;
+}
+
+/* Form styles */
+.bia-form-summary {
+  cursor: pointer;
+  font-weight: var(--sc3-btn-font-weight);
+  color: var(--sc3-secondary);
+}
+
+.bia-form-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+/* Fieldset styles for form sections */
+.bia-fieldset {
+  border-radius: var(--sc3-border-radius);
+  padding: var(--sc3-form-padding);
+  margin-bottom: var(--sc3-section-margin);
+}
+
+.bia-fieldset-business {
+  border: 2px solid var(--sc3-primary);
+  background: var(--sc3-blue-light);
+}
+
+.bia-fieldset-impact {
+  border: 2px solid var(--sc3-green);
+  background: var(--sc3-green-light);
+}
+
+.bia-fieldset-criticality {
+  border: 2px solid var(--sc3-purple);
+  background: var(--sc3-purple-light);
+}
+
+.bia-fieldset-dependencies {
+  border: 2px solid var(--sc3-accent);
+  background: var(--sc3-yellow-light);
+}
+
+.bia-legend {
+  font-weight: var(--sc3-btn-font-weight);
+}
+
+.bia-legend-business {
+  color: var(--sc3-primary);
+}
+
+.bia-legend-impact {
+  color: var(--sc3-green);
+}
+
+.bia-legend-criticality {
+  color: var(--sc3-purple);
+}
+
+.bia-legend-dependencies {
+  color: var(--sc3-accent);
+}
+
+/* Form field table */
+.bia-field-table {
+  width: 100%;
+}
+
+.bia-field-cell-label {
+  width: 25%;
+}
+
+.bia-field-cell-label-wide {
+  width: 40%;
+}
+
+/* Input styles */
+.bia-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--sc3-input-padding);
+  border-radius: var(--sc3-input-border-radius);
+  border: 1px solid var(--sc3-secondary);
+  font-size: 1rem;
+}
+
+.bia-input-number {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--sc3-input-padding);
+  border-radius: var(--sc3-input-border-radius);
+  border: 1px solid var(--sc3-secondary);
+  font-size: 1rem;
+}
+
+.bia-input-date {
+  box-sizing: border-box;
+  padding: var(--sc3-input-padding);
+  border-radius: var(--sc3-input-border-radius);
+  border: 1px solid var(--sc3-secondary);
+  font-size: 1rem;
+}
+
+.bia-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--sc3-input-padding);
+  border-radius: var(--sc3-input-border-radius);
+  border: 1px solid var(--sc3-secondary);
+  font-size: 1rem;
+  resize: vertical;
+}
+
+.bia-select {
+  box-sizing: border-box;
+  padding: var(--sc3-input-padding);
+  border-radius: var(--sc3-input-border-radius);
+  border: 1px solid var(--sc3-secondary);
+  font-size: 1rem;
+  margin-right: 0.5rem;
+}
+
+.bia-select-criticality {
+  box-sizing: border-box;
+  padding: var(--sc3-input-padding);
+  border-radius: var(--sc3-input-border-radius);
+  border: 1px solid var(--sc3-secondary);
+  font-size: 1rem;
+  margin-right: 0.5rem;
+  color: var(--sc3-purple);
+  background: #fff;
+}
+
+/* Flex containers */
+.bia-flex-container {
+  display: flex;
+  align-items: center;
+}
+
+.bia-flex-gap {
+  display: flex;
+  gap: 1rem;
+  margin-top: 8px;
+}
+
+/* Input specific to criticality section */
+.bia-input-criticality {
+  flex: 1;
+  box-sizing: border-box;
+  padding: var(--sc3-input-padding);
+  border-radius: var(--sc3-input-border-radius);
+  border: 1px solid var(--sc3-secondary);
+  font-size: 1rem;
+  color: var(--sc3-purple);
+}
+
+/* Checkbox styles */
+.bia-checkbox-container {
+  display: flex;
+  align-items: center;
+  padding: var(--sc3-input-padding);
+}
+
+.bia-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  accent-color: var(--sc3-purple);
+}
+
+.bia-checkbox-label {
+  color: var(--sc3-purple);
+}
+
+/* Objective exceeded warning styles */
+.bia-input-objective-exceeded {
+  border: 2px solid var(--sc3-error) !important;
+  background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+.bia-objective-warning {
+  color: var(--sc3-error);
+  font-size: 0.85em;
+  font-weight: bold;
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 3px;
+  border-left: 3px solid var(--sc3-error);
+}
+
+/* Required field indicator */
+.bia-required {
+  color: var(--sc3-error);
+}
+
+/* Button styles */
+.bia-btn {
+  border: none;
+  border-radius: var(--sc3-btn-radius);
+  padding: var(--sc3-btn-padding);
+  font-weight: var(--sc3-btn-font-weight);
+  font-size: var(--sc3-btn-font-size);
+  cursor: pointer;
+}
+
+.bia-btn-primary {
+  background: var(--sc3-secondary);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 153, 204, 0.13);
+}
+
+.bia-btn-cancel {
+  background: var(--sc3-gray);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(117, 117, 117, 0.13);
+}
+
+.bia-btn-outline-secondary {
+  background: #fff;
+  color: var(--sc3-secondary);
+  border: 2px solid var(--sc3-secondary);
+  box-shadow: 0 2px 6px rgba(0, 153, 204, 0.13);
+}
+
+.bia-btn-outline-primary {
+  background: #fff;
+  color: var(--sc3-primary);
+  border: 2px solid var(--sc3-primary);
+  box-shadow: 0 2px 6px rgba(0, 51, 102, 0.13);
+}
+
+.bia-btn-accent {
+  background: var(--sc3-accent);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 6px rgba(251, 192, 45, 0.13);
+}
+
+/* Table styles */
+.bia-table-container {
+  width: 100vw;
+  max-width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.bia-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0 0.05rem;
+  box-sizing: border-box;
+}
+
+.bia-table {
+  width: 95vw;
+  min-width: 1200px;
+  border-collapse: collapse;
+  background: var(--sc3-table-bg);
+  border-radius: var(--sc3-table-border-radius);
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.bia-table-heading {
+  color: var(--sc3-primary);
+  margin-top: 2rem;
+  margin-left: 0;
+  align-self: flex-start;
+}
+
+/* Table header styles */
+.bia-th-group-business {
+  border: 4px solid var(--sc3-primary);
+  background: var(--sc3-blue-light);
+  color: var(--sc3-primary);
+  font-weight: var(--sc3-table-header-font-weight);
+  font-size: var(--sc3-table-header-font-size);
+}
+
+.bia-th-group-impact {
+  border: 4px solid var(--sc3-green);
+  background: var(--sc3-green-light);
+  color: var(--sc3-green);
+  font-weight: var(--sc3-table-header-font-weight);
+  font-size: var(--sc3-table-header-font-size);
+}
+
+.bia-th-group-criticality {
+  border: 4px solid var(--sc3-purple);
+  background: var(--sc3-purple-light);
+  color: var(--sc3-purple);
+  font-weight: var(--sc3-table-header-font-weight);
+  font-size: var(--sc3-table-header-font-size);
+  text-align: center;
+}
+
+.bia-th-group-dependencies {
+  border: 4px solid var(--sc3-accent);
+  background: var(--sc3-yellow-light);
+  color: #b38b00;
+  font-weight: var(--sc3-table-header-font-weight);
+  font-size: var(--sc3-table-header-font-size);
+}
+
+/* Column headers */
+.bia-th-business {
+  border: 3px solid var(--sc3-primary);
+  border-top: none;
+  background: var(--sc3-blue-light);
+  min-width: 120px;
+}
+
+.bia-th-impact {
+  border: 3px solid var(--sc3-green);
+  border-top: none;
+  background: var(--sc3-green-light);
+  min-width: 120px;
+}
+
+.bia-th-impact-wide {
+  border: 3px solid var(--sc3-green);
+  border-top: none;
+  background: var(--sc3-green-light);
+  min-width: 150px;
+}
+
+.bia-th-criticality {
+  border: 3px solid var(--sc3-purple);
+  border-top: none;
+  background: var(--sc3-purple-light);
+  color: var(--sc3-purple);
+}
+
+.bia-th-criticality-wide {
+  border: 3px solid var(--sc3-purple);
+  border-top: none;
+  background: var(--sc3-purple-light);
+  color: var(--sc3-purple);
+  min-width: 100px;
+}
+
+.bia-th-criticality-narrow {
+  border: 3px solid var(--sc3-purple);
+  border-top: none;
+  background: var(--sc3-purple-light);
+  color: var(--sc3-purple);
+  min-width: 50px;
+}
+
+.bia-th-criticality-medium {
+  border: 3px solid var(--sc3-purple);
+  border-top: none;
+  background: var(--sc3-purple-light);
+  color: var(--sc3-purple);
+  min-width: 80px;
+}
+
+.bia-th-dependencies {
+  border: 3px solid var(--sc3-accent);
+  border-top: none;
+  background: var(--sc3-yellow-light);
+  min-width: 120px;
+}
+
+/* Table data cells */
+.bia-td-business {
+  border: 2px solid var(--sc3-primary);
+  min-width: 120px;
+}
+
+.bia-td-impact {
+  border: 2px solid var(--sc3-green);
+  min-width: 120px;
+}
+
+.bia-td-impact-wide {
+  border: 2px solid var(--sc3-green);
+  min-width: 150px;
+}
+
+.bia-td-criticality {
+  border: 2px solid var(--sc3-purple);
+  min-width: 60px;
+}
+
+.bia-td-criticality-wide {
+  border: 2px solid var(--sc3-purple);
+  min-width: 100px;
+}
+
+.bia-td-criticality-medium {
+  border: 2px solid var(--sc3-purple);
+  min-width: 80px;
+}
+
+.bia-td-dependencies {
+  border: 2px solid var(--sc3-accent);
+  min-width: 120px;
+}
+
+/* Table header styles for specific sections */
+.bia-th-detail {
+  border: 3px solid var(--sc3-primary);
+  border-top: none;
+  background: var(--sc3-blue-light);
+  min-width: 120px;
+}
+
+.bia-th-dependency {
+  border: 3px solid var(--sc3-accent);
+  border-top: none;
+  background: var(--sc3-yellow-light);
+  min-width: 120px;
+}
+
+/* Table cell styles for specific sections */
+.bia-td-detail {
+  border: 2px solid var(--sc3-primary);
+  min-width: 120px;
+}
+
+.bia-td-dependency {
+  border: 2px solid var(--sc3-accent);
+  min-width: 120px;
+}
+
+/* Table row styles */
+.bia-table-row {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bia-table-row-editing {
+  outline: 3px solid var(--sc3-secondary);
+  background: #e8f4f8;
+  box-shadow: 0 0 8px rgba(0, 153, 204, 0.2);
+}
+
+.bia-table-row-hover {
+  background: #f0f8ff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Action buttons in table */
+.bia-table-actions {
+  background: #fff;
+  border: none;
+  padding: 0;
+  min-width: 32px;
+  white-space: nowrap;
+}
+
+.bia-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 0 4px;
+}
+
+.bia-action-btn-up {
+  color: var(--sc3-secondary);
+}
+
+.bia-action-btn-up:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.bia-action-btn-down {
+  color: var(--sc3-secondary);
+}
+
+.bia-action-btn-down:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.bia-action-btn-delete {
+  color: var(--sc3-delete);
+}
+
+/* Button container for table actions */
+.bia-button-container {
+  display: flex;
+  gap: 12px;
+  margin: 1.5em 0 2em 0;
+}
+
+/* Version footer */
+.bia-version {
+  width: 100%;
+  text-align: center;
+  color: #888;
+  font-size: 0.95em;
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+  letter-spacing: 0.03em;
+  user-select: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .bia-container {
+    margin: 1rem;
+    padding: 16px;
+  }
+  
+  .bia-table {
+    width: 98vw;
+    min-width: 800px;
+  }
+  
+  .bia-button-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .bia-btn {
+    width: 100%;
+  }
+}
+
+/* Impact Assessment specific styles */
+.bia-impact-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bia-select-impact {
+  flex-shrink: 0;
+  min-width: 150px;
+}
+
+.bia-textarea-impact {
+  flex: 1;
+  min-height: 60px;
+  resize: vertical;
+}
+
+.bia-input-impact {
+  flex: 1;
+  min-width: 100px;
+}
+
+/* Dependencies specific styles */
+.bia-textarea-dependencies {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Introduction component styles */
+.bia-intro-details {
+  margin-bottom: 1rem;
+}
+
+.bia-intro-summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--sc3-secondary);
+}
+
+.bia-intro-link {
+  color: var(--sc3-secondary);
+}
+
+.bia-intro-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 1rem 0;
+  background: var(--sc3-table-bg);
+  border-radius: var(--sc3-table-border-radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 2px solid var(--sc3-purple);
+}
+
+.bia-intro-table-header {
+  background: #ede7f6;
+  color: var(--sc3-purple);
+}
+
+.bia-intro-table-th {
+  border: 2px solid var(--sc3-purple);
+  padding: 12px;
+  font-weight: bold;
+  font-size: 1.05em;
+  text-align: center;
+}
+
+.bia-intro-table-row {
+  background: #ffffff;
+  transition: background 0.2s;
+}
+
+.bia-intro-table-row:nth-child(even) {
+  background: #f9f7ff;
+}
+
+.bia-intro-table-td-criticality {
+  border: 1px solid var(--sc3-purple);
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--sc3-purple);
+  background: #ede7f6;
+  width: 25%;
+  min-width: 180px;
+  white-space: nowrap;
+}
+
+.bia-intro-table-td {
+  border: 1px solid var(--sc3-purple);
+  padding: 6px;
+}
+
+.bia-intro-input {
+  width: 100%;
+  border: 1px solid var(--sc3-purple);
+  padding: 0.4em 0.6em;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
+  box-sizing: border-box;
+  color: #4a148c;
+}
+
+.bia-intro-select {
+  width: 100%;
+  border: 1px solid var(--sc3-purple);
+  padding: 0.4em 0.6em;
+  border-radius: 4px;
+  font-size: 1rem;
+  text-align: center;
+  box-sizing: border-box;
+  color: #4a148c;
+  background: #fff;
+}
+
+.bia-intro-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--sc3-purple);
+}
+
+.bia-intro-checkbox-cell {
+  text-align: center;
+}
+
+.bia-intro-reset-button {
+  background: var(--sc3-purple);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(123, 31, 162, 0.13);
+}
+
+.bia-intro-reset-button:hover {
+  background: #6a1b9a;
+}
+
+.bia-comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: var(--sc3-table-bg);
+  border-radius: 4px;
+  overflow: hidden;
+  table-layout: fixed; /* Enable fixed layout for column width control */
+}
+
+/* Column width control for SLO vs SLA comparison table */
+.bia-comparison-table th:nth-child(1),
+.bia-comparison-table td:nth-child(1) {
+  width: 20%; /* Aspect column - narrower */
+}
+
+.bia-comparison-table th:nth-child(2),
+.bia-comparison-table td:nth-child(2) {
+  width: 40%; /* SLO column - wider */
+}
+
+.bia-comparison-table th:nth-child(3),
+.bia-comparison-table td:nth-child(3) {
+  width: 40%; /* SLA column - wider */
+}
+
+.bia-comparison-table-header {
+  background: var(--sc3-table-header-bg);
+}
+
+.bia-comparison-table th {
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-weight: bold;
+  background: var(--sc3-table-header-bg);
+}
+
+.bia-comparison-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.bia-comparison-table-bold {
+  font-weight: bold;
+}
+
+.bia-comparison-table-row-alt {
+  background: #f9f9f9;
+}
+
+.bia-downtime-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: var(--sc3-table-bg);
+  border-radius: 4px; /* Smaller radius to prevent cell corner visibility */
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #ccc;
+  table-layout: fixed; /* Enable fixed layout for column width control */
+}
+
+/* Column width control for SLA Percentage downtime table */
+.bia-downtime-table th:nth-child(1),
+.bia-downtime-table td:nth-child(1) {
+  width: 12%; /* SLA Percentage column - narrow */
+}
+
+.bia-downtime-table th:nth-child(2),
+.bia-downtime-table td:nth-child(2) {
+  width: 18%; /* Common Name column - narrow */
+}
+
+.bia-downtime-table th:nth-child(3),
+.bia-downtime-table td:nth-child(3) {
+  width: 17.5%; /* Downtime Per Day column */
+}
+
+.bia-downtime-table th:nth-child(4),
+.bia-downtime-table td:nth-child(4) {
+  width: 17.5%; /* Downtime Per Week column */
+}
+
+.bia-downtime-table th:nth-child(5),
+.bia-downtime-table td:nth-child(5) {
+  width: 17.5%; /* Downtime Per Month column */
+}
+
+.bia-downtime-table th:nth-child(6),
+.bia-downtime-table td:nth-child(6) {
+  width: 17.5%; /* Downtime Per Year column */
+}
+
+.bia-downtime-table th {
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-weight: bold;
+  text-align: center;
+  background: var(--sc3-table-header-bg);
+  box-shadow: none; /* Explicitly remove any inherited shadows */
+}
+
+.bia-downtime-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  box-shadow: none; /* Explicitly remove any inherited shadows */
+}
+
+.bia-downtime-table-bold {
+  font-weight: bold;
+}
+
+.bia-downtime-table-row-alt {
+  background: #f9f9f9;
+}
+
+/* Action button styles */
+.bia-action-cell {
+  background: #fff;
+  border: none;
+  padding: 0;
+  min-width: 32px;
+  white-space: nowrap;
+}
+
+.bia-action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 0 4px;
+  color: var(--sc3-secondary);
+}
+
+.bia-action-button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.bia-action-button-remove {
+  color: #d32f2f;
+}
+
+.bia-action-button-remove:hover:not(:disabled) {
+  color: #b71c1c;
+}
+
+/* Print styles */
+@media print {
+  .bia-container {
+    box-shadow: none;
+    background: white;
+  }
+  
+  .bia-btn {
+    display: none;
+  }
+  
+  .bia-action-btn {
+    display: none;
+  }
+}
+
+/* BIA Report Styles */
+.bia-report-container {
+  margin-top: 2rem;
+  background: var(--sc3-table-bg);
+  border-radius: var(--sc3-table-border-radius);
+  box-shadow: 0 2px 12px rgba(0, 51, 102, 0.13);
+  overflow: hidden;
+}
+
+.bia-report-details {
+  width: 100%;
+}
+
+.bia-report-summary {
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  outline: none;
+  padding: 1.5rem;
+  background: var(--sc3-bg);
+  border-bottom: 3px solid var(--sc3-accent);
+  margin: 0;
+}
+
+.bia-report-summary::-webkit-details-marker {
+  display: none;
+}
+
+.bia-report-summary::marker {
+  display: none;
+}
+
+.bia-report-summary::before {
+  content: "▼";
+  color: var(--sc3-primary);
+  font-weight: bold;
+  width: 1em;
+  display: inline-block;
+  margin-right: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.bia-report-details:not([open]) .bia-report-summary::before {
+  transform: rotate(-90deg);
+}
+
+.bia-report-heading {
+  color: var(--sc3-primary);
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: var(--sc3-btn-font-weight);
+  display: inline;
+}
+
+.bia-report-content {
+  padding: 1.5rem;
+}
+
+.bia-report-section {
+  margin-bottom: 2rem;
+}
+
+.bia-report-section:last-child {
+  margin-bottom: 0;
+}
+
+.bia-report-section-title {
+  color: var(--sc3-primary);
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--sc3-secondary);
+  font-size: 1.1em;
+  font-weight: var(--sc3-btn-font-weight);
+}
+
+.bia-report-section-description {
+  color: var(--sc3-text);
+  font-size: 0.9em;
+  font-style: italic;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: var(--sc3-light);
+  border-radius: var(--sc3-border-radius);
+  border-left: 3px solid var(--sc3-secondary);
+}
+
+/* Executive Summary Grid */
+.bia-report-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bia-report-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--sc3-bg);
+  border-radius: var(--sc3-border-radius);
+  border-left: 4px solid var(--sc3-secondary);
+}
+
+.bia-report-summary-label {
+  font-weight: var(--sc3-btn-font-weight);
+  color: var(--sc3-primary);
+}
+
+.bia-report-summary-value {
+  font-size: 1.2em;
+  font-weight: var(--sc3-btn-font-weight);
+  color: var(--sc3-secondary);
+}
+
+.bia-report-summary-value.bia-report-critical {
+  color: var(--sc3-purple);
+}
+
+.bia-report-summary-value.bia-report-high {
+  color: var(--sc3-accent);
+}
+
+/* RTO Analysis Grid */
+.bia-report-rto-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.bia-report-metric {
+  text-align: center;
+  padding: 1rem;
+  background: var(--sc3-green-light);
+  border-radius: var(--sc3-border-radius);
+  border: 2px solid var(--sc3-green);
+}
+
+.bia-report-metric-label {
+  display: block;
+  color: var(--sc3-green);
+  font-weight: var(--sc3-btn-font-weight);
+  margin-bottom: 0.5rem;
+}
+
+.bia-report-metric-value {
+  display: block;
+  font-size: 1.3em;
+  font-weight: var(--sc3-btn-font-weight);
+  color: var(--sc3-primary);
+}
+
+/* Distribution Charts */
+.bia-report-distribution {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bia-report-distribution-item {
+  display: grid;
+  grid-template-columns: 2fr 1fr 3fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  background: var(--sc3-bg);
+  border-radius: var(--sc3-border-radius);
+}
+
+.bia-report-distribution-label {
+  font-weight: var(--sc3-btn-font-weight);
+  color: var(--sc3-primary);
+}
+
+.bia-report-distribution-value {
+  text-align: center;
+  font-weight: var(--sc3-btn-font-weight);
+  color: var(--sc3-secondary);
+}
+
+.bia-report-distribution-bar {
+  height: 20px;
+  background: #e0e0e0;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bia-report-distribution-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+
+/* Criticality level colors - consistent scheme: 1=Green, 2=Blue, 3=Purple, 4=Yellow/Gold, 5=Red */
+.bia-report-criticality-5 { background: #d32f2f; } /* 5 - Red (Platinum) */
+.bia-report-criticality-4 { background: #fbc02d; } /* 4 - Yellow/Gold (Gold) */
+.bia-report-criticality-3 { background: #7b1fa2; } /* 3 - Purple (Silver) */
+.bia-report-criticality-2 { background: #0099cc; } /* 2 - Blue (Bronze) */
+.bia-report-criticality-1 { background: #388e3c; } /* 1 - Green (None) */
+
+/* Impact level colors - same consistent scheme */
+.bia-report-impact-5 { background: #d32f2f; } /* 5 - Red (Critical) */
+.bia-report-impact-4 { background: #fbc02d; } /* 4 - Yellow/Gold (High) */
+.bia-report-impact-3 { background: #7b1fa2; } /* 3 - Purple (Moderate) */
+.bia-report-impact-2 { background: #0099cc; } /* 2 - Blue (Low) */
+.bia-report-impact-1 { background: #388e3c; } /* 1 - Green (Negligible) */
+
+/* Business Units */
+.bia-report-business-units {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.bia-report-business-unit {
+  padding: 0.5rem 1rem;
+  background: var(--sc3-blue-light);
+  color: var(--sc3-primary);
+  border-radius: var(--sc3-border-radius);
+  border: 1px solid var(--sc3-primary);
+  font-weight: var(--sc3-btn-font-weight);
+}
+
+.bia-report-no-data {
+  color: var(--sc3-gray);
+  font-style: italic;
+}
+
+/* Critical Processes */
+.bia-report-critical-processes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bia-report-critical-process {
+  padding: 1rem;
+  background: var(--sc3-purple-light);
+  border-radius: var(--sc3-border-radius);
+  border-left: 4px solid var(--sc3-purple);
+}
+
+.bia-report-process-name {
+  font-weight: var(--sc3-btn-font-weight);
+  color: var(--sc3-purple);
+  margin-bottom: 0.5rem;
+  font-size: 1.1em;
+}
+
+.bia-report-process-details {
+  display: flex;
+  gap: 1rem;
+  color: var(--sc3-primary);
+  font-size: 0.9em;
+}
+
+.bia-report-process-details span {
+  padding: 0.25rem 0.5rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 3px;
+  font-weight: var(--sc3-btn-font-weight);
+}
+
+/* Recommendations */
+.bia-report-recommendations {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bia-report-recommendation {
+  padding: 1rem;
+  background: var(--sc3-yellow-light);
+  border-radius: var(--sc3-border-radius);
+  border-left: 4px solid var(--sc3-accent);
+  line-height: 1.5;
+}
+
+.bia-report-recommendation strong {
+  color: var(--sc3-primary);
+}
+
+/* Donut Chart Styles */
+.bia-donut-chart {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--sc3-bg);
+  border: 1px solid var(--sc3-border);
+  border-radius: var(--sc3-border-radius);
+  padding: 1rem;
+  min-width: 250px;
+}
+
+.bia-donut-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.bia-donut-svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.bia-donut-segment {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.bia-donut-segment:hover {
+  opacity: 0.8;
+}
+
+.bia-donut-center-number {
+  font-size: 18px;
+  font-weight: var(--sc3-btn-font-weight);
+  fill: var(--sc3-primary);
+}
+
+.bia-donut-center-label {
+  font-size: 12px;
+  fill: var(--sc3-text);
+}
+
+.bia-donut-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 150px;
+  justify-content: center;
+}
+
+.bia-donut-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9em;
+  color: var(--sc3-text);
+}
+
+.bia-donut-legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Custom tooltip for donut chart */
+.bia-donut-tooltip {
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85em;
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+/* Chart Container for side-by-side layout */
+.bia-report-chart-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.bia-report-bar-chart {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Responsive adjustments for report */
+@media (max-width: 768px) {
+  .bia-report-summary-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bia-report-rto-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bia-report-distribution-item {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .bia-report-process-details {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .bia-report-chart-container {
+    flex-direction: column;
+  }
+  
+  .bia-donut-chart {
+    align-self: center;
+  }
+  
+  .bia-donut-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .bia-donut-legend {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* Table Cell Colors for Criticality and Impact Scores */
+/* Using consistent color scheme: 1=Green, 2=Blue, 3=Purple, 4=Yellow/Gold, 5=Red */
+
+/* Criticality Colors */
+.bia-criticality-color-5 {
+  background-color: #ffebee !important; /* 5 - Red (Critical/Platinum) */
+  color: #c62828 !important;
+}
+
+.bia-criticality-color-4 {
+  background-color: #fff8e1 !important; /* 4 - Yellow/Gold */
+  color: #f57f17 !important;
+}
+
+.bia-criticality-color-3 {
+  background-color: #f3e5f5 !important; /* 3 - Purple */
+  color: #6a1b9a !important;
+}
+
+.bia-criticality-color-2 {
+  background-color: #e3f2fd !important; /* 2 - Blue */
+  color: #1565c0 !important;
+}
+
+.bia-criticality-color-1 {
+  background-color: #e8f5e8 !important; /* 1 - Green */
+  color: #2e7d32 !important;
+}
+
+/* Impact Score Colors - same scheme as criticality */
+.bia-impact-color-5 {
+  background-color: #ffebee !important; /* 5 - Red (Critical) */
+  color: #c62828 !important;
+}
+
+.bia-impact-color-4 {
+  background-color: #fff8e1 !important; /* 4 - Yellow/Gold (High) */
+  color: #f57f17 !important;
+}
+
+.bia-impact-color-3 {
+  background-color: #f3e5f5 !important; /* 3 - Purple (Moderate) */
+  color: #6a1b9a !important;
+}
+
+.bia-impact-color-2 {
+  background-color: #e3f2fd !important; /* 2 - Blue (Low) */
+  color: #1565c0 !important;
+}
+
+.bia-impact-color-1 {
+  background-color: #e8f5e8 !important; /* 1 - Green (Negligible) */
+  color: #2e7d32 !important;
+}
