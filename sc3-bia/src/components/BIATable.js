@@ -18,8 +18,43 @@ const BIATable = ({
   setEditIndex,
   setSubmitted,
   setFieldsOpen,
-  setEntries
+  setEntries,
+  setDraggedProcessIndex,
+  draggedProcessIndex,
+  setDropTargetIndex,
+  dropTargetIndex,
+  handleMoveProcess
 }) => {
+
+  const handleDragStart = (e, index) => {
+    setDraggedProcessIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDropTargetIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setDropTargetIndex(null);
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+    if (draggedProcessIndex !== null && draggedProcessIndex !== dropIndex) {
+      handleMoveProcess(draggedProcessIndex, dropIndex);
+    }
+    setDraggedProcessIndex(null);
+    setDropTargetIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedProcessIndex(null);
+    setDropTargetIndex(null);
+  };
+
   // Helper function to get criticality color class
   const getCriticalityColorClass = (criticality) => {
     const rating = criticality || "1";
@@ -141,7 +176,16 @@ const BIATable = ({
               {entries.map((entry, idx) => (
                 <tr
                   key={idx}
-                  className={`bia-table-row ${editIndex === idx ? 'bia-table-row-editing' : ''} ${hoveredRowIndex === idx ? 'bia-table-row-hover' : ''}`}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, idx)}
+                  onDragEnd={handleDragEnd}
+                  className={`bia-table-row 
+                    ${dropTargetIndex === idx ? 'bia-table-row-drop-target' : ''} 
+                    ${editIndex === idx ? 'bia-table-row-editing' : ''} 
+                    ${hoveredRowIndex === idx ? 'bia-table-row-hover' : ''}`}
                   onClick={() => handleRowClick(idx)}
                   onMouseEnter={() => setHoveredRowIndex(idx)}
                   onMouseLeave={() => setHoveredRowIndex(null)}
@@ -250,21 +294,21 @@ const BIATable = ({
             onClick={handleAddNewProcess}
             className="bia-btn bia-btn-outline-secondary"
           >
-            Add New Process
+            + Add New Process
           </button>
           <button
             type="button"
             onClick={handleStartNew}
             className="bia-btn bia-btn-outline-primary"
           >
-            Start New
+            🗑️ Start New
           </button>
           <button
             type="button"
             onClick={handleExport}
             className="bia-btn bia-btn-accent"
           >
-            Export to Excel
+            📊 Export to Excel
           </button>
         </div>
       </div>

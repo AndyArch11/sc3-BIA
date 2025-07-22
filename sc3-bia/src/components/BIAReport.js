@@ -533,10 +533,13 @@ const BIAReport = ({ entries }) => {
   return (
     <details className="bia-intro-details">
       <summary className="bia-intro-summary">
-        BIA Analysis Report
+        BIA Report
       </summary>
       <div>
         {/* Report content starts here */}
+        <h3 className="bia-report-title">
+            Business Impact Assessment Report
+        </h3>
         <div className="bia-report-content">
         {/* Executive Summary */}
         <div className="bia-report-section">

@@ -3,6 +3,7 @@
 /* SC3.com.au theme colors */
 :root {
   --sc3-primary: #003366;
+  --sc3-primary-shadow: #00336622;
   --sc3-secondary: #0099cc;
   --sc3-accent: #fbc02d;
   --sc3-bg: #f4f8fb;
@@ -17,6 +18,16 @@
   --sc3-error: #d32f2f;
   --sc3-gray: #757575;
   --sc3-delete: #c00;
+
+  /* Colours used by sc3.com.au */
+  --sc3-background-blue: #08283e;
+  --sc3-text-orange: #eb7325;
+  --sc3-heading-yellow: #ffe8b5;
+  --sc3-text-yellow: #ffe8b5;
+  --sc3-heading-orange: #eb7325;
+  --sc3-menu-current: #5c868e;
+  --sc3-menu-other: #e2a027;
+  --sc3-white: #ffffff;
   
   /* Layout constants */
   --sc3-border-radius: 6px;
@@ -31,15 +42,16 @@
   --sc3-table-header-font-weight: bold;
   --sc3-input-border-radius: 4px;
   --sc3-input-padding: 0.4em 0.6em;
+  --sc3-table-transition: background 0.2s;
 }
 
-/* Main container */
-.bia-container {
+/* Main container styles */
+.bia-main-container {
   max-width: 900px;
   margin: 2rem auto;
   background: var(--sc3-bg);
   border-radius: var(--sc3-table-border-radius);
-  box-shadow: 0 2px 12px rgba(0, 51, 102, 0.13);
+  box-shadow: 0 2px 12px var(--sc3-primary-shadow);
   padding: 24px;
   font-family: "Segoe UI", Arial, sans-serif;
   color: var(--sc3-primary);
@@ -488,7 +500,7 @@
 /* Table row styles */
 .bia-table-row {
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .bia-table-row-editing {
@@ -726,6 +738,42 @@
   background: #6a1b9a;
 }
 
+.bia-guidance-container {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.bia-guidance-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid var(--sc3-secondary);
+  margin-bottom: 1rem;
+}
+
+.bia-guidance-title {
+  color: var(--sc3-primary);
+  margin: 0;
+}
+
+.bia-guidance-toggle-icon {
+  color: var(--sc3-primary);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.bia-guidance-content {
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid var(--sc3-secondary);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
 .bia-comparison-table {
   width: 100%;
   border-collapse: collapse;
@@ -934,6 +982,15 @@
 
 .bia-report-details:not([open]) .bia-report-summary::before {
   transform: rotate(-90deg);
+}
+
+.bia-report-title {
+  color: var(--sc3-primary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  border-bottom: 2px solid var(--sc3-accent);
+  padding-bottom: 0.5rem;
 }
 
 .bia-report-heading {

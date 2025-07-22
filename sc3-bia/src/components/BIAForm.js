@@ -6,7 +6,7 @@ import BIAReport from "./BIAReport";
 import { exportBIAToExcel } from "./ExcelExport";
 import "./BIA.css";
 
-const VERSION = "v0.2.0"; // Update as needed
+const VERSION = "v0.2.1"; // Update as needed
 
 // Helper to get today's date in YYYY-MM-DD format
 const getToday = () => {
@@ -260,11 +260,110 @@ const BIAForm = () => {
     }
   };
 
+ 
+  
+  // Drag and drop state for reordering risks
+  const [draggedEntryIndex, setDraggedEntryIndex] = useState(null);
+  const [dragOverIndex, setDragOverIndex] = useState(null);
+  const [dropTargetIndex, setDropTargetIndex] = useState(null);
+
+  const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
+
+  const updatedEntries = [...entries];
+  const draggedEntry= updatedEntries[draggedEntryIndex];
+
+  // Drag and drop handlers for reordering processes
+  const handleMoveProcess = (fromIndex, toIndex) => {
+    if (fromIndex === toIndex || toIndex < 0 || toIndex >= entries.length) {
+      return;
+    }
+
+    const updatedEntries = [...entries];
+    const entryToMove = updatedEntries[fromIndex];
+    updatedEntries.splice(fromIndex, 1);
+    updatedEntries.splice(toIndex, 0, entryToMove);
+
+    setEntries(updatedEntries);
+
+    // Update selected process index if needed
+    if (selectedEntryIndex === fromIndex) {
+      setSelectedEntryIndex(toIndex);
+    } else if (selectedEntryIndex !== null) {
+      if (fromIndex < selectedEntryIndex && toIndex >= selectedEntryIndex) {
+        setSelectedEntryIndex(selectedEntryIndex - 1);
+      } else if (fromIndex > selectedEntryIndex && toIndex <= selectedEntryIndex) {
+        setSelectedEntryIndex(selectedEntryIndex + 1);
+      }
+    }
+  };
+    
+  const handleDragStart = (e, index) => {
+    setDraggedEntryIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/html", e.target.outerHTML);
+    e.target.style.opacity = "0.5";
+  };
+
+  const handleDragEnd = (e) => {
+    e.target.style.opacity = "1";
+    setDraggedEntryIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = (e, dropIndex) => {
+    e.preventDefault();
+
+    if (draggedEntryIndex === null || draggedEntryIndex === dropIndex) {
+      return;
+    }
+
+    // Remove the dragged item
+    updatedEntries.splice(draggedEntryIndex, 1);
+
+    // Insert it at the new position
+    const insertIndex =
+      draggedEntryIndex < dropIndex ? dropIndex - 1 : dropIndex;
+    updatedEntries.splice(insertIndex, 0, draggedEntry);
+
+    setEntries(updatedEntries);
+
+    // Update selected entry index if needed
+    if (selectedEntryIndex === draggedEntryIndex) {
+      setSelectedEntryIndex(insertIndex);
+    } else if (selectedEntryIndex !== null) {
+      if (
+        draggedEntryIndex < selectedEntryIndex &&
+        insertIndex >= selectedEntryIndex
+      ) {
+        setSelectedEntryIndex(selectedEntryIndex - 1);
+      } else if (
+        draggedEntryIndex > selectedEntryIndex &&
+        insertIndex <= selectedEntryIndex
+      ) {
+        setSelectedEntryIndex(selectedEntryIndex + 1);
+      }
+    }
+
+    setDraggedEntryIndex(null);
+    setDragOverIndex(null);
+  };
+
   return (
-    <div className="bia-container">
+    <div className="bia-main-container">
       <h2 className="bia-main-heading">
         Business Impact Assessment Form
       </h2>
+
       <BIAIntro 
         criticalityDefaults={criticalityDefaults}
         setCriticalityDefaults={setCriticalityDefaults}
@@ -300,6 +399,11 @@ const BIAForm = () => {
         setSubmitted={setSubmitted}
         setFieldsOpen={setFieldsOpen}
         setEntries={setEntries}
+        setDraggedProcessIndex={setDraggedEntryIndex}
+        draggedProcessIndex={draggedEntryIndex}
+        setDropTargetIndex={setDropTargetIndex}
+        dropTargetIndex={dropTargetIndex}
+        handleMoveProcess={handleMoveProcess}
       />
 
       <BIAReport entries={entries} />
