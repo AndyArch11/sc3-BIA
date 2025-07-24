@@ -109,6 +109,8 @@ export const exportBIAToExcel = (entries) => {
     "Operational": entry.operationalImpact,
     "OH&S Impact Score": entry.ohsImpactScore,
     "OH&S Impact": entry.ohsImpact,
+    "Environmental Impact Score": entry.environmentalImpactScore,
+    "Environmental Impact": entry.environmentalImpact,
     "Staff Impact Score": entry.staffImpactScore,
     "# Staff Impacted": entry.numberOfStaffImpacted,
     "Sites Impact Score": entry.sitesImpactScore,

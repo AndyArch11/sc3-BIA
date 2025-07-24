@@ -112,7 +112,7 @@ const BIATable = ({
                 <th colSpan={9} className="bia-th-group-business">
                   Business Process Details
                 </th>
-                <th colSpan={18} className="bia-th-group-impact">
+                <th colSpan={20} className="bia-th-group-impact">
                   Impact Assessment
                 </th>
                 <th colSpan={9} className="bia-th-group-criticality">
@@ -142,6 +142,8 @@ const BIATable = ({
                 <th className="bia-th-impact">Operational Impact</th>
                 <th className="bia-th-impact">OH&S Impact Score</th>
                 <th className="bia-th-impact">OH&S Impact</th>
+                <th className="bia-th-impact">Environmental Impact Score</th>
+                <th className="bia-th-impact">Environmental Impact</th>
                 <th className="bia-th-impact">Staff Impacted Score</th>
                 <th className="bia-th-impact"># Staff Impacted</th>
                 <th className="bia-th-impact">Sites Impacted Score</th>
@@ -227,6 +229,8 @@ const BIATable = ({
                   <td className="bia-td-impact">{entry.operationalImpact}</td>
                   <td className={`bia-td-impact ${getImpactColorClass(entry.ohsImpactScore)}`}>{formatImpactScore(entry.ohsImpactScore)}</td>
                   <td className="bia-td-impact">{entry.ohsImpact}</td>
+                  <td className={`bia-td-impact ${getImpactColorClass(entry.environmentalImpactScore)}`}>{formatImpactScore(entry.environmentalImpactScore)}</td>
+                  <td className="bia-td-impact">{entry.environmentalImpact}</td>
                   <td className={`bia-td-impact ${getImpactColorClass(entry.staffImpactScore)}`}>{formatImpactScore(entry.staffImpactScore)}</td>
                   <td className="bia-td-impact">{entry.numberOfStaffImpacted}</td>
                   <td className={`bia-td-impact ${getImpactColorClass(entry.sitesImpactScore)}`}>{formatImpactScore(entry.sitesImpactScore)}</td>

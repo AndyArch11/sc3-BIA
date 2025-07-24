@@ -23,6 +23,7 @@ const BIAReport = ({ entries }) => {
       parseFloat(entry.financialImpactScore) || 1,
       parseFloat(entry.operationalImpactScore) || 1,
       parseFloat(entry.ohsImpactScore) || 1,
+      parseFloat(entry.environmentalImpactScore) || 1,
       parseFloat(entry.staffImpactScore) || 1,
       parseFloat(entry.sitesImpactScore) || 1,
       parseFloat(entry.reputationalImpactScore) || 1,
@@ -649,7 +650,7 @@ const BIAReport = ({ entries }) => {
         <div className="bia-report-section">
           <h4 className="bia-report-section-title">Average Impact Score Distribution</h4>
           <p className="bia-report-section-description">
-            Based on the average of all impact categories (Financial, Operational, OHS, Staff, Sites, Reputational, Statutory, Information Security)
+            Based on the average of all impact categories (Financial, Operational, OHS, Environmental,Staff, Sites, Reputational, Statutory, Information Security)
           </p>
           
           {/* Donut Chart */}

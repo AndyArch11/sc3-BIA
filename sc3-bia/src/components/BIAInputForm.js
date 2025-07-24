@@ -1,6 +1,8 @@
 import React from "react";
 import "./BIA.css";
 
+
+
 const InputForm = ({ 
   form, 
   handleChange, 
@@ -13,9 +15,7 @@ const InputForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <details open={fieldsOpen} onToggle={e => setFieldsOpen(e.target.open)}>
-        <summary className="bia-form-summary">
-          BIA Form Fields
-        </summary>
+        <summary className="bia-form-summary">BIA Form Fields</summary>
         <table className="bia-form-table">
           <tbody>
             {/* Business Process Details */}
@@ -25,7 +25,7 @@ const InputForm = ({
                   <legend className="bia-legend bia-legend-business">Business Process Details</legend>
                   <table className="bia-field-table">
                     <tbody>
-                      <tr title="A unique identifier for this business process (e.g. FIN-001, HR-002)">
+                  <tr title="A unique identifier for this business process (e.g. FIN-001, HR-002)">
                         <td className="bia-field-cell-label"><label>Business Process ID:<span className="bia-required">*</span></label></td>
                         <td>
                           <input
@@ -131,7 +131,7 @@ const InputForm = ({
                             className="bia-input-date"                        
                           />
                         </td>
-                      </tr>
+                      </tr>                      
                     </tbody>
                   </table>
                 </fieldset>
@@ -145,8 +145,8 @@ const InputForm = ({
                   <legend className="bia-legend bia-legend-impact">Impact Assessment</legend>
                   <table className="bia-field-table">
                     <tbody>
-                      <tr title="The overall impact for this process">
-                        <td className="bia-field-cell-label-wide"><label>Impact of Disruption:</label></td>
+                      <tr className="bia-impact-row-main" title="The overall impact for this process">
+                        <td className="bia-field-cell-label-wide"><label>Overall Impact of Disruption:</label></td>
                         <td>
                           <div className="bia-flex-container">
                           <select
@@ -170,7 +170,16 @@ const InputForm = ({
                           </div>  
                         </td>
                       </tr>
-                      <tr title="The financial impact of disruption to this process, which may also be a factor of the duration of the disruption">
+                      <tr>
+                        <td colSpan="2" style={{ padding: 0 }}>
+                          <div className="bia-or-line-container">
+                            <hr className="bia-or-line-left" />
+                            <span className="bia-or-text">Or</span>
+                            <hr className="bia-or-line-right" />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="bia-impact-row-other" title="The financial impact of disruption to this process, which may also be a factor of the duration of the disruption">
                         <td className="bia-field-cell-label-wide"><label>Financial Impact:</label></td>
                         <td>
                           <div className="bia-flex-container">
@@ -217,7 +226,7 @@ const InputForm = ({
                           </div>
                         </td>
                       </tr>
-                      <tr title="The operational impact of disruption to this process, which may also be a factor of the duration of the disruption">
+                      <tr className="bia-impact-row-other" title="The operational impact of disruption to this process, which may also be a factor of the duration of the disruption">
                         <td className="bia-field-cell-label-wide"><label>Operational Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
@@ -242,7 +251,7 @@ const InputForm = ({
                           </div>
                         </td>
                       </tr>
-                      <tr title="The impact on employee health and safety due to disruption of this process">
+                      <tr className="bia-impact-row-other" title="The impact on employee health and safety due to disruption of this process">
                         <td className="bia-field-cell-label-wide"><label>Occupational Health & Safety Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
@@ -267,7 +276,32 @@ const InputForm = ({
                           </div>
                         </td>
                       </tr>
-                      <tr title="The impact on staff due to disruption of this process">
+                      <tr className="bia-impact-row-other" title="The impact on the environment due to disruption of this process">
+                        <td className="bia-field-cell-label-wide"><label>Environmental Impact:</label></td>
+                        <td>
+                          <div className="bia-impact-container">
+                            <select
+                              name="environmentalImpactScore"
+                              value={form.environmentalImpactScore}
+                              onChange={handleChange}
+                              className="bia-select bia-select-impact"
+                            >
+                              <option value="1">1 (Negligible Impact)</option>
+                              <option value="2">2 (Low Impact)</option>
+                              <option value="3">3 (Moderate Impact)</option>
+                              <option value="4">4 (High Impact)</option>
+                              <option value="5">5 (Critical Impact)</option>
+                            </select>
+                            <textarea
+                              name="environmentalImpact"
+                              value={form.environmentalImpact}
+                              onChange={handleChange}
+                              className="bia-textarea bia-textarea-impact"
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                      <tr className="bia-impact-row-other" title="The impact on staff due to disruption of this process">
                         <td className="bia-field-cell-label-wide"><label>Number of Staff Impacted:</label></td>
                         <td>
                           <div className="bia-impact-container">
@@ -295,7 +329,7 @@ const InputForm = ({
                           </div>
                         </td>
                       </tr>
-                      <tr title="The impact on sites due to disruption of this process">
+                      <tr className="bia-impact-row-other" title="The impact on sites due to disruption of this process">
                         <td className="bia-field-cell-label-wide"><label>Number of Sites Impacted:</label></td>
                         <td>
                           <div className="bia-impact-container">
@@ -323,7 +357,7 @@ const InputForm = ({
                           </div>
                         </td>
                       </tr>
-                      <tr title="The impact on customers and their loyalty to the brand due to disruption of this process">
+                      <tr className="bia-impact-row-other" title="The impact on customers and their loyalty to the brand due to disruption of this process">
                         <td className="bia-field-cell-label-wide"><label>Reputational Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
@@ -348,7 +382,7 @@ const InputForm = ({
                           </div>
                         </td>
                       </tr>
-                      <tr title="The impact on statutory and regulatory compliance due to disruption of this process">
+                      <tr className="bia-impact-row-other" title="The impact on statutory and regulatory compliance due to disruption of this process">
                         <td className="bia-field-cell-label-wide"><label>Statutory / Regulatory Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
@@ -373,7 +407,7 @@ const InputForm = ({
                           </div>
                         </td>
                       </tr>
-                      <tr title="The impact on information security due to disruption of this process">
+                      <tr className="bia-impact-row-other" title="The impact on information security due to disruption of this process">
                         <td className="bia-field-cell-label-wide"><label>Information Security Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">

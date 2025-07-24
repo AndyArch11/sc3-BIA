@@ -111,56 +111,112 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults }) => {
             </tr>
           </thead>
           <tbody>
-            {Object.entries(criticalityDefaults).map(([level, defaults]) => (
+            {Object.entries(criticalityDefaults).reverse().map(([level, defaults]) => (
               <tr key={level} className="bia-intro-table-row">
-                <td className="bia-intro-table-td-criticality">
+                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
                   {level} ({level === "1" ? "None" : level === "2" ? "Bronze" : level === "3" ? "Silver" : level === "4" ? "Gold" : "Platinum"})
                 </td>
-                <td className="bia-intro-table-td">
+                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                  <select
+                    value={defaults.mtpdSymbol || "="}
+                    onChange={e => setCriticalityDefaults(prev => ({
+                      ...prev,
+                      [level]: { ...prev[level], mtpdSymbol: e.target.value }
+                    }))}
+                    className="bia-intro-symbol-select"
+                  >
+                    <option value="<">&lt;</option>
+                    <option value="≤">&#8804;</option>
+                    <option value="=">=</option>
+                    <option value=">">&gt;</option>
+                    <option value="≥">&#8805;</option>
+                  </select>
                   <input
                     type="number"
                     value={defaults.mtpd}
-                    onChange={(e) => setCriticalityDefaults(prev => ({
+                    onChange={e => setCriticalityDefaults(prev => ({
                       ...prev,
                       [level]: { ...prev[level], mtpd: e.target.value }
                     }))}
                     className="bia-intro-input"
                   />
                 </td>
-                <td className="bia-intro-table-td">
+                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                  <select
+                    value={defaults.rtoSymbol || "="}
+                    onChange={e => setCriticalityDefaults(prev => ({
+                      ...prev,
+                      [level]: { ...prev[level], rtoSymbol: e.target.value }
+                    }))}
+                    className="bia-intro-symbol-select"
+                  >
+                    <option value="<">&lt;</option>
+                    <option value="≤">&#8804;</option>
+                    <option value="=">=</option>
+                    <option value=">">&gt;</option>
+                    <option value="≥">&#8805;</option>
+                  </select>
                   <input
                     type="number"
                     value={defaults.rto}
-                    onChange={(e) => setCriticalityDefaults(prev => ({
+                    onChange={e => setCriticalityDefaults(prev => ({
                       ...prev,
                       [level]: { ...prev[level], rto: e.target.value }
                     }))}
                     className="bia-intro-input"
                   />
                 </td>
-                <td className="bia-intro-table-td">
+                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                  <select
+                    value={defaults.rpoSymbol || "="}
+                    onChange={e => setCriticalityDefaults(prev => ({
+                      ...prev,
+                      [level]: { ...prev[level], rpoSymbol: e.target.value }
+                    }))}
+                    className="bia-intro-symbol-select"
+                  >
+                    <option value="<">&lt;</option>
+                    <option value="≤">&#8804;</option>
+                    <option value="=">=</option>
+                    <option value=">">&gt;</option>
+                    <option value="≥">&#8805;</option>
+                  </select>
                   <input
                     type="number"
                     value={defaults.rpo}
-                    onChange={(e) => setCriticalityDefaults(prev => ({
+                    onChange={e => setCriticalityDefaults(prev => ({
                       ...prev,
                       [level]: { ...prev[level], rpo: e.target.value }
                     }))}
                     className="bia-intro-input"
                   />
                 </td>
-                <td className="bia-intro-table-td">
+                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                  <select
+                    value={defaults.slaSymbol || "="}
+                    onChange={e => setCriticalityDefaults(prev => ({
+                      ...prev,
+                      [level]: { ...prev[level], slaSymbol: e.target.value }
+                    }))}
+                    className="bia-intro-symbol-select"
+                  >
+                    <option value="<">&lt;</option>
+                    <option value="≤">&#8804;</option>
+                    <option value="=">=</option>
+                    <option value=">">&gt;</option>
+                    <option value="≥">&#8805;</option>
+                  </select>
                   <input
                     type="text"
                     value={defaults.sla}
-                    onChange={(e) => setCriticalityDefaults(prev => ({
+                    onChange={e => setCriticalityDefaults(prev => ({
                       ...prev,
                       [level]: { ...prev[level], sla: e.target.value }
                     }))}
                     className="bia-intro-input"
                   />
                 </td>
-                <td className="bia-intro-table-td">
+                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
                   <select
                     value={defaults.slaPeriod || "Month"}
                     onChange={(e) => setCriticalityDefaults(prev => ({
@@ -176,7 +232,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults }) => {
                     <option value="Year">Year</option>
                   </select>
                 </td>
-                <td className="bia-intro-table-td bia-intro-checkbox-cell">
+                <td className={`bia-criticality-color-${level} bia-intro-table-td bia-intro-checkbox-cell`}>
                   <input
                     type="checkbox"
                     checked={defaults.slaIncludesPlanned || false}
@@ -195,11 +251,11 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults }) => {
         <button
           type="button"
           onClick={() => setCriticalityDefaults({
-            1: { mtpd: "168", rto: "72", rpo: "48", sla: "90%", slaPeriod: "Month", slaIncludesPlanned: false },
-            2: { mtpd: "120", rto: "48", rpo: "24", sla: "95%", slaPeriod: "Month", slaIncludesPlanned: false },
-            3: { mtpd: "72", rto: "24", rpo: "12", sla: "99%", slaPeriod: "Month", slaIncludesPlanned: false },
-            4: { mtpd: "48", rto: "12", rpo: "6", sla: "99.9%", slaPeriod: "Month", slaIncludesPlanned: false },
-            5: { mtpd: "24", rto: "4", rpo: "1", sla: "99.95%", slaPeriod: "Month", slaIncludesPlanned: false }
+            1: { mtpd: "168", mtpdSymbol: "≤", rto: "72", rtoSymbol: "≤", rpo: "48", rpoSymbol: "≤", sla: "90%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+            2: { mtpd: "120", mtpdSymbol: "≤", rto: "48", rtoSymbol: "≤", rpo: "24", rpoSymbol: "≤", sla: "95%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+            3: { mtpd: "72", mtpdSymbol: "≤", rto: "24", rtoSymbol: "≤", rpo: "12", rpoSymbol: "≤", sla: "99%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+            4: { mtpd: "48", mtpdSymbol: "≤", rto: "12", rtoSymbol: "≤", rpo: "6", rpoSymbol: "≤", sla: "99.9%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+            5: { mtpd: "24", mtpdSymbol: "<", rto: "4", rtoSymbol: "<", rpo: "1", rpoSymbol: "<", sla: "99.95%", slaSymbol: ">", slaPeriod: "Month", slaIncludesPlanned: false },
           })}
           className="bia-intro-reset-button"
         >

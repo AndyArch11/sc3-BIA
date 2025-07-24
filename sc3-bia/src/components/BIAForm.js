@@ -6,7 +6,7 @@ import BIAReport from "./BIAReport";
 import { exportBIAToExcel } from "./ExcelExport";
 import "./BIA.css";
 
-const VERSION = "v0.2.1"; // Update as needed
+const VERSION = "v0.2.2"; // Update as needed
 
 // Helper to get today's date in YYYY-MM-DD format
 const getToday = () => {
@@ -36,6 +36,8 @@ const initialForm = {
   operationalImpact: "",
   ohsImpactScore: "1",
   ohsImpact: "",
+  environmentalImpactScore: "1",
+  environmentalImpact: "",
   staffImpactScore: "1",
   numberOfStaffImpacted: "",
   sitesImpactScore: "1",
@@ -72,11 +74,11 @@ const BIAForm = () => {
   const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
   const [fieldsOpen, setFieldsOpen] = useState(false);
   const [criticalityDefaults, setCriticalityDefaults] = useState({
-    1: { mtpd: "168", rto: "72", rpo: "48", sla: "90%", slaPeriod: "Month", slaIncludesPlanned: false },
-    2: { mtpd: "120", rto: "48", rpo: "24", sla: "95%", slaPeriod: "Month", slaIncludesPlanned: false },
-    3: { mtpd: "72", rto: "24", rpo: "12", sla: "99%", slaPeriod: "Month", slaIncludesPlanned: false },
-    4: { mtpd: "48", rto: "12", rpo: "6", sla: "99.9%", slaPeriod: "Month", slaIncludesPlanned: false },
-    5: { mtpd: "24", rto: "4", rpo: "1", sla: "99.95%", slaPeriod: "Month", slaIncludesPlanned: false }
+    1: { mtpd: "168", mtpdSymbol: "=", rto: "72", rtoSymbol: "=", rpo: "48", rpoSymbol: "=", sla: "90%", slaSymbol: "=", slaPeriod: "Month", slaIncludesPlanned: false },
+    2: { mtpd: "120", mtpdSymbol: "<", rto: "48", rtoSymbol: "≤", rpo: "24", rpoSymbol: "≤", sla: "95%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+    3: { mtpd: "72", mtpdSymbol: "<", rto: "24", rtoSymbol: "≤", rpo: "12", rpoSymbol: "≤", sla: "99%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+    4: { mtpd: "48", mtpdSymbol: "<", rto: "12", rtoSymbol: "≤", rpo: "6", rpoSymbol: "≤", sla: "99.9%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+    5: { mtpd: "24", mtpdSymbol: "<", rto: "4", rtoSymbol: "≤", rpo: "1", rpoSymbol: "≤", sla: "99.95%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false }
   });
 
   // Helper function to format impact score display
@@ -107,24 +109,42 @@ const BIAForm = () => {
 
   // Helper to calculate process criticality fields
   const calculateCriticalityFields = (f) => {
+    // If Impact of Disruption is set and not "1", use it for criticality
+    let criticality;
+    if (f.impactScore && f.impactScore !== "1") {
+      criticality = f.impactScore;
+    } else {
+      // Otherwise, use the average of the other impact scores
+      const scores = [
+        f.financialImpactScore,
+        f.operationalImpactScore,
+        f.ohsImpactScore,
+        f.environmentalImpactScore,
+        f.staffImpactScore,
+        f.sitesImpactScore,
+        f.reputationalImpactScore,
+        f.statutoryImpactScore,
+        f.infosecImpactScore
+      ].map(s => parseInt(s || "1", 10));
+      const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+      if (avg <= 1.5) criticality = "1";
+      else if (avg <= 2.5) criticality = "2";
+      else if (avg <= 3.5) criticality = "3";
+      else if (avg <= 4.5) criticality = "4";
+      else criticality = "5";
+    }
+    // Calculate processImpactScore as sum of all impact scores
     const impactSum =
       Number(f.impactScore) +
       Number(f.financialImpactScore) +
       Number(f.operationalImpactScore) +
       Number(f.ohsImpactScore) +
+      Number(f.environmentalImpactScore) +
       Number(f.staffImpactScore) +
       Number(f.sitesImpactScore) +
       Number(f.reputationalImpactScore) +
       Number(f.statutoryImpactScore) +
       Number(f.infosecImpactScore);
-
-    let criticality;
-    if (impactSum <= 9) criticality = "1";
-    else if (impactSum > 9 && impactSum <= 18) criticality = "2";
-    else if (impactSum > 18 && impactSum <= 27) criticality = "3";
-    else if (impactSum > 27 && impactSum <= 36) criticality = "4";
-    else criticality = "5";
-
     const defaults = criticalityDefaults[criticality] || {};
     return {
       processImpactScore: impactSum.toString(),
@@ -140,12 +160,12 @@ const BIAForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // If an impact score field changes, recalculate criticality fields
     const impactFields = [
       "impactScore",
       "financialImpactScore",
       "operationalImpactScore",
       "ohsImpactScore",
+      "environmentalImpactScore",
       "staffImpactScore",
       "sitesImpactScore",
       "reputationalImpactScore",
@@ -153,6 +173,27 @@ const BIAForm = () => {
       "infosecImpactScore",
     ];
     let updatedForm = { ...form, [name]: value };
+
+    // If Impact of Disruption is changed, reset other impact assessment values to 1
+    if (name === "impactScore") {
+      updatedForm = {
+        ...updatedForm,
+        financialImpactScore: "1",
+        operationalImpactScore: "1",
+        ohsImpactScore: "1",
+        environmentalImpactScore: "1",
+        staffImpactScore: "1",
+        sitesImpactScore: "1",
+        reputationalImpactScore: "1",
+        statutoryImpactScore: "1",
+        infosecImpactScore: "1",
+      };
+    }
+
+    // If any other Impact Assessment field changes, reset impactScore to "1"
+    if (impactFields.includes(name) && name !== "impactScore") {
+      updatedForm.impactScore = "1";
+    }
 
     // If criticality is changed, update SLA, RTO, and RPO from defaults
     if (name === "criticality") {
@@ -411,7 +452,7 @@ const BIAForm = () => {
   );
 };
 
-function WrappedBIAForm() {
+export default function WrappedBIAForm() {
   return (
     <>
       <BIAForm />
@@ -421,5 +462,3 @@ function WrappedBIAForm() {
     </>
   );
 }
-
-export default WrappedBIAForm;
