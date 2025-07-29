@@ -35,7 +35,13 @@ sc3-bia
 │   ├── App.js             # Main App component, imports BIAForm
 │   ├── App.css            # CSS styles for the application
 │   └── components
-│       └── BIAForm.js     # BIA SPA form
+│       └── BIA.css         # Stylesheets
+│       └── BIAForm.js      # BIA SPA form
+│       └── BIAInputForm.js # Captures BIA details
+│       └── BIAIntro.js     # Guidance on performing a BIA
+│       └── BIAReport.js    # BIA report
+│       └── BIATable.js     # BIA table
+│       └── ExcelExport.js  # Excel export of BIAs
 ├── package.json           # npm configuration file
 └── README.md              # Project documentation
 ```

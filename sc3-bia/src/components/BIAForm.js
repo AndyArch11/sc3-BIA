@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import InputForm from "./BIAInputForm";
+import BIAInputForm from "./BIAInputForm";
 import BIAIntro from "./BIAIntro";
 import BIATable from "./BIATable";
 import BIAReport from "./BIAReport";
@@ -66,6 +66,14 @@ const initialForm = {
   processDependencies: ""
 };
 
+const CRITICALITY_DEFAULTS = {
+  1: { mtpd: "168", mtpdSymbol: "=", rto: "72", rtoSymbol: "=", rpo: "48", rpoSymbol: "=", sla: "90%", slaSymbol: "=", slaPeriod: "Month", slaIncludesPlanned: false },
+  2: { mtpd: "120", mtpdSymbol: "<", rto: "48", rtoSymbol: "≤", rpo: "24", rpoSymbol: "≤", sla: "95%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+  3: { mtpd: "72", mtpdSymbol: "<", rto: "24", rtoSymbol: "≤", rpo: "12", rpoSymbol: "≤", sla: "99%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+  4: { mtpd: "48", mtpdSymbol: "<", rto: "12", rtoSymbol: "≤", rpo: "6", rpoSymbol: "≤", sla: "99.9%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
+  5: { mtpd: "24", mtpdSymbol: "<", rto: "4", rtoSymbol: "≤", rpo: "1", rpoSymbol: "≤", sla: "99.95%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false }
+};
+
 const BIAForm = () => {
   const [form, setForm] = useState(initialForm);
   const [entries, setEntries] = useState([]);
@@ -73,13 +81,7 @@ const BIAForm = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
   const [fieldsOpen, setFieldsOpen] = useState(false);
-  const [criticalityDefaults, setCriticalityDefaults] = useState({
-    1: { mtpd: "168", mtpdSymbol: "=", rto: "72", rtoSymbol: "=", rpo: "48", rpoSymbol: "=", sla: "90%", slaSymbol: "=", slaPeriod: "Month", slaIncludesPlanned: false },
-    2: { mtpd: "120", mtpdSymbol: "<", rto: "48", rtoSymbol: "≤", rpo: "24", rpoSymbol: "≤", sla: "95%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
-    3: { mtpd: "72", mtpdSymbol: "<", rto: "24", rtoSymbol: "≤", rpo: "12", rpoSymbol: "≤", sla: "99%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
-    4: { mtpd: "48", mtpdSymbol: "<", rto: "12", rtoSymbol: "≤", rpo: "6", rpoSymbol: "≤", sla: "99.9%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
-    5: { mtpd: "24", mtpdSymbol: "<", rto: "4", rtoSymbol: "≤", rpo: "1", rpoSymbol: "≤", sla: "99.95%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false }
-  });
+  const [criticalityDefaults, setCriticalityDefaults] = useState(CRITICALITY_DEFAULTS);
 
   // Helper function to format impact score display
   const formatImpactScore = (score) => {
@@ -408,10 +410,11 @@ const BIAForm = () => {
       <BIAIntro 
         criticalityDefaults={criticalityDefaults}
         setCriticalityDefaults={setCriticalityDefaults}
+        initialCriticalityDefaults={CRITICALITY_DEFAULTS}
       />
       
       {(!submitted || entries.length === 0) ? (
-        <InputForm 
+        <BIAInputForm 
           form={form}
           handleChange={handleChange}
           handleSubmit={handleSubmit}

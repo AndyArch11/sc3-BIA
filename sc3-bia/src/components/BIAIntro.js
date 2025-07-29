@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import "./BIA.css";
 
-const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults }) => {
+const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCriticalityDefaults }) => {
 
   // State for guidance section
   const [showImplementationGuidance, setShowImplementationGuidance] = useState(false);
+  
 
   return (
     <details className="bia-intro-details">
@@ -114,7 +115,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults }) => {
             {Object.entries(criticalityDefaults).reverse().map(([level, defaults]) => (
               <tr key={level} className="bia-intro-table-row">
                 <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
-                  {level} ({level === "1" ? "None" : level === "2" ? "Bronze" : level === "3" ? "Silver" : level === "4" ? "Gold" : "Platinum"})
+                  {level} ({level === "1" ? "None / Tier 5" : level === "2" ? "Bronze / Tier 4" : level === "3" ? "Silver / Tier 3" : level === "4" ? "Gold / Tier 2" : "Platinum / Tier 1"})
                 </td>
                 <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
                   <select
@@ -250,13 +251,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults }) => {
 
         <button
           type="button"
-          onClick={() => setCriticalityDefaults({
-            1: { mtpd: "168", mtpdSymbol: "≤", rto: "72", rtoSymbol: "≤", rpo: "48", rpoSymbol: "≤", sla: "90%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
-            2: { mtpd: "120", mtpdSymbol: "≤", rto: "48", rtoSymbol: "≤", rpo: "24", rpoSymbol: "≤", sla: "95%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
-            3: { mtpd: "72", mtpdSymbol: "≤", rto: "24", rtoSymbol: "≤", rpo: "12", rpoSymbol: "≤", sla: "99%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
-            4: { mtpd: "48", mtpdSymbol: "≤", rto: "12", rtoSymbol: "≤", rpo: "6", rpoSymbol: "≤", sla: "99.9%", slaSymbol: "≥", slaPeriod: "Month", slaIncludesPlanned: false },
-            5: { mtpd: "24", mtpdSymbol: "<", rto: "4", rtoSymbol: "<", rpo: "1", rpoSymbol: "<", sla: "99.95%", slaSymbol: ">", slaPeriod: "Month", slaIncludesPlanned: false },
-          })}
+          onClick={() => setCriticalityDefaults(initialCriticalityDefaults)}
           className="bia-intro-reset-button"
         >
           Reset to Initial Defaults

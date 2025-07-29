@@ -813,6 +813,8 @@
   background: var(--sc3-table-bg);
   border-radius: 4px;
   overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #ccc;
   table-layout: fixed; /* Enable fixed layout for column width control */
 }
 
@@ -840,12 +842,14 @@
   border: 1px solid #ccc;
   padding: 8px;
   font-weight: bold;
-  background: var(--sc3-table-header-bg);
+  background: var(--sc3-table-header-bg);  
+  box-shadow: none; /* Explicitly remove any inherited shadows */
 }
 
 .bia-comparison-table td {
   border: 1px solid #ccc;
   padding: 8px;
+  box-shadow: none; /* Explicitly remove any inherited shadows */
 }
 
 .bia-comparison-table-bold {
