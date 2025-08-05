@@ -25,7 +25,7 @@ const InputForm = ({
                   <legend className="bia-legend bia-legend-business">Business Process Details</legend>
                   <table className="bia-field-table">
                     <tbody>
-                  <tr title="A unique identifier for this business process (e.g. FIN-001, HR-002)">
+                      <tr title="A unique identifier for this business process (e.g. FIN-001, HR-002)">
                         <td className="bia-field-cell-label"><label>Business Process ID:<span className="bia-required">*</span></label></td>
                         <td>
                           <input
