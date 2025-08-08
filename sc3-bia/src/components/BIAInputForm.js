@@ -26,7 +26,7 @@ const InputForm = ({
                   <table className="bia-field-table">
                     <tbody>
                       <tr title="A unique identifier for this business process (e.g. FIN-001, HR-002)">
-                        <td className="bia-field-cell-label"><label>Business Process ID:<span className="bia-required">*</span></label></td>
+                        <td className="bia-field-cell-label"><label className="bia-form-label">Business Process ID:<span className="bia-required">*</span></label></td>
                         <td>
                           <input
                             type="text"
@@ -39,7 +39,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The name of the business process (e.g. Payroll Processing)"> 
-                        <td className="bia-field-cell-label"><label>Business Process Name:<span className="bia-required">*</span></label></td>                            
+                        <td className="bia-field-cell-label"><label className="bia-form-label">Business Process Name:<span className="bia-required">*</span></label></td>                            
                         <td>
                           <input
                             type="text"
@@ -52,7 +52,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The business unit or department responsible for this process">
-                        <td className="bia-field-cell-label"><label>Business Unit:</label></td>
+                        <td className="bia-field-cell-label"><label className="bia-form-label">Business Unit:</label></td>
                         <td>
                           <input
                             type="text"
@@ -64,7 +64,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The person accountable for this process">
-                        <td className="bia-field-cell-label"><label>Process Owner:</label></td>
+                        <td className="bia-field-cell-label"><label className="bia-form-label">Process Owner:</label></td>
                         <td>
                           <input
                             type="text"
@@ -76,7 +76,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Briefly describe the purpose and scope of this process">
-                        <td className="bia-field-cell-label"><label>Description:</label></td>
+                        <td className="bia-field-cell-label"><label className="bia-form-label">Description:</label></td>
                         <td>
                           <textarea
                             name="description"
@@ -87,7 +87,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="List scenarios or events that are considered in-scope for this BIA (e.g. system outage, data loss)">
-                        <td className="bia-field-cell-label"><label>In Scope Scenarios:</label></td>
+                        <td className="bia-field-cell-label"><label className="bia-form-label">In Scope Scenarios:</label></td>
                         <td>
                           <textarea
                             name="inScopeScenarios"
@@ -98,7 +98,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="List scenarios or events that are not considered in-scope for this BIA">
-                        <td className="bia-field-cell-label"><label>Out of Scope Scenarios:</label></td>
+                        <td className="bia-field-cell-label"><label className="bia-form-label">Out of Scope Scenarios:</label></td>
                         <td>
                           <textarea
                             name="outOfScopeScenarios"
@@ -109,7 +109,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Name of the person completing this form">
-                        <td className="bia-field-cell-label"><label>Created By:</label></td>
+                        <td className="bia-field-cell-label"><label className="bia-form-label">Created By:</label></td>
                         <td>
                           <input
                             type="text"
@@ -121,7 +121,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Date this entry was created">
-                        <td className="bia-field-cell-label"><label>Date Created:</label></td>
+                        <td className="bia-field-cell-label"><label className="bia-form-label">Date Created:</label></td>
                         <td>
                           <input
                             type="date"
@@ -146,7 +146,7 @@ const InputForm = ({
                   <table className="bia-field-table">
                     <tbody>
                       <tr className="bia-impact-row-main" title="The overall impact for this process">
-                        <td className="bia-field-cell-label-wide"><label>Overall Impact of Disruption:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Overall Impact of Disruption:</label></td>
                         <td>
                           <div className="bia-flex-container">
                           <select
@@ -180,7 +180,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The financial impact of disruption to this process, which may also be a factor of the duration of the disruption">
-                        <td className="bia-field-cell-label-wide"><label>Financial Impact:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Financial Impact:</label></td>
                         <td>
                           <div className="bia-flex-container">
                             <select
@@ -227,7 +227,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The operational impact of disruption to this process, which may also be a factor of the duration of the disruption">
-                        <td className="bia-field-cell-label-wide"><label>Operational Impact:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Operational Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
                           <select
@@ -252,7 +252,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The impact on employee health and safety due to disruption of this process">
-                        <td className="bia-field-cell-label-wide"><label>Occupational Health & Safety Impact:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Occupational Health & Safety Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
                             <select
@@ -277,7 +277,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The impact on the environment due to disruption of this process">
-                        <td className="bia-field-cell-label-wide"><label>Environmental Impact:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Environmental Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
                             <select
@@ -302,7 +302,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The impact on staff due to disruption of this process">
-                        <td className="bia-field-cell-label-wide"><label>Number of Staff Impacted:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Number of Staff Impacted:</label></td>
                         <td>
                           <div className="bia-impact-container">
                             <select
@@ -330,7 +330,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The impact on sites due to disruption of this process">
-                        <td className="bia-field-cell-label-wide"><label>Number of Sites Impacted:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Number of Sites Impacted:</label></td>
                         <td>
                           <div className="bia-impact-container">
                             <select
@@ -358,7 +358,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The impact on customers and their loyalty to the brand due to disruption of this process">
-                        <td className="bia-field-cell-label-wide"><label>Reputational Impact:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Reputational Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
                             <select
@@ -383,7 +383,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The impact on statutory and regulatory compliance due to disruption of this process">
-                        <td className="bia-field-cell-label-wide"><label>Statutory / Regulatory Impact:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Statutory / Regulatory Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
                             <select
@@ -408,7 +408,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr className="bia-impact-row-other" title="The impact on information security due to disruption of this process">
-                        <td className="bia-field-cell-label-wide"><label>Information Security Impact:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Information Security Impact:</label></td>
                         <td>
                           <div className="bia-impact-container">
                             <select
@@ -446,7 +446,7 @@ const InputForm = ({
                   <table className="bia-field-table">
                     <tbody>
                       <tr title="The importance of this process to the organisation">
-                        <td className="bia-field-cell-label-wide"><label>Criticality Rating:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Criticality Rating:</label></td>
                         <td>
                           <select
                             name="criticality"
@@ -463,7 +463,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The maximum tolerable period of disruption for this process">
-                        <td className="bia-field-cell-label-wide"><label>MTPD - Maximum Tolerable Period of Disruption (hours):</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">MTPD - Maximum Tolerable Period of Disruption (hours):</label></td>
                         <td>
                           <input
                             type="number"
@@ -478,7 +478,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The recovery time objective for this process">
-                        <td className="bia-field-cell-label-wide"><label>RTO - Recovery Time Objective (hours):</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">RTO - Recovery Time Objective (hours):</label></td>
                         <td>
                           <input
                             type="number"
@@ -493,7 +493,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The actual recovery time achieved for this process">
-                        <td className="bia-field-cell-label-wide"><label>RTA - Recovery Time Actual (hours):</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">RTA - Recovery Time Actual (hours):</label></td>
                         <td>
                           <input
                             type="number"
@@ -519,7 +519,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The recovery point objective for this process">
-                        <td className="bia-field-cell-label-wide"><label>RPO - Recovery Point Objective (hours):</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">RPO - Recovery Point Objective (hours):</label></td>
                         <td>
                           <input
                             type="number"
@@ -534,7 +534,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The actual recovery point achieved for this process">
-                        <td className="bia-field-cell-label-wide"><label>RPA - Recovery Point Actual (hours):</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">RPA - Recovery Point Actual (hours):</label></td>
                         <td>
                           <input
                             type="number"
@@ -560,7 +560,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The service level agreement for this process (actually the Availability Service Level Objective - SLO), defining the percentage of time this process should be available">
-                        <td className="bia-field-cell-label-wide"><label>SLA (%):</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">SLA (%):</label></td>
                         <td>
                           <input
                             type="text"
@@ -573,7 +573,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The measurement period for the SLA percentage">
-                        <td className="bia-field-cell-label-wide"><label>SLA Period:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">SLA Period:</label></td>
                         <td>
                           <select
                             name="slaPeriod"
@@ -590,7 +590,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Whether the SLA calculation includes planned downtime or only unplanned outages">
-                        <td className="bia-field-cell-label-wide"><label>SLA Includes Planned Downtime:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">SLA Includes Planned Downtime:</label></td>
                         <td>
                           <div className="bia-checkbox-container">
                             <input
@@ -620,7 +620,7 @@ const InputForm = ({
                   <table className="bia-field-table">
                     <tbody>
                       <tr title="Legal, regulatory, and contractual obligations that this process must comply with">
-                        <td className="bia-field-cell-label-wide"><label>Legal, Regulatory, and Contractual Obligations:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Legal, Regulatory, and Contractual Obligations:</label></td>
                         <td>
                           <textarea
                             name="legalObligations"
@@ -631,7 +631,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="The resources required to recover this process">
-                        <td className="bia-field-cell-label-wide"><label>Resources Required for Recovery:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Resources Required for Recovery:</label></td>
                         <td>
                           <textarea
                             name="resources"
@@ -642,7 +642,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Key dependencies, including suppliers and third parties">
-                        <td className="bia-field-cell-label-wide"><label>Key Dependencies, including Suppliers and Third Parties:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Key Dependencies, including Suppliers and Third Parties:</label></td>
                         <td>
                           <textarea
                             name="dependencies"
@@ -653,7 +653,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Dependencies on IT Systems and Applications">
-                        <td className="bia-field-cell-label-wide"><label>Dependencies on IT Systems and Applications:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on IT Systems and Applications:</label></td>
                         <td>
                           <textarea
                             name="itDependencies"
@@ -664,7 +664,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Dependencies on people and skills">
-                        <td className="bia-field-cell-label-wide"><label>Dependencies on people and skills:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on people and skills:</label></td>
                         <td>
                           <textarea
                             name="peopleDependencies"
@@ -675,7 +675,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Dependencies on facilities and infrastructure">
-                        <td className="bia-field-cell-label-wide"><label>Dependencies on facilities and infrastructure:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on facilities and infrastructure:</label></td>
                         <td>
                           <textarea
                             name="facilitiesDependencies"
@@ -686,7 +686,7 @@ const InputForm = ({
                         </td>
                       </tr>
                       <tr title="Dependencies on other business processes">
-                        <td className="bia-field-cell-label-wide"><label>Dependencies on other business processes:</label></td>
+                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on other business processes:</label></td>
                         <td>
                           <textarea
                             name="processDependencies"

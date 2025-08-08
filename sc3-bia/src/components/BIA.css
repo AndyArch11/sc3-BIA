@@ -170,6 +170,12 @@
   width: 40%;
 }
 
+.bia-form-label {
+  font-weight: 600;
+  color: var(--sc3-primary);
+  font-size: 0.9rem;
+}
+
 /* Input styles */
 .bia-input {
   width: 100%;
