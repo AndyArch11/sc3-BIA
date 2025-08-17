@@ -22,13 +22,33 @@
   white-space: nowrap;
 }
 /* Impact Assessment row borders */
-.bia-impact-row-main {
-  border: 2px solid var(--sc3-accent);
+.bia-impact-row-other {
+  border: 2px solid var(--sc3-green-light);
   border-radius: 6px;
 }
-.bia-impact-row-other {
+
+/* Alternating row backgrounds for Impact Assessment */
+.bia-impact-row-other:nth-of-type(even) {
+  background: var(--sc3-green-light); /* Light green */
+}
+
+.bia-impact-row-other:nth-of-type(odd) {
+  background: #f0f8ed; /* Light green tint */
+}
+
+/* Process Criticality row styling */
+.bia-criticality-row {
   border: 2px solid var(--sc3-purple);
   border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.bia-criticality-row:nth-of-type(even) {
+  background: var(--sc3-purple-light); /* Light purple background */
+}
+
+.bia-criticality-row:nth-of-type(odd) {
+  background: #e4dcf4; /* light purple background */
 }
 /* SC3 BIA Form Styles */
 
@@ -77,6 +97,476 @@
   --sc3-table-transition: background 0.2s;
 }
 
+/* Table responsiveness */
+.bia-table-container {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  margin: 1rem 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  scroll-behavior: smooth; /* Smooth scrolling for modern browsers */
+  scrollbar-width: thin; /* Thin scrollbars on Firefox */
+}
+
+/* Custom scrollbar styling for better mobile experience */
+.bia-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.bia-table-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.bia-table-container::-webkit-scrollbar-thumb {
+  background: var(--sc3-secondary);
+  border-radius: 4px;
+}
+
+.bia-table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--sc3-primary);
+}
+
+.bia-guidance-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
+.bia-downtime-table {
+  min-width: 600px;
+  width: 100%;
+}
+
+.bia-comparison-table {
+  min-width: 500px;
+  width: 100%;
+}
+
+/* Form field responsiveness */
+.bia-intro-input,
+.bia-intro-select,
+.bia-intro-symbol-select {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.bia-intro-input {
+  width: 60px;
+  min-width: 50px;
+}
+
+.bia-intro-symbol-select {
+  width: 35px;
+  max-width: 35px;
+  border: 1px solid var(--sc3-purple);
+  padding: 0.2em 0.1em;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  text-align: center;
+  box-sizing: border-box;
+  color: #4a148c;
+  background: #fff;
+  margin-right: 2px;
+}
+
+/* General form field constraints */
+.bia-input,
+.bia-input-number,
+.bia-input-date,
+.bia-textarea,
+.bia-select,
+.bia-select-impact,
+.bia-textarea-impact,
+.bia-input-impact,
+.bia-textarea-dependencies {
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Ensure no element extends beyond viewport */
+* {
+  box-sizing: border-box;
+}
+
+/* Container constraints */
+.bia-intro-details {
+  max-width: 100%;
+  overflow-x: auto; /* Allow horizontal scrolling for tables */
+  word-wrap: break-word;
+}
+
+.bia-main-container {
+  max-width: 100%;
+  overflow: visible; /* Ensure no clipping of table breakout */
+  word-wrap: break-word;
+  padding: 1rem;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .bia-intro-table-th,
+  .bia-intro-table-td {
+    padding: 0.25rem;
+    font-size: 0.8rem;
+  }
+  
+  .bia-intro-input {
+    width: 50px;
+    font-size: 0.8rem;
+  }
+  
+  .bia-intro-symbol-select {
+    width: 35px;
+    font-size: 0.8rem;
+  }
+  
+  .bia-downtime-table th,
+  .bia-downtime-table td,
+  .bia-comparison-table th,
+  .bia-comparison-table td {
+    padding: 0.25rem;
+    font-size: 0.75rem;
+  }
+  
+  /* Form field mobile optimization */
+  .bia-input,
+  .bia-input-number,
+  .bia-input-date,
+  .bia-textarea,
+  .bia-select,
+  .bia-select-impact,
+  .bia-textarea-impact,
+  .bia-input-impact,
+  .bia-textarea-dependencies,
+  .bia-select-criticality {
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 0.9rem;
+    word-wrap: break-word;
+  }
+  
+  /* Impact Assessment containers - allow flexible layout on mobile */
+  .bia-impact-container,
+  .bia-flex-container {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem;
+    align-items: center !important;
+  }
+  
+  /* All Impact Assessment select fields should size to content on mobile */
+  .bia-impact-container select,
+  .bia-flex-container select,
+  .bia-select-impact {
+    width: auto !important;
+    min-width: fit-content !important;
+    flex-shrink: 0 !important;
+    max-width: none !important;
+  }
+  
+  /* Text inputs and textareas in Impact Assessment should be flexible */
+  .bia-impact-container input[type="number"],
+  .bia-flex-container input[type="number"],
+  .bia-impact-container textarea,
+  .bia-flex-container textarea,
+  .bia-input-impact,
+  .bia-textarea-impact {
+    flex: 1 !important;
+    min-width: 120px !important;
+    width: auto !important;
+  }
+  
+  /* Ensure containers stack when there's not enough horizontal space */
+  .bia-impact-container,
+  .bia-flex-container {
+    min-width: 100%;
+  }
+  
+  /* Reduce textarea heights on mobile */
+  .bia-textarea,
+  .bia-textarea-impact,
+  .bia-textarea-dependencies {
+    min-height: 60px;
+    resize: vertical;
+  }
+  
+  /* Make form labels and containers more compact */
+  .bia-form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  /* Responsive grid adjustments */
+  .bia-form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .bia-form-row {
+    flex-direction: column;
+  }
+  
+  .bia-form-column {
+    width: 100% !important;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Compact main container on mobile */
+  .bia-main-container {
+    padding: 0.75rem;
+  }
+  
+  /* Enhanced row differentiation on mobile */
+  .bia-impact-row-other,
+  .bia-criticality-row {
+    margin-bottom: 0.75rem !important;
+    padding: 0.5rem !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .bia-impact-row-other:nth-of-type(even) {
+    border-left: 6px solid #f0f8ed !important;
+    background: #f0f8ed !important; /* Stronger green tint for mobile */
+  }
+  
+  .bia-impact-row-other:nth-of-type(odd) {
+    border-left: 6px solid var(--sc3-light-green) !important;
+    background: var(--sc3-light-green)  !important; /* Light green tint for contrast */
+  }
+  
+  .bia-criticality-row:nth-of-type(even) {
+    border-left: 6px solid var(--sc3-purple) !important;
+    background: var(--sc3-purple-light) !important;
+  }
+  
+  .bia-criticality-row:nth-of-type(odd) {
+    border-left: 6px solid var(--sc3-secondary) !important;
+    background: #e4dcf4 !important; /* Light purple tint */
+  }
+  
+  /* View mode radio buttons - stack vertically on mobile */
+  .bia-radio-group {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  
+  .bia-radio-option {
+    gap: 0.75rem;
+  }
+  
+  .bia-back-to-top-container {
+    margin: 1.5rem 0;
+    padding: 0.75rem 0;
+  }
+  
+  .bia-back-to-top-button {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+    border-radius: var(--sc3-btn-radius);
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: var(--sc3-btn-font-weight);
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .bia-back-to-top-button:hover {
+    background: #e9ecef;
+    color: #495057;
+    border-color: #adb5bd;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Small mobile screens (≤ 480px) - Compact mode */
+@media (max-width: 480px) {
+  .bia-intro-table {
+    min-width: 350px; /* Further reduce minimum width for better scrolling */
+  }
+  
+  .bia-downtime-table {
+    min-width: 450px; /* More compact for small screens */
+  }
+  
+  .bia-comparison-table {
+    min-width: 380px; /* More compact for comparison table */
+  }
+  
+  /* Compact table cells */
+  .bia-intro-table-th,
+  .bia-intro-table-td,
+  .bia-downtime-table th,
+  .bia-downtime-table td,
+  .bia-comparison-table th,
+  .bia-comparison-table td {
+    padding: 0.15rem 0.1rem;
+    font-size: 0.7rem;
+    line-height: 1.2;
+    word-break: break-word;
+  }
+  
+  /* Compact form inputs */
+  .bia-intro-input {
+    width: 40px;
+    min-width: 35px;
+    font-size: 0.7rem;
+    padding: 0.1rem;
+  }
+  
+  .bia-intro-symbol-select {
+    width: 30px;
+    min-width: 25px;
+    font-size: 0.7rem;
+    padding: 0.1rem;
+  }
+  
+  .bia-intro-select {
+    font-size: 0.7rem;
+    padding: 0.1rem;
+    min-width: 55px;
+  }
+  
+  /* More aggressive stacking for impact containers */
+  .bia-impact-container,
+  .bia-flex-container {
+    flex-direction: column !important;
+    gap: 0.25rem;
+  }
+  
+  .bia-impact-container > *,
+  .bia-flex-container > * {
+    width: 100% !important;
+    flex: none !important;
+    min-width: auto !important;
+  }
+  
+  /* Compact main container */
+  .bia-main-container {
+    padding: 0.5rem;
+  }
+  
+  .bia-intro-details {
+    padding: 0.5rem;
+  }
+  
+  /* Compact buttons */
+  .bia-intro-reset-button {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  /* Compact guidance sections */
+  .bia-guidance-title {
+    font-size: 1rem;
+  }
+  
+  /* Make text more compact */
+  p, li {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+  
+  h4 {
+    font-size: 1rem;
+    margin: 0.8rem 0 0.4rem 0;
+  }
+  
+  /* Stack form elements more compactly */
+  .bia-form-group {
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Enhanced row separation for very small screens */
+  .bia-impact-row-main,
+  .bia-impact-row-other,
+  .bia-criticality-row {
+    margin-bottom: 1rem !important;
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+    border-left-width: 8px !important;
+  }
+  
+  /* Add labels to help identify sections on very small screens */
+  .bia-impact-row-main .bia-form-label::before {
+    content: "📊 ";
+    font-size: 0.8rem;
+  }
+  
+  .bia-impact-row-other .bia-form-label::before {
+    content: "📈 ";
+    font-size: 0.8rem;
+  }
+  
+  .bia-criticality-row .bia-form-label::before {
+    content: "⚡ ";
+    font-size: 0.8rem;
+  }
+  
+  .rar-view-mode-container {
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .rar-view-mode-options label {
+    font-size: 13px;
+  }
+  
+  .rar-view-mode-options {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+/* Ultra-small devices (≤ 360px) - Maximum compactness for NFR table */
+@media (max-width: 360px) {
+  .bia-intro-table {
+    min-width: 320px; /* Absolute minimum for NFR table usability */
+    font-size: 0.65rem;
+  }
+  
+  .bia-intro-table-th,
+  .bia-intro-table-td {
+    padding: 0.1rem 0.05rem;
+    font-size: 0.65rem;
+    line-height: 1.1;
+  }
+  
+  .bia-intro-input {
+    width: 35px;
+    min-width: 30px;
+    font-size: 0.65rem;
+    padding: 0.05rem;
+  }
+  
+  .bia-intro-symbol-select {
+    width: 25px;
+    min-width: 20px;
+    font-size: 0.65rem;
+    padding: 0.05rem;
+  }
+  
+  .bia-intro-select {
+    font-size: 0.65rem;
+    padding: 0.05rem;
+    min-width: 50px;
+  }
+  
+  .bia-intro-checkbox {
+    transform: scale(0.8);
+  }
+}
+
 /* Main container styles */
 .bia-main-container {
   max-width: 900px;
@@ -87,6 +577,7 @@
   padding: 24px;
   font-family: "Segoe UI", Arial, sans-serif;
   color: var(--sc3-primary);
+  overflow: visible; /* Ensure no clipping of table breakout */
 }
 
 /* Main heading */
@@ -137,6 +628,12 @@
   background: var(--sc3-yellow-light);
 }
 
+.bia-fieldset-viewmode {
+  border: 2px solid var(--sc3-secondary);
+  background: var(--sc3-blue-light);
+  margin-bottom: 1rem;
+}
+
 .bia-legend {
   font-weight: var(--sc3-btn-font-weight);
 }
@@ -155,6 +652,10 @@
 
 .bia-legend-dependencies {
   color: var(--sc3-accent);
+}
+
+.bia-legend-viewmode {
+  color: var(--sc3-secondary);
 }
 
 /* Form field table */
@@ -274,6 +775,87 @@
   color: var(--sc3-purple);
 }
 
+/* Radio button styles for view mode */
+.bia-view-mode-container {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 15px;
+}
+
+.bia-view-mode-container > label:first-child {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.bia-view-mode-options {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.bia-view-mode-options label {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.bia-view-mode-options input[type="radio"] {
+  margin-right: 8px;
+  margin-bottom: 0;
+}
+
+.bia-radio-group {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.bia-radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bia-radio {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--sc3-secondary);
+  cursor: pointer;
+}
+
+.bia-radio-label {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  color: var(--sc3-primary);
+}
+
+.bia-radio-title {
+  font-weight: var(--sc3-btn-font-weight);
+  font-size: 1rem;
+  color: var(--sc3-secondary);
+}
+
+.bia-radio-description {
+  font-size: 0.85rem;
+  color: var(--sc3-gray);
+  font-style: italic;
+}
+
 /* Objective exceeded warning styles */
 .bia-input-objective-exceeded {
   border: 2px solid var(--sc3-error) !important;
@@ -299,15 +881,18 @@
 /* Button styles */
 .bia-btn {
   border: none;
-  border-radius: var(--sc3-btn-radius);
   padding: var(--sc3-btn-padding);
+  border-radius: var(--sc3-btn-radius);
   font-weight: var(--sc3-btn-font-weight);
   font-size: var(--sc3-btn-font-size);
   cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .bia-btn-primary {
-  background: var(--sc3-secondary);
+  background: var(--sc3-primary);
   color: #fff;
   box-shadow: 0 2px 6px rgba(0, 153, 204, 0.13);
 }
@@ -316,6 +901,34 @@
   background: var(--sc3-gray);
   color: #fff;
   box-shadow: 0 2px 6px rgba(117, 117, 117, 0.13);
+}
+
+.bia-btn-secondary {
+  background: var(--sc3-secondary);
+  color: var(--sc3-white);
+  border-color: var(--sc3-secondary);
+  box-shadow: 0 2px 6px rgba(117, 117, 117, 0.13);
+}
+
+.bia-btn-secondary:hover {
+  background-color: var(--sc3-primary);
+  border-color: var(--sc3-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bia-btn-outline {
+  background: #fff;
+  color: var(--sc3-primary);
+  border: 2px solid var(--sc3-primary);
+  padding: 10px 20px;
+}
+
+.bia-btn-outline:hover {
+  background: var(--sc3-primary);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .bia-btn-outline-secondary {
@@ -340,36 +953,86 @@
 }
 
 /* Table styles */
+.bia-table-outer-container {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background: #f8f9fa;
+  border-top: 2px solid var(--sc3-secondary);
+  border-bottom: 2px solid var(--sc3-secondary);
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+}
+
+.bia-table-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
 .bia-table-container {
   width: 100vw;
-  max-width: 100vw;
   position: relative;
   left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
+  transform: translateX(-50%);
   background: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  overflow-x: auto;
   box-sizing: border-box;
+  margin: 2rem 0;
+}
+
+.bia-table-section {
+  margin-bottom: 1rem;
+}
+
+.bia-table-summary {
+  cursor: pointer;
+  font-weight: var(--sc3-btn-font-weight);
+  color: var(--sc3-secondary);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e0e0e0;
+  transition: color 0.2s;
+}
+
+.bia-table-summary strong {
+  color: var(--sc3-secondary);
+  margin: 0 0.25rem;
 }
 
 .bia-table-scroll {
   width: 100%;
-  overflow-x: auto;
-  padding: 0 0.05rem;
+  padding: 0;
   box-sizing: border-box;
 }
 
+.bia-table-count {
+  background: var(--sc3-secondary);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: normal;
+}
+
+.bia-table-statistics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: white;
+  border-radius: var(--sc3-border-radius);
+  border: 1px solid #e0e0e0;
+}
+
 .bia-table {
-  width: 95vw;
+  width: 100%;
   min-width: 1200px;
   border-collapse: collapse;
   background: var(--sc3-table-bg);
   border-radius: var(--sc3-table-border-radius);
   overflow: hidden;
-  margin: 0 auto;
 }
 
 .bia-table-heading {
@@ -592,10 +1255,27 @@
 }
 
 /* Button container for table actions */
+.bia-table-button-container {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
 .bia-button-container {
+  margin-top: 2rem;
+  text-align: center;
+  border-top: 2px solid var(--sc3-primary);
+  padding-top: 1.5rem;
+}
+
+.bia-button-group {
   display: flex;
-  gap: 12px;
-  margin: 1.5em 0 2em 0;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 /* Version footer */
@@ -630,6 +1310,24 @@
   .bia-btn {
     width: 100%;
   }
+
+  .rar-view-mode-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px;
+  }
+  
+  .rar-view-mode-container > label:first-child {
+    margin-bottom: 5px;
+  }
+  
+  .rar-view-mode-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    width: 100%;
+  }
 }
 
 /* Impact Assessment specific styles */
@@ -637,6 +1335,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .bia-select-impact {
@@ -653,6 +1352,28 @@
 .bia-input-impact {
   flex: 1;
   min-width: 100px;
+}
+
+/* Flex container for form elements */
+.bia-flex-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap; /* Keep elements on same line for larger screens */
+}
+
+.bia-flex-container > select {
+  flex-shrink: 0; /* Prevent selects from shrinking */
+}
+
+.bia-flex-container > input[type="number"] {
+  flex: 1; /* Allow number inputs to take remaining space */
+  min-width: 120px;
+}
+
+.bia-flex-container > textarea {
+  flex: 1; /* Allow textareas to take remaining space */
+  min-width: 200px;
 }
 
 /* Dependencies specific styles */
@@ -676,74 +1397,34 @@
   color: var(--sc3-secondary);
 }
 
-.bia-intro-table {
+.bia-intro-cell-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin: 1rem 0;
-  background: var(--sc3-table-bg);
-  border-radius: var(--sc3-table-border-radius);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  border: 2px solid var(--sc3-purple);
-}
-
-.bia-intro-table-header {
-  background: #ede7f6;
-  color: var(--sc3-purple);
-}
-
-.bia-intro-table-th {
-  border: 2px solid var(--sc3-purple);
-  padding: 12px;
-  font-weight: bold;
-  font-size: 1.05em;
-  text-align: center;
-}
-
-.bia-intro-table-row {
-  background: #ffffff;
-  transition: background 0.2s;
-}
-
-.bia-intro-table-row:nth-child(even) {
-  background: #f9f7ff;
-}
-
-.bia-intro-table-td-criticality {
-  border: 1px solid var(--sc3-purple);
-  padding: 10px;
-  text-align: center;
-  font-weight: bold;
-  color: var(--sc3-purple);
-  background: #ede7f6;
-  width: 25%;
-  min-width: 180px;
-  white-space: nowrap;
-}
-
-.bia-intro-table-td {
-  border: 1px solid var(--sc3-purple);
-  padding: 6px;
 }
 
 .bia-intro-input {
-  width: 100%;
+  width: 50px;
+  max-width: 50px;
   border: 1px solid var(--sc3-purple);
-  padding: 0.4em 0.6em;
+  padding: 0.2em 0.3em;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align: center;
   box-sizing: border-box;
   color: #4a148c;
 }
 
 .bia-intro-select {
-  width: 100%;
+  width: 80px;
+  max-width: 80px;
   border: 1px solid var(--sc3-purple);
-  padding: 0.4em 0.6em;
+  padding: 0.2em 0.3em;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align: center;
   box-sizing: border-box;
   color: #4a148c;
@@ -758,6 +1439,37 @@
 
 .bia-intro-checkbox-cell {
   text-align: center;
+}
+
+/* Back to Top Button Styles */
+.bia-back-to-top-container {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 1rem 0;
+}
+
+.bia-back-to-top-button {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dee2e6;
+  border-radius: var(--sc3-btn-radius);
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: var(--sc3-btn-font-weight);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bia-back-to-top-button:hover {
+  background: #e9ecef;
+  color: #495057;
+  border-color: #adb5bd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);;
 }
 
 .bia-intro-reset-button {
@@ -983,47 +1695,21 @@
 /* BIA Report Styles */
 .bia-report-container {
   margin-top: 2rem;
-  background: var(--sc3-table-bg);
-  border-radius: var(--sc3-table-border-radius);
-  box-shadow: 0 2px 12px rgba(0, 51, 102, 0.13);
-  overflow: hidden;
+  padding: 1.5rem;
+  background: white;
+  border-radius: var(--sc3-border-radius);
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px var(--sc3-primary-shadow);
 }
 
 .bia-report-details {
-  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .bia-report-summary {
   cursor: pointer;
-  user-select: none;
-  list-style: none;
-  outline: none;
-  padding: 1.5rem;
-  background: var(--sc3-bg);
-  border-bottom: 3px solid var(--sc3-accent);
-  margin: 0;
-}
-
-.bia-report-summary::-webkit-details-marker {
-  display: none;
-}
-
-.bia-report-summary::marker {
-  display: none;
-}
-
-.bia-report-summary::before {
-  content: "▼";
-  color: var(--sc3-primary);
-  font-weight: bold;
-  width: 1em;
-  display: inline-block;
-  margin-right: 0.5rem;
-  transition: transform 0.2s ease;
-}
-
-.bia-report-details:not([open]) .bia-report-summary::before {
-  transform: rotate(-90deg);
+  font-weight: 600;
+  color: var(--sc3-secondary);
 }
 
 .bia-report-title {
@@ -1459,4 +2145,117 @@
 .bia-impact-color-1 {
   background-color: #e8f5e8 !important; /* 1 - Green (Negligible) */
   color: #2e7d32 !important;
+}
+
+.bia-intro-section {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+
+.bia-intro-table-wrapper {
+  width: 100%;
+  margin: 1rem 0;
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.bia-intro-table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bia-intro-table {
+  width: 100%;
+  min-width: 750px;
+  border-collapse: collapse;
+}
+
+.bia-intro-table th,
+.bia-intro-table td {
+  padding: 12px 15px;
+  border: 1px solid #eee;
+  text-align: left;
+}
+
+.bia-intro-table th {
+  background: var(--sc3-bg);
+  color: var(--sc3-text);
+  font-weight: bold;
+}
+
+.bia-intro-table-th {
+  border: 2px solid var(--sc3-purple);
+  padding: 12px;
+  font-weight: bold;
+  font-size: 1.05em;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Specific column widths for better content fit */
+.bia-intro-table-th:nth-child(1) {
+  width: 25%; /* Criticality column - needs more space for level names */
+}
+
+.bia-intro-table-th:nth-child(2),
+.bia-intro-table-th:nth-child(3),
+.bia-intro-table-th:nth-child(4) {
+  width: 14%; /* MTPD, RTO, RPO columns */
+}
+
+.bia-intro-table-th:nth-child(5) {
+  width: 12%; /* SLA column */
+}
+
+.bia-intro-table-th:nth-child(6) {
+  width: 12%; /* Period column */
+}
+
+.bia-intro-table-th:nth-child(7) {
+  width: 13%; /* Incl. Planned column */
+}
+
+.bia-intro-table tr:nth-child(even) {
+  background: var(--sc3-bg-alt);
+}
+
+.bia-intro-table-row:nth-child(even) {
+  background: #f9f7ff;
+}
+
+.bia-intro-table tr:hover {
+  background: var(--sc3-bg-hover);
+}
+
+.bia-intro-table-header {
+  background: #ede7f6;
+  color: var(--sc3-purple);
+}
+
+.bia-intro-table-row {
+  background: #ffffff;
+  transition: background 0.2s;
+}
+
+.bia-intro-table-td-criticality {
+  border: 1px solid var(--sc3-purple);
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--sc3-purple);
+  background: #ede7f6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bia-intro-table-td {
+  border: 1px solid var(--sc3-purple);
+  padding: 6px;
+  overflow: hidden;
+  position: relative;
 }

@@ -6,7 +6,7 @@ import BIAReport from "./BIAReport";
 import { exportBIAToExcel } from "./ExcelExport";
 import "./BIA.css";
 
-const VERSION = "v0.2.3"; // Update as needed
+const VERSION = "v0.2.4"; // Update as needed
 
 // Helper to get today's date in YYYY-MM-DD format
 const getToday = () => {
@@ -82,6 +82,8 @@ const BIAForm = () => {
   const [hoveredRowIndex, setHoveredRowIndex] = useState(null);
   const [fieldsOpen, setFieldsOpen] = useState(false);
   const [criticalityDefaults, setCriticalityDefaults] = useState(CRITICALITY_DEFAULTS);
+  const [viewMode, setViewMode] = useState('basic'); // Default to basic view
+  const [biaOpen, setBiaOpen] = useState(true); // BIA Table section open state
 
   // Helper function to format impact score display
   const formatImpactScore = (score) => {
@@ -422,6 +424,8 @@ const BIAForm = () => {
           editIndex={editIndex}
           fieldsOpen={fieldsOpen || entries.length === 0}
           setFieldsOpen={setFieldsOpen}
+          viewMode={viewMode}
+          setViewMode={setViewMode}
         />
       ) : null}
 
@@ -448,6 +452,8 @@ const BIAForm = () => {
         setDropTargetIndex={setDropTargetIndex}
         dropTargetIndex={dropTargetIndex}
         handleMoveProcess={handleMoveProcess}
+        biaOpen={biaOpen}
+        setBiaOpen={setBiaOpen}
       />
 
       <BIAReport entries={entries} />

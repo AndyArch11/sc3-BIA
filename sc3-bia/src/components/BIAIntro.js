@@ -6,11 +6,19 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
   // State for guidance section
   const [showImplementationGuidance, setShowImplementationGuidance] = useState(false);
   
+  // Function to scroll to top
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+  
 
   return (
     <details className="bia-intro-details">
       <summary className="bia-intro-summary">
-        BIA Guidance and Preparation
+        📚 BIA Guidance and Preparation
       </summary>
       
       <p>A <i>Business Impact Analysis (BIA)</i> is a systematic process for evaluating the potential effects of an interruption to critical business operations as a result of a disaster, accident, or emergency. 
@@ -96,159 +104,183 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
         <p>It is important to note that the BIA is an iterative process and should be revisited regularly to ensure it remains aligned with the business objectives and the changing environment. 
             These requirements feed into the overall risk assessment process and the Business Continuity Planning (BCP) process.</p>
 
+        <div className="bia-back-to-top-container">
+          <button 
+            onClick={scrollToTop}
+            className="bia-back-to-top-button"
+            title="Back to Top"
+          >
+            ↑ Back to Top
+          </button>
+        </div>
+
         <p><b>Non-Functional Requirements (NFRs)</b> that are informed by the criticality levels:</p>
         <p><i>Set MTPD, RTO, RPO, and SLA for Each Criticality Level. These values will be used as defaults when calculating Process Criticality based on impact scores.</i></p>
 
-        <table className="bia-intro-table">
-          <thead>
-            <tr className="bia-intro-table-header">
-              <th className="bia-intro-table-th">Criticality</th>
-              <th className="bia-intro-table-th">MTPD (hours)</th>
-              <th className="bia-intro-table-th">RTO (hours)</th>
-              <th className="bia-intro-table-th">RPO (hours)</th>
-              <th className="bia-intro-table-th">SLA (%)</th>
-              <th className="bia-intro-table-th">Period</th>
-              <th className="bia-intro-table-th">Incl. Planned?</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(criticalityDefaults).reverse().map(([level, defaults]) => (
-              <tr key={level} className="bia-intro-table-row">
-                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
-                  {level} ({level === "1" ? "None / Tier 5" : level === "2" ? "Bronze / Tier 4" : level === "3" ? "Silver / Tier 3" : level === "4" ? "Gold / Tier 2" : "Platinum / Tier 1"})
-                </td>
-                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
-                  <select
-                    value={defaults.mtpdSymbol || "="}
-                    onChange={e => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], mtpdSymbol: e.target.value }
-                    }))}
-                    className="bia-intro-symbol-select"
-                  >
-                    <option value="<">&lt;</option>
-                    <option value="≤">&#8804;</option>
-                    <option value="=">=</option>
-                    <option value=">">&gt;</option>
-                    <option value="≥">&#8805;</option>
-                  </select>
-                  <input
-                    type="number"
-                    value={defaults.mtpd}
-                    onChange={e => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], mtpd: e.target.value }
-                    }))}
-                    className="bia-intro-input"
-                  />
-                </td>
-                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
-                  <select
-                    value={defaults.rtoSymbol || "="}
-                    onChange={e => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], rtoSymbol: e.target.value }
-                    }))}
-                    className="bia-intro-symbol-select"
-                  >
-                    <option value="<">&lt;</option>
-                    <option value="≤">&#8804;</option>
-                    <option value="=">=</option>
-                    <option value=">">&gt;</option>
-                    <option value="≥">&#8805;</option>
-                  </select>
-                  <input
-                    type="number"
-                    value={defaults.rto}
-                    onChange={e => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], rto: e.target.value }
-                    }))}
-                    className="bia-intro-input"
-                  />
-                </td>
-                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
-                  <select
-                    value={defaults.rpoSymbol || "="}
-                    onChange={e => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], rpoSymbol: e.target.value }
-                    }))}
-                    className="bia-intro-symbol-select"
-                  >
-                    <option value="<">&lt;</option>
-                    <option value="≤">&#8804;</option>
-                    <option value="=">=</option>
-                    <option value=">">&gt;</option>
-                    <option value="≥">&#8805;</option>
-                  </select>
-                  <input
-                    type="number"
-                    value={defaults.rpo}
-                    onChange={e => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], rpo: e.target.value }
-                    }))}
-                    className="bia-intro-input"
-                  />
-                </td>
-                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
-                  <select
-                    value={defaults.slaSymbol || "="}
-                    onChange={e => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], slaSymbol: e.target.value }
-                    }))}
-                    className="bia-intro-symbol-select"
-                  >
-                    <option value="<">&lt;</option>
-                    <option value="≤">&#8804;</option>
-                    <option value="=">=</option>
-                    <option value=">">&gt;</option>
-                    <option value="≥">&#8805;</option>
-                  </select>
-                  <input
-                    type="text"
-                    value={defaults.sla}
-                    onChange={e => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], sla: e.target.value }
-                    }))}
-                    className="bia-intro-input"
-                  />
-                </td>
-                <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
-                  <select
-                    value={defaults.slaPeriod || "Month"}
-                    onChange={(e) => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], slaPeriod: e.target.value }
-                    }))}
-                    className="bia-intro-select"
-                  >
-                    <option value="Day">Day</option>
-                    <option value="Week">Week</option>
-                    <option value="Month">Month</option>
-                    <option value="Quarter">Quarter</option>
-                    <option value="Year">Year</option>
-                  </select>
-                </td>
-                <td className={`bia-criticality-color-${level} bia-intro-table-td bia-intro-checkbox-cell`}>
-                  <input
-                    type="checkbox"
-                    checked={defaults.slaIncludesPlanned || false}
-                    onChange={(e) => setCriticalityDefaults(prev => ({
-                      ...prev,
-                      [level]: { ...prev[level], slaIncludesPlanned: e.target.checked }
-                    }))}
-                    className="bia-intro-checkbox"
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
+        <div className="bia-intro-section">
+          <div className="bia-intro-table-wrapper">
+            {/* Outer wrapper for horizontal scroll so that scroll bar does not hide the last row - works for Chrome and Edge, not for Firefox */}
+            <div className="bia-intro-table-scroll">
+              <table className="bia-intro-table">
+                <thead>
+                  <tr className="bia-intro-table-header">
+                    <th className="bia-intro-table-th">Criticality</th>
+                    <th className="bia-intro-table-th">MTPD (hours)</th>
+                    <th className="bia-intro-table-th">RTO (hours)</th>
+                    <th className="bia-intro-table-th">RPO (hours)</th>
+                    <th className="bia-intro-table-th">SLA (%)</th>
+                    <th className="bia-intro-table-th">Period</th>
+                    <th className="bia-intro-table-th">Incl. Planned?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {Object.entries(criticalityDefaults).reverse().map(([level, defaults]) => (
+                  <tr key={level} className="bia-intro-table-row">
+                    <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                      {level} ({level === "1" ? "None / Tier 5" : level === "2" ? "Bronze / Tier 4" : level === "3" ? "Silver / Tier 3" : level === "4" ? "Gold / Tier 2" : "Platinum / Tier 1"})
+                    </td>
+                    <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                      <div className="bia-intro-cell-content">
+                        <select
+                          value={defaults.mtpdSymbol || "="}
+                          onChange={e => setCriticalityDefaults(prev => ({
+                            ...prev,
+                            [level]: { ...prev[level], mtpdSymbol: e.target.value }
+                          }))}
+                          className="bia-intro-symbol-select"
+                        >
+                          <option value="<">&lt;</option>
+                          <option value="≤">&#8804;</option>
+                          <option value="=">=</option>
+                          <option value=">">&gt;</option>
+                          <option value="≥">&#8805;</option>
+                        </select>
+                        <input
+                          type="number"
+                          value={defaults.mtpd}
+                          onChange={e => setCriticalityDefaults(prev => ({
+                            ...prev,
+                            [level]: { ...prev[level], mtpd: e.target.value }
+                          }))}
+                          className="bia-intro-input"
+                        />
+                      </div>
+                    </td>
+                    <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                      <div className="bia-intro-cell-content">
+                        <select
+                          value={defaults.rtoSymbol || "="}
+                          onChange={e => setCriticalityDefaults(prev => ({
+                            ...prev,
+                            [level]: { ...prev[level], rtoSymbol: e.target.value }
+                          }))}
+                          className="bia-intro-symbol-select"
+                        >
+                          <option value="<">&lt;</option>
+                          <option value="≤">&#8804;</option>
+                          <option value="=">=</option>
+                          <option value=">">&gt;</option>
+                          <option value="≥">&#8805;</option>
+                        </select>
+                        <input
+                          type="number"
+                          value={defaults.rto}
+                          onChange={e => setCriticalityDefaults(prev => ({
+                            ...prev,
+                            [level]: { ...prev[level], rto: e.target.value }
+                          }))}
+                          className="bia-intro-input"
+                        />
+                      </div>
+                    </td>
+                    <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                      <div className="bia-intro-cell-content">
+                        <select
+                          value={defaults.rpoSymbol || "="}
+                          onChange={e => setCriticalityDefaults(prev => ({
+                            ...prev,
+                            [level]: { ...prev[level], rpoSymbol: e.target.value }
+                          }))}
+                          className="bia-intro-symbol-select"
+                        >
+                          <option value="<">&lt;</option>
+                          <option value="≤">&#8804;</option>
+                          <option value="=">=</option>
+                          <option value=">">&gt;</option>
+                          <option value="≥">&#8805;</option>
+                        </select>
+                        <input
+                          type="number"
+                          value={defaults.rpo}
+                          onChange={e => setCriticalityDefaults(prev => ({
+                            ...prev,
+                            [level]: { ...prev[level], rpo: e.target.value }
+                          }))}
+                          className="bia-intro-input"
+                        />
+                      </div>
+                    </td>
+                    <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                      <div className="bia-intro-cell-content">
+                        <select
+                          value={defaults.slaSymbol || "="}
+                          onChange={e => setCriticalityDefaults(prev => ({
+                            ...prev,
+                            [level]: { ...prev[level], slaSymbol: e.target.value }
+                          }))}
+                          className="bia-intro-symbol-select"
+                        >
+                          <option value="<">&lt;</option>
+                          <option value="≤">&#8804;</option>
+                          <option value="=">=</option>
+                          <option value=">">&gt;</option>
+                          <option value="≥">&#8805;</option>
+                        </select>
+                        <input
+                          type="text"
+                          value={defaults.sla}
+                          onChange={e => setCriticalityDefaults(prev => ({
+                            ...prev,
+                            [level]: { ...prev[level], sla: e.target.value }
+                          }))}
+                          className="bia-intro-input"
+                        />
+                      </div>
+                    </td>
+                    <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                      <select
+                        value={defaults.slaPeriod || "Month"}
+                        onChange={(e) => setCriticalityDefaults(prev => ({
+                          ...prev,
+                          [level]: { ...prev[level], slaPeriod: e.target.value }
+                        }))}
+                        className="bia-intro-select"
+                      >
+                        <option value="Day">Day</option>
+                        <option value="Week">Week</option>
+                        <option value="Month">Month</option>
+                        <option value="Quarter">Quarter</option>
+                        <option value="Year">Year</option>
+                      </select>
+                    </td>
+                    <td className={`bia-criticality-color-${level} bia-intro-table-td bia-intro-checkbox-cell`}>
+                      <input
+                        type="checkbox"
+                        checked={defaults.slaIncludesPlanned || false}
+                        onChange={(e) => setCriticalityDefaults(prev => ({
+                          ...prev,
+                          [level]: { ...prev[level], slaIncludesPlanned: e.target.checked }
+                        }))}
+                        className="bia-intro-checkbox"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            </div>
+          </div>
+        </div>
         <button
           type="button"
           onClick={() => setCriticalityDefaults(initialCriticalityDefaults)}
@@ -256,6 +288,16 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
         >
           Reset to Initial Defaults
         </button>
+
+        <div className="bia-back-to-top-container">
+          <button 
+            onClick={scrollToTop}
+            className="bia-back-to-top-button"
+            title="Back to Top"
+          >
+            ↑ Back to Top
+          </button>
+        </div>
 
         <p><b>Note:</b> These Non-Functional Requirements (NFRs) are naive blunt instruments that do not usually account for the scenarios that they are meant to address or those that they don't address, 
         whether they are applicable equally or not for nodal scoped events, locale scoped events, or regional scoped events, or for outages vs data corruption, etc.</p>
@@ -273,14 +315,25 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
         <p><b>SLA (Service Level Agreement):</b> A formal agreement between a service provider and a customer that outlines the expected level of service, including metrics such as availability, performance, and response times. 
         A public contractual SLA is usually made up of a combination of internal Service Level Objectives (SLOs) and external commitments. An SLA is often mistakenly used to indicate an internal availability SLO.</p>
 
+        <div className="bia-back-to-top-container">
+          <button 
+            onClick={scrollToTop}
+            className="bia-back-to-top-button"
+            title="Back to Top"
+          >
+            ↑ Back to Top
+          </button>
+        </div>
+
         <p><b>Service Level Objectives (SLO) vs Service Level Agreements (SLA):</b></p>
-        <table className="bia-comparison-table">
-          <thead>
-            <tr className="bia-comparison-table-header">
-              <th className="bia-comparison-table th">Aspect</th>
-              <th className="bia-comparison-table th">SLO (Service Level Objective)</th>
-              <th className="bia-comparison-table th">SLA (Service Level Agreement)</th>
-            </tr>
+        <div className="bia-guidance-table-container">
+          <table className="bia-comparison-table">
+            <thead>
+              <tr className="bia-comparison-table-header">
+                <th className="bia-comparison-table th">Aspect</th>
+                <th className="bia-comparison-table th">SLO (Service Level Objective)</th>
+                <th className="bia-comparison-table th">SLA (Service Level Agreement)</th>
+              </tr>
           </thead>
           <tbody>
             <tr>
@@ -305,9 +358,11 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
             </tr>
           </tbody>
         </table>
+        </div>
 
         <p><b>SLA Percentage Downtime Reference:</b></p>
-        <table className="bia-downtime-table">
+        <div className="bia-guidance-table-container">
+          <table className="bia-downtime-table">
           <thead>
             <tr className="bia-downtime-table-header">
               <th className="bia-downtime-table th">SLA Percentage</th>
@@ -361,9 +416,20 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
             </tr>
           </tbody>
         </table>
+        </div>
 
         <p><i>Note: Availability SLOs (and SLAs) should explicitly define the measurement window; the period during which service availability is tracked, along with the reset cadence for the metric. This is often missing in Availability SLOs and SLAs.</i></p>
         <p>Availability SLOs (and SLAs) should also indicate if it is inclusive of planned downtime or only unplanned outages.</p>
+
+        <div className="bia-back-to-top-container">
+          <button 
+            onClick={scrollToTop}
+            className="bia-back-to-top-button"
+            title="Back to Top"
+          >
+            ↑ Back to Top
+          </button>
+        </div>
 
         
         <div className="bia-guidance-container">
@@ -383,7 +449,8 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
             <div className="bia-guidance-content">
               <p>Different SLA, RTO, and RPO requirements necessitate specific technical architectures and implementation strategies. The following provides guidance on matching technical solutions to business requirements:</p>
 
-              <table className="bia-downtime-table">
+              <div className="bia-guidance-table-container">
+                <table className="bia-downtime-table">
                 <thead>
                   <tr className="bia-downtime-table-header">
                     <th className="bia-downtime-table th">SLA Range</th>
@@ -445,6 +512,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                   </tr>
                 </tbody>
               </table>
+              </div>
 
               <p><i><b>Important:</b> The technical solutions and strategies outlined above are subject to organizational budget constraints and resource availability. 
               Some business objectives may not be technically or economically achievable within current budget allocations. 
@@ -611,6 +679,18 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
 
         <p><b>Disclaimer:</b> The information provided here is for general informational purposes only and will require adaptation for specific businesses and maturity capabilities and is not intended as legal advice. 
           Please consult with a qualified legal professional for specific legal advice tailored to your situation.</p>
+
+        <div className="bia-back-to-top-container">
+          <button 
+            onClick={scrollToTop}
+            className="bia-back-to-top-button"
+            title="Back to Top"
+          >
+            ↑ Back to Top
+          </button>
+        </div>
+
+        <p><hr /></p>
       </div>
     </details>
   );

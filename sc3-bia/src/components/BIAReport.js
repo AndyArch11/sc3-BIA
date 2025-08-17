@@ -532,239 +532,241 @@ const BIAReport = ({ entries }) => {
   };
 
   return (
-    <details className="bia-intro-details">
-      <summary className="bia-intro-summary">
-        BIA Report
-      </summary>
-      <div>
-        {/* Report content starts here */}
-        <h3 className="bia-report-title">
-            Business Impact Assessment Report
-        </h3>
-        <div className="bia-report-content">
-        {/* Executive Summary */}
-        <div className="bia-report-section">
-          <h4 className="bia-report-section-title">Executive Summary</h4>
-          <div className="bia-report-summary-grid">
-            <div className="bia-report-summary-item">
-              <span className="bia-report-summary-label">Total Processes Analyzed:</span>
-              <span className="bia-report-summary-value">{totalProcesses}</span>
-            </div>
-            <div className="bia-report-summary-item">
-              <span className="bia-report-summary-label">Business Units Covered:</span>
-              <span className="bia-report-summary-value">{businessUnits.length}</span>
-            </div>
-            <div className="bia-report-summary-item">
-              <span className="bia-report-summary-label">Critical Processes (Platinum):</span>
-              <span className="bia-report-summary-value bia-report-critical">{criticalProcesses}</span>
-            </div>
-            <div className="bia-report-summary-item">
-              <span className="bia-report-summary-label">High Priority Processes (Gold):</span>
-              <span className="bia-report-summary-value bia-report-high">{highCriticalityProcesses}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Recovery Time Objectives */}
-        <div className="bia-report-section">
-          <h4 className="bia-report-section-title">Recovery Time Analysis</h4>
-          <div className="bia-report-rto-grid">
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Average RTO:</span>
-              <span className="bia-report-metric-value">{avgRTO} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Maximum RTO:</span>
-              <span className="bia-report-metric-value">{maxRTO} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Average RTA:</span>
-              <span className="bia-report-metric-value">{avgRTA} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Maximum RTA:</span>
-              <span className="bia-report-metric-value">{maxRTAValue} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Average MTPD:</span>
-              <span className="bia-report-metric-value">{avgMTPD} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Maximum MTPD:</span>
-              <span className="bia-report-metric-value">{maxMTPD} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Average RPO:</span>
-              <span className="bia-report-metric-value">{avgRPO} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Maximum RPO:</span>
-              <span className="bia-report-metric-value">{maxRPO} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Average RPA:</span>
-              <span className="bia-report-metric-value">{avgRPA} hours</span>
-            </div>
-            <div className="bia-report-metric">
-              <span className="bia-report-metric-label">Maximum RPA:</span>
-              <span className="bia-report-metric-value">{maxRPAValue} hours</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Criticality Distribution */}
-        <div className="bia-report-section">
-          <h4 className="bia-report-section-title">Process Criticality Distribution</h4>
-          
-          {/* Donut Chart */}
-          <div className="bia-report-criticality-chart">
-            <CriticalityDonutChart 
-              data={criticalityStats} 
-              total={totalProcesses}
-              formatCriticalityRating={formatCriticalityRating}
-            />
-          </div>
-
-          {/* Bar Chart */}
-          <div className="bia-report-distribution">
-            {Object.entries(criticalityStats)
-              .sort(([a], [b]) => b - a)
-              .map(([rating, count]) => (
-                <div key={rating} className="bia-report-distribution-item">
-                  <span className="bia-report-distribution-label">
-                    {formatCriticalityRating(rating)}:
-                  </span>
-                  <span className="bia-report-distribution-value">{count}</span>
-                  <div className="bia-report-distribution-bar">
-                    <div 
-                      className={`bia-report-distribution-fill bia-report-criticality-${rating}`}
-                      style={{ width: `${(count / totalProcesses) * 100}%` }}
-                    ></div>
-                  </div>
+    <div className="bia-report-container">
+      <details className="bia-report-details">
+        <summary className="bia-report-summary">
+          📊 BIA Report
+        </summary>
+        <div>
+          {/* Report content starts here */}
+          <h3 className="bia-report-title">
+              Business Impact Assessment Report
+          </h3>
+          <div className="bia-report-content">
+            {/* Executive Summary */}
+            <div className="bia-report-section">
+              <h4 className="bia-report-section-title">Executive Summary</h4>
+              <div className="bia-report-summary-grid">
+                <div className="bia-report-summary-item">
+                  <span className="bia-report-summary-label">Total Processes Analyzed:</span>
+                  <span className="bia-report-summary-value">{totalProcesses}</span>
                 </div>
-              ))}
-          </div>
-        </div>
-
-        {/* Impact Distribution */}
-        <div className="bia-report-section">
-          <h4 className="bia-report-section-title">Average Impact Score Distribution</h4>
-          <p className="bia-report-section-description">
-            Based on the average of all impact categories (Financial, Operational, OHS, Environmental,Staff, Sites, Reputational, Statutory, Information Security)
-          </p>
-          
-          {/* Donut Chart */}
-          <div className="bia-report-criticality-chart">
-            <ImpactDonutChart 
-              data={impactStats} 
-              total={totalProcesses}
-              formatImpactScore={formatImpactScore}
-            />
-          </div>
-
-          {/* Bar Chart */}
-          <div className="bia-report-distribution">
-            {Object.entries(impactStats)
-              .sort(([a], [b]) => b - a)
-              .map(([score, count]) => (
-                <div key={score} className="bia-report-distribution-item">
-                  <span className="bia-report-distribution-label">
-                    {formatImpactScore(score)}:
-                  </span>
-                  <span className="bia-report-distribution-value">{count}</span>
-                  <div className="bia-report-distribution-bar">
-                    <div 
-                      className={`bia-report-distribution-fill bia-report-impact-${score}`}
-                      style={{ width: `${(count / totalProcesses) * 100}%` }}
-                    ></div>
-                  </div>
+                <div className="bia-report-summary-item">
+                  <span className="bia-report-summary-label">Business Units Covered:</span>
+                  <span className="bia-report-summary-value">{businessUnits.length}</span>
                 </div>
-              ))}
-          </div>
-        </div>
+                <div className="bia-report-summary-item">
+                  <span className="bia-report-summary-label">Critical Processes (Platinum):</span>
+                  <span className="bia-report-summary-value bia-report-critical">{criticalProcesses}</span>
+                </div>
+                <div className="bia-report-summary-item">
+                  <span className="bia-report-summary-label">High Priority Processes (Gold):</span>
+                  <span className="bia-report-summary-value bia-report-high">{highCriticalityProcesses}</span>
+                </div>
+              </div>
+            </div>
 
-        {/* Business Units */}
-        <div className="bia-report-section">
-          <h4 className="bia-report-section-title">Business Units Analyzed</h4>
-          <div className="bia-report-business-units">
-            {businessUnits.length > 0 ? (
-              businessUnits.map((unit, index) => (
-                <span key={index} className="bia-report-business-unit">
-                  {unit}
-                </span>
-              ))
-            ) : (
-              <span className="bia-report-no-data">No business units specified</span>
-            )}
-          </div>
-        </div>
+            {/* Recovery Time Objectives */}
+            <div className="bia-report-section">
+              <h4 className="bia-report-section-title">Recovery Time Analysis</h4>
+              <div className="bia-report-rto-grid">
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Average RTO:</span>
+                  <span className="bia-report-metric-value">{avgRTO} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Maximum RTO:</span>
+                  <span className="bia-report-metric-value">{maxRTO} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Average RTA:</span>
+                  <span className="bia-report-metric-value">{avgRTA} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Maximum RTA:</span>
+                  <span className="bia-report-metric-value">{maxRTAValue} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Average MTPD:</span>
+                  <span className="bia-report-metric-value">{avgMTPD} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Maximum MTPD:</span>
+                  <span className="bia-report-metric-value">{maxMTPD} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Average RPO:</span>
+                  <span className="bia-report-metric-value">{avgRPO} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Maximum RPO:</span>
+                  <span className="bia-report-metric-value">{maxRPO} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Average RPA:</span>
+                  <span className="bia-report-metric-value">{avgRPA} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Maximum RPA:</span>
+                  <span className="bia-report-metric-value">{maxRPAValue} hours</span>
+                </div>
+              </div>
+            </div>
 
-        {/* Critical Process Summary */}
-        {criticalProcesses > 0 && (
-          <div className="bia-report-section">
-            <h4 className="bia-report-section-title">Critical Processes (Platinum Level)</h4>
-            <div className="bia-report-critical-processes">
-              {entries
-                .filter(entry => (entry.criticality || "1") === "5")
-                .map((entry, index) => (
-                  <div key={index} className="bia-report-critical-process">
-                    <div className="bia-report-process-name">{entry.processName || entry.processId}</div>
-                    <div className="bia-report-process-details">
-                      <span>RTO: {formatNumber(entry.recoveryTimeObjective) === "N/A" ? "N/A" : `${formatNumber(entry.recoveryTimeObjective)}h`}</span>
-                      <span>RTA: {formatNumber(entry.recoveryTimeActual) === "N/A" ? "N/A" : `${formatNumber(entry.recoveryTimeActual)}h`}</span>
-                      <span>MTPD: {formatNumber(entry.mtpd) === "N/A" ? "N/A" : `${formatNumber(entry.mtpd)}h`}</span>
-                      <span>RPO: {formatNumber(entry.recoveryPointObjective) === "N/A" ? "N/A" : `${formatNumber(entry.recoveryPointObjective)}h`}</span>
-                      <span>RPA: {formatNumber(entry.recoveryPointActual) === "N/A" ? "N/A" : `${formatNumber(entry.recoveryPointActual)}h`}</span>
-                      <span>Unit: {entry.businessUnit || "N/A"}</span>
+            {/* Criticality Distribution */}
+            <div className="bia-report-section">
+              <h4 className="bia-report-section-title">Process Criticality Distribution</h4>
+              
+              {/* Donut Chart */}
+              <div className="bia-report-criticality-chart">
+                <CriticalityDonutChart 
+                  data={criticalityStats} 
+                  total={totalProcesses}
+                  formatCriticalityRating={formatCriticalityRating}
+                />
+              </div>
+
+              {/* Bar Chart */}
+              <div className="bia-report-distribution">
+                {Object.entries(criticalityStats)
+                  .sort(([a], [b]) => b - a)
+                  .map(([rating, count]) => (
+                    <div key={rating} className="bia-report-distribution-item">
+                      <span className="bia-report-distribution-label">
+                        {formatCriticalityRating(rating)}:
+                      </span>
+                      <span className="bia-report-distribution-value">{count}</span>
+                      <div className="bia-report-distribution-bar">
+                        <div 
+                          className={`bia-report-distribution-fill bia-report-criticality-${rating}`}
+                          style={{ width: `${(count / totalProcesses) * 100}%` }}
+                        ></div>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* Recommendations */}
-        <div className="bia-report-section">
-          <h4 className="bia-report-section-title">Key Recommendations</h4>
-          <div className="bia-report-recommendations">
+            {/* Impact Distribution */}
+            <div className="bia-report-section">
+              <h4 className="bia-report-section-title">Average Impact Score Distribution</h4>
+              <p className="bia-report-section-description">
+                Based on the average of all impact categories (Financial, Operational, OHS, Environmental,Staff, Sites, Reputational, Statutory, Information Security)
+              </p>
+              
+              {/* Donut Chart */}
+              <div className="bia-report-criticality-chart">
+                <ImpactDonutChart 
+                  data={impactStats} 
+                  total={totalProcesses}
+                  formatImpactScore={formatImpactScore}
+                />
+              </div>
+
+              {/* Bar Chart */}
+              <div className="bia-report-distribution">
+                {Object.entries(impactStats)
+                  .sort(([a], [b]) => b - a)
+                  .map(([score, count]) => (
+                    <div key={score} className="bia-report-distribution-item">
+                      <span className="bia-report-distribution-label">
+                        {formatImpactScore(score)}:
+                      </span>
+                      <span className="bia-report-distribution-value">{count}</span>
+                      <div className="bia-report-distribution-bar">
+                        <div 
+                          className={`bia-report-distribution-fill bia-report-impact-${score}`}
+                          style={{ width: `${(count / totalProcesses) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+
+            {/* Business Units */}
+            <div className="bia-report-section">
+              <h4 className="bia-report-section-title">Business Units Analyzed</h4>
+              <div className="bia-report-business-units">
+                {businessUnits.length > 0 ? (
+                  businessUnits.map((unit, index) => (
+                    <span key={index} className="bia-report-business-unit">
+                      {unit}
+                    </span>
+                  ))
+                ) : (
+                  <span className="bia-report-no-data">No business units specified</span>
+                )}
+              </div>
+            </div>
+
+            {/* Critical Process Summary */}
             {criticalProcesses > 0 && (
-              <div className="bia-report-recommendation">
-                <strong>Critical Process Focus:</strong> {criticalProcesses} critical processes require immediate attention for business continuity planning.
+              <div className="bia-report-section">
+                <h4 className="bia-report-section-title">Critical Processes (Platinum Level)</h4>
+                <div className="bia-report-critical-processes">
+                  {entries
+                    .filter(entry => (entry.criticality || "1") === "5")
+                    .map((entry, index) => (
+                      <div key={index} className="bia-report-critical-process">
+                        <div className="bia-report-process-name">{entry.processName || entry.processId}</div>
+                        <div className="bia-report-process-details">
+                          <span>RTO: {formatNumber(entry.recoveryTimeObjective) === "N/A" ? "N/A" : `${formatNumber(entry.recoveryTimeObjective)}h`}</span>
+                          <span>RTA: {formatNumber(entry.recoveryTimeActual) === "N/A" ? "N/A" : `${formatNumber(entry.recoveryTimeActual)}h`}</span>
+                          <span>MTPD: {formatNumber(entry.mtpd) === "N/A" ? "N/A" : `${formatNumber(entry.mtpd)}h`}</span>
+                          <span>RPO: {formatNumber(entry.recoveryPointObjective) === "N/A" ? "N/A" : `${formatNumber(entry.recoveryPointObjective)}h`}</span>
+                          <span>RPA: {formatNumber(entry.recoveryPointActual) === "N/A" ? "N/A" : `${formatNumber(entry.recoveryPointActual)}h`}</span>
+                          <span>Unit: {entry.businessUnit || "N/A"}</span>
+                        </div>
+                      </div>
+                    ))}
+                </div>
               </div>
             )}
-            {avgRTO !== "N/A" && parseFloat(avgRTO) > 24 && (
-              <div className="bia-report-recommendation">
-                <strong>Recovery Time Concern:</strong> Average RTO of {avgRTO} hours may be too high for critical business operations.
+
+            {/* Recommendations */}
+            <div className="bia-report-section">
+              <h4 className="bia-report-section-title">Key Recommendations</h4>
+              <div className="bia-report-recommendations">
+                {criticalProcesses > 0 && (
+                  <div className="bia-report-recommendation">
+                    <strong>Critical Process Focus:</strong> {criticalProcesses} critical processes require immediate attention for business continuity planning.
+                  </div>
+                )}
+                {avgRTO !== "N/A" && parseFloat(avgRTO) > 24 && (
+                  <div className="bia-report-recommendation">
+                    <strong>Recovery Time Concern:</strong> Average RTO of {avgRTO} hours may be too high for critical business operations.
+                  </div>
+                )}
+                {avgRTA !== "N/A" && avgRTO !== "N/A" && parseFloat(avgRTA) > parseFloat(avgRTO) && (
+                  <div className="bia-report-recommendation">
+                    <strong>Performance Gap:</strong> Average RTA ({avgRTA}h) exceeds average RTO ({avgRTO}h), indicating recovery performance issues.
+                  </div>
+                )}
+                {avgRPO !== "N/A" && parseFloat(avgRPO) > 24 && (
+                  <div className="bia-report-recommendation">
+                    <strong>Data Loss Risk:</strong> Average RPO of {avgRPO} hours may result in significant data loss for critical processes.
+                  </div>
+                )}
+                {avgRPA !== "N/A" && avgRPO !== "N/A" && parseFloat(avgRPA) > parseFloat(avgRPO) && (
+                  <div className="bia-report-recommendation">
+                    <strong>Data Recovery Gap:</strong> Average RPA ({avgRPA}h) exceeds average RPO ({avgRPO}h), indicating data recovery performance issues.
+                  </div>
+                )}
+                {businessUnits.length < totalProcesses / 2 && (
+                  <div className="bia-report-recommendation">
+                    <strong>Documentation Gap:</strong> Consider completing business unit assignments for better organizational coverage analysis.
+                  </div>
+                )}
+                <div className="bia-report-recommendation">
+                  <strong>Regular Review:</strong> BIA should be reviewed and updated at least annually or when significant business changes occur.
+                </div>
               </div>
-            )}
-            {avgRTA !== "N/A" && avgRTO !== "N/A" && parseFloat(avgRTA) > parseFloat(avgRTO) && (
-              <div className="bia-report-recommendation">
-                <strong>Performance Gap:</strong> Average RTA ({avgRTA}h) exceeds average RTO ({avgRTO}h), indicating recovery performance issues.
-              </div>
-            )}
-            {avgRPO !== "N/A" && parseFloat(avgRPO) > 24 && (
-              <div className="bia-report-recommendation">
-                <strong>Data Loss Risk:</strong> Average RPO of {avgRPO} hours may result in significant data loss for critical processes.
-              </div>
-            )}
-            {avgRPA !== "N/A" && avgRPO !== "N/A" && parseFloat(avgRPA) > parseFloat(avgRPO) && (
-              <div className="bia-report-recommendation">
-                <strong>Data Recovery Gap:</strong> Average RPA ({avgRPA}h) exceeds average RPO ({avgRPO}h), indicating data recovery performance issues.
-              </div>
-            )}
-            {businessUnits.length < totalProcesses / 2 && (
-              <div className="bia-report-recommendation">
-                <strong>Documentation Gap:</strong> Consider completing business unit assignments for better organizational coverage analysis.
-              </div>
-            )}
-            <div className="bia-report-recommendation">
-              <strong>Regular Review:</strong> BIA should be reviewed and updated at least annually or when significant business changes occur.
             </div>
           </div>
         </div>
-        </div>
-      </div>
-    </details>
+      </details>
+    </div>
   );
 };
 

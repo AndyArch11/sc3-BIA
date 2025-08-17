@@ -5,6 +5,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: auto; /* Allow horizontal scrolling for full-width tables */
+}
+
+html {
+  overflow-x: auto; /* Ensure html also allows horizontal scrolling */
 }
 
 code {

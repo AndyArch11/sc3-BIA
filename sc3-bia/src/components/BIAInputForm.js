@@ -10,12 +10,42 @@ const InputForm = ({
   handleCancel,
   editIndex, 
   fieldsOpen, 
-  setFieldsOpen
+  setFieldsOpen,
+  viewMode,
+  setViewMode
 }) => {
   return (
     <form onSubmit={handleSubmit}>
       <details open={fieldsOpen} onToggle={e => setFieldsOpen(e.target.open)}>
-        <summary className="bia-form-summary">BIA Form Fields</summary>
+        <summary className="bia-form-summary">✏️ BIA Form Fields</summary>
+        
+        {/* View Mode Selection */}
+        <div className="bia-view-mode-container">
+          <label>
+            View Mode:
+          </label>
+          <div className="bia-view-mode-options">
+            <label>
+              <input
+                type="radio"
+                value="basic"
+                checked={viewMode === 'basic'}
+                onChange={(e) => setViewMode(e.target.value)}
+              />
+              Basic (Essential fields only)
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="extended"
+                checked={viewMode === 'extended'}
+                onChange={(e) => setViewMode(e.target.value)}
+              />
+              Extended (All fields)
+            </label>
+          </div>
+        </div>
+        
         <table className="bia-form-table">
           <tbody>
             {/* Business Process Details */}
@@ -51,87 +81,91 @@ const InputForm = ({
                           />
                         </td>
                       </tr>
-                      <tr title="The business unit or department responsible for this process">
-                        <td className="bia-field-cell-label"><label className="bia-form-label">Business Unit:</label></td>
-                        <td>
-                          <input
-                            type="text"
-                            name="businessUnit"
-                            value={form.businessUnit}
-                            onChange={handleChange}
-                            className="bia-input"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="The person accountable for this process">
-                        <td className="bia-field-cell-label"><label className="bia-form-label">Process Owner:</label></td>
-                        <td>
-                          <input
-                            type="text"
-                            name="owner"
-                            value={form.owner}
-                            onChange={handleChange}
-                            className="bia-input"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="Briefly describe the purpose and scope of this process">
-                        <td className="bia-field-cell-label"><label className="bia-form-label">Description:</label></td>
-                        <td>
-                          <textarea
-                            name="description"
-                            value={form.description}
-                            onChange={handleChange}
-                            className="bia-textarea"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="List scenarios or events that are considered in-scope for this BIA (e.g. system outage, data loss)">
-                        <td className="bia-field-cell-label"><label className="bia-form-label">In Scope Scenarios:</label></td>
-                        <td>
-                          <textarea
-                            name="inScopeScenarios"
-                            value={form.inScopeScenarios}
-                            onChange={handleChange}  
-                            className="bia-textarea"                              
-                          />
-                        </td>
-                      </tr>
-                      <tr title="List scenarios or events that are not considered in-scope for this BIA">
-                        <td className="bia-field-cell-label"><label className="bia-form-label">Out of Scope Scenarios:</label></td>
-                        <td>
-                          <textarea
-                            name="outOfScopeScenarios"
-                            value={form.outOfScopeScenarios}
-                            onChange={handleChange}
-                            className="bia-textarea"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="Name of the person completing this form">
-                        <td className="bia-field-cell-label"><label className="bia-form-label">Created By:</label></td>
-                        <td>
-                          <input
-                            type="text"
-                            name="createdBy"
-                            value={form.createdBy}
-                            onChange={handleChange}  
-                            className="bia-input"                              
-                          />
-                        </td>
-                      </tr>
-                      <tr title="Date this entry was created">
-                        <td className="bia-field-cell-label"><label className="bia-form-label">Date Created:</label></td>
-                        <td>
-                          <input
-                            type="date"
-                            name="dateCreated"
-                            value={form.dateCreated}
-                            onChange={handleChange}   
-                            className="bia-input-date"                        
-                          />
-                        </td>
-                      </tr>                      
+                      {viewMode === 'extended' && (
+                        <>
+                          <tr title="The business unit or department responsible for this process">
+                            <td className="bia-field-cell-label"><label className="bia-form-label">Business Unit:</label></td>
+                            <td>
+                              <input
+                                type="text"
+                                name="businessUnit"
+                                value={form.businessUnit}
+                                onChange={handleChange}
+                                className="bia-input"
+                              />
+                            </td>
+                          </tr>
+                          <tr title="The person accountable for this process">
+                            <td className="bia-field-cell-label"><label className="bia-form-label">Process Owner:</label></td>
+                            <td>
+                              <input
+                                type="text"
+                                name="owner"
+                                value={form.owner}
+                                onChange={handleChange}
+                                className="bia-input"
+                              />
+                            </td>
+                          </tr>
+                          <tr title="Briefly describe the purpose and scope of this process">
+                            <td className="bia-field-cell-label"><label className="bia-form-label">Description:</label></td>
+                            <td>
+                              <textarea
+                                name="description"
+                                value={form.description}
+                                onChange={handleChange}
+                                className="bia-textarea"
+                              />
+                            </td>
+                          </tr>
+                          <tr title="List scenarios or events that are considered in-scope for this BIA (e.g. system outage, data loss)">
+                            <td className="bia-field-cell-label"><label className="bia-form-label">In Scope Scenarios:</label></td>
+                            <td>
+                              <textarea
+                                name="inScopeScenarios"
+                                value={form.inScopeScenarios}
+                                onChange={handleChange}  
+                                className="bia-textarea"                              
+                              />
+                            </td>
+                          </tr>
+                          <tr title="List scenarios or events that are not considered in-scope for this BIA">
+                            <td className="bia-field-cell-label"><label className="bia-form-label">Out of Scope Scenarios:</label></td>
+                            <td>
+                              <textarea
+                                name="outOfScopeScenarios"
+                                value={form.outOfScopeScenarios}
+                                onChange={handleChange}
+                                className="bia-textarea"
+                              />
+                            </td>
+                          </tr>
+                          <tr title="Name of the person completing this form">
+                            <td className="bia-field-cell-label"><label className="bia-form-label">Created By:</label></td>
+                            <td>
+                              <input
+                                type="text"
+                                name="createdBy"
+                                value={form.createdBy}
+                                onChange={handleChange}  
+                                className="bia-input"                              
+                              />
+                            </td>
+                          </tr>
+                          <tr title="Date this entry was created">
+                            <td className="bia-field-cell-label"><label className="bia-form-label">Date Created:</label></td>
+                            <td>
+                              <input
+                                type="date"
+                                name="dateCreated"
+                                value={form.dateCreated}
+                                onChange={handleChange}   
+                                className="bia-input-date"                        
+                              />
+                            </td>
+                          </tr>
+                        </>
+                      )}                      
                     </tbody>
                   </table>
                 </fieldset>
@@ -145,7 +179,7 @@ const InputForm = ({
                   <legend className="bia-legend bia-legend-impact">Impact Assessment</legend>
                   <table className="bia-field-table">
                     <tbody>
-                      <tr className="bia-impact-row-main" title="The overall impact for this process">
+                      <tr className="bia-impact-row-other" title="The overall impact for this process">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">Overall Impact of Disruption:</label></td>
                         <td>
                           <div className="bia-flex-container">
@@ -445,7 +479,7 @@ const InputForm = ({
                   <legend className="bia-legend bia-legend-criticality">Process Criticality</legend>
                   <table className="bia-field-table">
                     <tbody>
-                      <tr title="The importance of this process to the organisation">
+                      <tr className="bia-criticality-row" title="The importance of this process to the organisation">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">Criticality Rating:</label></td>
                         <td>
                           <select
@@ -462,7 +496,7 @@ const InputForm = ({
                           </select>
                         </td>
                       </tr>
-                      <tr title="The maximum tolerable period of disruption for this process">
+                      <tr className="bia-criticality-row" title="The maximum tolerable period of disruption for this process">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">MTPD - Maximum Tolerable Period of Disruption (hours):</label></td>
                         <td>
                           <input
@@ -477,7 +511,7 @@ const InputForm = ({
                           />
                         </td>
                       </tr>
-                      <tr title="The recovery time objective for this process">
+                      <tr className="bia-criticality-row" title="The recovery time objective for this process">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">RTO - Recovery Time Objective (hours):</label></td>
                         <td>
                           <input
@@ -492,7 +526,7 @@ const InputForm = ({
                           />
                         </td>
                       </tr>
-                      <tr title="The actual recovery time achieved for this process">
+                      <tr className="bia-criticality-row" title="The actual recovery time achieved for this process">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">RTA - Recovery Time Actual (hours):</label></td>
                         <td>
                           <input
@@ -518,7 +552,7 @@ const InputForm = ({
                           )}
                         </td>
                       </tr>
-                      <tr title="The recovery point objective for this process">
+                      <tr className="bia-criticality-row" title="The recovery point objective for this process">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">RPO - Recovery Point Objective (hours):</label></td>
                         <td>
                           <input
@@ -533,7 +567,7 @@ const InputForm = ({
                           />
                         </td>
                       </tr>
-                      <tr title="The actual recovery point achieved for this process">
+                      <tr className="bia-criticality-row" title="The actual recovery point achieved for this process">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">RPA - Recovery Point Actual (hours):</label></td>
                         <td>
                           <input
@@ -559,7 +593,7 @@ const InputForm = ({
                           )}
                         </td>
                       </tr>
-                      <tr title="The service level agreement for this process (actually the Availability Service Level Objective - SLO), defining the percentage of time this process should be available">
+                      <tr className="bia-criticality-row" title="The service level agreement for this process (actually the Availability Service Level Objective - SLO), defining the percentage of time this process should be available">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">SLA (%):</label></td>
                         <td>
                           <input
@@ -572,7 +606,7 @@ const InputForm = ({
                           />
                         </td>
                       </tr>
-                      <tr title="The measurement period for the SLA percentage">
+                      <tr className="bia-criticality-row" title="The measurement period for the SLA percentage">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">SLA Period:</label></td>
                         <td>
                           <select
@@ -589,7 +623,7 @@ const InputForm = ({
                           </select>
                         </td>
                       </tr>
-                      <tr title="Whether the SLA calculation includes planned downtime or only unplanned outages">
+                      <tr className="bia-criticality-row" title="Whether the SLA calculation includes planned downtime or only unplanned outages">
                         <td className="bia-field-cell-label-wide"><label className="bia-form-label">SLA Includes Planned Downtime:</label></td>
                         <td>
                           <div className="bia-checkbox-container">
@@ -613,112 +647,116 @@ const InputForm = ({
             </tr>
 
             {/* Dependencies and Obligations */}
-            <tr>
-              <td colSpan={2}>
-                <fieldset className="bia-fieldset bia-fieldset-dependencies">
-                  <legend className="bia-legend bia-legend-dependencies">Dependencies and Obligations</legend>
-                  <table className="bia-field-table">
-                    <tbody>
-                      <tr title="Legal, regulatory, and contractual obligations that this process must comply with">
-                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Legal, Regulatory, and Contractual Obligations:</label></td>
-                        <td>
-                          <textarea
-                            name="legalObligations"
-                            value={form.legalObligations}
-                            onChange={handleChange}
-                            className="bia-textarea bia-textarea-dependencies"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="The resources required to recover this process">
-                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Resources Required for Recovery:</label></td>
-                        <td>
-                          <textarea
-                            name="resources"
-                            value={form.resources}
-                            onChange={handleChange}
-                            className="bia-textarea bia-textarea-dependencies"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="Key dependencies, including suppliers and third parties">
-                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Key Dependencies, including Suppliers and Third Parties:</label></td>
-                        <td>
-                          <textarea
-                            name="dependencies"
-                            value={form.dependencies}
-                            onChange={handleChange}
-                            className="bia-textarea bia-textarea-dependencies"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="Dependencies on IT Systems and Applications">
-                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on IT Systems and Applications:</label></td>
-                        <td>
-                          <textarea
-                            name="itDependencies"
-                            value={form.itDependencies}
-                            onChange={handleChange}
-                            className="bia-textarea bia-textarea-dependencies"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="Dependencies on people and skills">
-                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on people and skills:</label></td>
-                        <td>
-                          <textarea
-                            name="peopleDependencies"
-                            value={form.peopleDependencies}
-                            onChange={handleChange}
-                            className="bia-textarea bia-textarea-dependencies"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="Dependencies on facilities and infrastructure">
-                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on facilities and infrastructure:</label></td>
-                        <td>
-                          <textarea
-                            name="facilitiesDependencies"
-                            value={form.facilitiesDependencies}
-                            onChange={handleChange}
-                            className="bia-textarea bia-textarea-dependencies"
-                          />
-                        </td>
-                      </tr>
-                      <tr title="Dependencies on other business processes">
-                        <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on other business processes:</label></td>
-                        <td>
-                          <textarea
-                            name="processDependencies"
-                            value={form.processDependencies}
-                            onChange={handleChange}
-                            className="bia-textarea bia-textarea-dependencies"
-                          />
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </fieldset>
-              </td>
-            </tr>
+            {viewMode === 'extended' && (
+              <tr>
+                <td colSpan={2}>
+                  <fieldset className="bia-fieldset bia-fieldset-dependencies">
+                    <legend className="bia-legend bia-legend-dependencies">Dependencies and Obligations</legend>
+                    <table className="bia-field-table">
+                      <tbody>
+                        <tr title="Legal, regulatory, and contractual obligations that this process must comply with">
+                          <td className="bia-field-cell-label-wide"><label className="bia-form-label">Legal, Regulatory, and Contractual Obligations:</label></td>
+                          <td>
+                            <textarea
+                              name="legalObligations"
+                              value={form.legalObligations}
+                              onChange={handleChange}
+                              className="bia-textarea bia-textarea-dependencies"
+                            />
+                          </td>
+                        </tr>
+                        <tr title="The resources required to recover this process">
+                          <td className="bia-field-cell-label-wide"><label className="bia-form-label">Resources Required for Recovery:</label></td>
+                          <td>
+                            <textarea
+                              name="resources"
+                              value={form.resources}
+                              onChange={handleChange}
+                              className="bia-textarea bia-textarea-dependencies"
+                            />
+                          </td>
+                        </tr>
+                        <tr title="Key dependencies, including suppliers and third parties">
+                          <td className="bia-field-cell-label-wide"><label className="bia-form-label">Key Dependencies, including Suppliers and Third Parties:</label></td>
+                          <td>
+                            <textarea
+                              name="dependencies"
+                              value={form.dependencies}
+                              onChange={handleChange}
+                              className="bia-textarea bia-textarea-dependencies"
+                            />
+                          </td>
+                        </tr>
+                        <tr title="Dependencies on IT Systems and Applications">
+                          <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on IT Systems and Applications:</label></td>
+                          <td>
+                            <textarea
+                              name="itDependencies"
+                              value={form.itDependencies}
+                              onChange={handleChange}
+                              className="bia-textarea bia-textarea-dependencies"
+                            />
+                          </td>
+                        </tr>
+                        <tr title="Dependencies on people and skills">
+                          <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on people and skills:</label></td>
+                          <td>
+                            <textarea
+                              name="peopleDependencies"
+                              value={form.peopleDependencies}
+                              onChange={handleChange}
+                              className="bia-textarea bia-textarea-dependencies"
+                            />
+                          </td>
+                        </tr>
+                        <tr title="Dependencies on facilities and infrastructure">
+                          <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on facilities and infrastructure:</label></td>
+                          <td>
+                            <textarea
+                              name="facilitiesDependencies"
+                              value={form.facilitiesDependencies}
+                              onChange={handleChange}
+                              className="bia-textarea bia-textarea-dependencies"
+                            />
+                          </td>
+                        </tr>
+                        <tr title="Dependencies on other business processes">
+                          <td className="bia-field-cell-label-wide"><label className="bia-form-label">Dependencies on other business processes:</label></td>
+                          <td>
+                            <textarea
+                              name="processDependencies"
+                              value={form.processDependencies}
+                              onChange={handleChange}
+                              className="bia-textarea bia-textarea-dependencies"
+                            />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </fieldset>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
+        <div className="bia-button-container">
+          <div className="bia-button-group">
+            <button
+              type="submit"
+              className="bia-btn bia-btn-secondary"
+            >
+              {editIndex !== null ? "Update Entry" : "Submit Process Details"}
+            </button>
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="bia-btn bia-btn-outline"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       </details>
-      <div className="bia-flex-gap">
-        <button
-          type="submit"
-          className="bia-btn bia-btn-primary"
-        >
-          {editIndex !== null ? "Update Entry" : "Submit Process Details"}
-        </button>
-        <button
-          type="button"
-          onClick={handleCancel}
-          className="bia-btn bia-btn-cancel"
-        >
-          Cancel
-        </button>
-      </div>
     </form>
   );
 };
