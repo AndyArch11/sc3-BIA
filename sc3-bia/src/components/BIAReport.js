@@ -548,7 +548,7 @@ const BIAReport = ({ entries }) => {
               <h4 className="bia-report-section-title">Executive Summary</h4>
               <div className="bia-report-summary-grid">
                 <div className="bia-report-summary-item">
-                  <span className="bia-report-summary-label">Total Processes Analyzed:</span>
+                  <span className="bia-report-summary-label">Total Processes Analysed:</span>
                   <span className="bia-report-summary-value">{totalProcesses}</span>
                 </div>
                 <div className="bia-report-summary-item">
@@ -651,7 +651,7 @@ const BIAReport = ({ entries }) => {
             <div className="bia-report-section">
               <h4 className="bia-report-section-title">Average Impact Score Distribution</h4>
               <p className="bia-report-section-description">
-                Based on the average of all impact categories (Financial, Operational, OHS, Environmental,Staff, Sites, Reputational, Statutory, Information Security)
+                Based on the average of all impact categories (Financial, Operational, OHS, Environmental, Staff, Sites, Reputational, Statutory, Information Security)
               </p>
               
               {/* Donut Chart */}
@@ -686,7 +686,7 @@ const BIAReport = ({ entries }) => {
 
             {/* Business Units */}
             <div className="bia-report-section">
-              <h4 className="bia-report-section-title">Business Units Analyzed</h4>
+              <h4 className="bia-report-section-title">Business Units Analysed</h4>
               <div className="bia-report-business-units">
                 {businessUnits.length > 0 ? (
                   businessUnits.map((unit, index) => (
@@ -755,7 +755,7 @@ const BIAReport = ({ entries }) => {
                 )}
                 {businessUnits.length < totalProcesses / 2 && (
                   <div className="bia-report-recommendation">
-                    <strong>Documentation Gap:</strong> Consider completing business unit assignments for better organizational coverage analysis.
+                    <strong>Documentation Gap:</strong> Consider completing business unit assignments for better organisational coverage analysis.
                   </div>
                 )}
                 <div className="bia-report-recommendation">

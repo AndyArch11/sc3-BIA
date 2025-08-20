@@ -25,7 +25,7 @@ const InputForm = ({
             View Mode:
           </label>
           <div className="bia-view-mode-options">
-            <label>
+            <label className="bia-view-mode-label">
               <input
                 type="radio"
                 value="basic"
@@ -34,7 +34,7 @@ const InputForm = ({
               />
               Basic (Essential fields only)
             </label>
-            <label>
+            <label className="bia-view-mode-label">
               <input
                 type="radio"
                 value="extended"

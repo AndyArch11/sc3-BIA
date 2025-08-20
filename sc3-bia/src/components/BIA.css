@@ -361,8 +361,10 @@
   }
   
   .bia-back-to-top-container {
-    margin: 1.5rem 0;
-    padding: 0.75rem 0;
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    padding: 1rem 0;
   }
   
   .bia-back-to-top-button {
@@ -370,8 +372,8 @@
     color: #6c757d;
     border: 1px solid #dee2e6;
     border-radius: var(--sc3-btn-radius);
-    padding: 0.6rem 1.2rem;
-    font-size: 0.85rem;
+    padding: 8px 16px;
+    font-size: 0.9rem;
     font-weight: var(--sc3-btn-font-weight);
     cursor: pointer;
     transition: all 0.3s ease-in-out;
@@ -2258,4 +2260,9 @@
   padding: 6px;
   overflow: hidden;
   position: relative;
+}
+
+.bia-view-mode-label {
+  color: #000;
+  margin-bottom: 0.5rem;
 }

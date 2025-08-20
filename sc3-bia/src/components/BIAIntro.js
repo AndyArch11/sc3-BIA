@@ -12,8 +12,20 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
       top: 0,
       behavior: 'smooth'
     });
-  };
-  
+  };  
+
+  // Back to Top Button Component
+  const BackToTopButton = ({ className = "" }) => (
+      <div className={`bia-back-to-top-container ${className}`}>
+          <button 
+              onClick={scrollToTop}
+              className="bia-back-to-top-button"
+              title="Back to top of page"
+          >
+              ↑ Back to Top
+          </button>
+      </div>
+  );  
 
   return (
     <details className="bia-intro-details">
@@ -104,15 +116,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
         <p>It is important to note that the BIA is an iterative process and should be revisited regularly to ensure it remains aligned with the business objectives and the changing environment. 
             These requirements feed into the overall risk assessment process and the Business Continuity Planning (BCP) process.</p>
 
-        <div className="bia-back-to-top-container">
-          <button 
-            onClick={scrollToTop}
-            className="bia-back-to-top-button"
-            title="Back to Top"
-          >
-            ↑ Back to Top
-          </button>
-        </div>
+        <BackToTopButton />
 
         <p><b>Non-Functional Requirements (NFRs)</b> that are informed by the criticality levels:</p>
         <p><i>Set MTPD, RTO, RPO, and SLA for Each Criticality Level. These values will be used as defaults when calculating Process Criticality based on impact scores.</i></p>
@@ -302,8 +306,8 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
         <p><b>Note:</b> These Non-Functional Requirements (NFRs) are naive blunt instruments that do not usually account for the scenarios that they are meant to address or those that they don't address, 
         whether they are applicable equally or not for nodal scoped events, locale scoped events, or regional scoped events, or for outages vs data corruption, etc.</p>
 
-        <p><b>MTPD (Maximum Tolerable Period of Disruption):</b> The maximum time that an organization can tolerate a disruption to a business process before the impact becomes unacceptable. 
-        This is the absolute limit beyond which the organization cannot survive.</p>
+        <p><b>MTPD (Maximum Tolerable Period of Disruption):</b> The maximum time that an organisation can tolerate a disruption to a business process before the impact becomes unacceptable. 
+        This is the absolute limit beyond which the organisation cannot survive.</p>
 
         <p><b>RTO (Recovery Time Objective):</b> The target time set for the recovery of IT and business activities after a disaster has occurred.</p>
 
@@ -315,15 +319,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
         <p><b>SLA (Service Level Agreement):</b> A formal agreement between a service provider and a customer that outlines the expected level of service, including metrics such as availability, performance, and response times. 
         A public contractual SLA is usually made up of a combination of internal Service Level Objectives (SLOs) and external commitments. An SLA is often mistakenly used to indicate an internal availability SLO.</p>
 
-        <div className="bia-back-to-top-container">
-          <button 
-            onClick={scrollToTop}
-            className="bia-back-to-top-button"
-            title="Back to Top"
-          >
-            ↑ Back to Top
-          </button>
-        </div>
+        <BackToTopButton />
 
         <p><b>Service Level Objectives (SLO) vs Service Level Agreements (SLA):</b></p>
         <div className="bia-guidance-table-container">
@@ -421,15 +417,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
         <p><i>Note: Availability SLOs (and SLAs) should explicitly define the measurement window; the period during which service availability is tracked, along with the reset cadence for the metric. This is often missing in Availability SLOs and SLAs.</i></p>
         <p>Availability SLOs (and SLAs) should also indicate if it is inclusive of planned downtime or only unplanned outages.</p>
 
-        <div className="bia-back-to-top-container">
-          <button 
-            onClick={scrollToTop}
-            className="bia-back-to-top-button"
-            title="Back to Top"
-          >
-            ↑ Back to Top
-          </button>
-        </div>
+        <BackToTopButton />
 
         
         <div className="bia-guidance-container">
@@ -483,7 +471,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                     <td className="bia-downtime-table td">1-4 hours</td>
                     <td className="bia-downtime-table td">1-4 hours</td>
                     <td className="bia-downtime-table td">Warm Standby</td>
-                    <td className="bia-downtime-table td">Hot/warm HA cluster, automated failover, regular data synchronization, load balancers</td>
+                    <td className="bia-downtime-table td">Hot/warm HA cluster, automated failover, regular data synchronisation, load balancers</td>
                     <td className="bia-downtime-table td">Medium</td>
                   </tr>
                   <tr className="bia-downtime-table-row-alt">
@@ -514,7 +502,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
               </table>
               </div>
 
-              <p><i><b>Important:</b> The technical solutions and strategies outlined above are subject to organizational budget constraints and resource availability. 
+              <p><i><b>Important:</b> The technical solutions and strategies outlined above are subject to organisational budget constraints and resource availability. 
               Some business objectives may not be technically or economically achievable within current budget allocations. 
               It is essential to align SLA requirements with realistic budget expectations and consider phased implementation approaches where immediate full compliance may not be feasible.</i></p>
 
@@ -538,7 +526,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
 
               <p><b>Warm Standby (99-99.5% SLA):</b></p>
               <ul>
-                <li>Secondary system running with periodic data synchronization</li>
+                <li>Secondary system running with periodic data synchronisation</li>
                 <li>Load balancer for traffic distribution and health checks</li>
                 <li>Automated failover with manual confirmation</li>
                 <li>Database clustering or replication lag acceptable</li>
@@ -555,7 +543,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
 
               <p><b>Cross-Site Failover (99.9-99.95% SLA):</b></p>
               <ul>
-                <li>Geographically distributed deployment across data centers</li>
+                <li>Geographically distributed deployment across data centres</li>
                 <li>Synchronous replication for zero data loss</li>
                 <li>Advanced monitoring and automated health checks</li>
                 <li>Network-level redundancy and carrier diversity</li>
@@ -579,7 +567,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
 
               <p><b>Monitoring and Observability:</b> Implement comprehensive monitoring, alerting, and observability solutions proportional to your SLA requirements.</p>
 
-              <p><b>Cost Optimization:</b> Balance business requirements with infrastructure costs. Consider hybrid approaches where different components have different availability requirements.</p>
+              <p><b>Cost Optimisation:</b> Balance business requirements with infrastructure costs. Consider hybrid approaches where different components have different availability requirements.</p>
 
               <p><b>Vendor Selection:</b> Cloud providers offer various SLA guarantees. Ensure vendor commitments align with your business requirements and include appropriate penalty clauses.</p>
 
@@ -587,8 +575,8 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
 
               <p><b>Component Dependency Models:</b></p>
               <ul>
-                <li><b>Serial Dependencies (Chain):</b> Overall availability = A₁ × A₂ × A₃ × ... × Aₙ (where A is availability of each component)</li>
-                <li><b>Parallel Redundancy:</b> Overall availability = 1 - ((1 - A₁) × (1 - A₂) × ... × (1 - Aₙ)) for redundant components</li>
+                <li><b>Serial Dependencies (Chain):</b> Overall availability = <code>A₁ × A₂ × A₃ × ... × Aₙ</code> (where A is availability of each component)</li>
+                <li><b>Parallel Redundancy:</b> Overall availability = <code>1 - ((1 - A₁) × (1 - A₂) × ... × (1 - Aₙ))</code> for redundant components</li>
                 <li><b>Mixed Architecture:</b> Combination of serial and parallel calculations based on system design</li>
               </ul>
 
@@ -645,7 +633,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                 <li><b>Hardware Failures:</b> Server crashes, disk failures, network outages, power failures</li>
                 <li><b>Site-level Disasters:</b> Fire, flood, earthquake, facility-wide power loss</li>
                 <li><b>Planned Maintenance:</b> Zero-downtime updates, hardware replacement, facility maintenance</li>
-                <li><b>Performance Scaling:</b> Read replicas for load distribution, geographic performance optimization</li>
+                <li><b>Performance Scaling:</b> Read replicas for load distribution, geographic performance optimisation</li>
                 <li><b>High Availability:</b> Immediate failover capabilities, minimal service interruption</li>
               </ul>
 
@@ -654,8 +642,8 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                 <li><b>Replication ≠ Backup:</b> Replication can propagate corruption; backups provide point-in-time recovery</li>
                 <li><b>3-2-1 Rule:</b> 3 copies of data, 2 different media types, 1 offsite location</li>
                 <li><b>Recovery Testing:</b> Both backup restoration and failover procedures must be regularly tested</li>
-                <li><b>RTO vs RPO Trade-offs:</b> Replication optimizes RTO (fast recovery), backups optimize RPO (data preservation)</li>
-                <li><b>Cost Implications:</b> Replication requires ongoing infrastructure costs, backups have storage and testing costs</li>
+                <li><b>RTO vs RPO Trade-offs:</b> Replication optimises RTO (fast recovery), backups optimise RPO (data preservation)</li>
+                <li><b>Cost Implications:</b> Replication requires ongoing infrastructure costs; backups have storage and testing costs</li>
               </ul>
 
               <p><b>Risk Scenarios Requiring Different Approaches:</b></p>
@@ -680,15 +668,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
         <p><b>Disclaimer:</b> The information provided here is for general informational purposes only and will require adaptation for specific businesses and maturity capabilities and is not intended as legal advice. 
           Please consult with a qualified legal professional for specific legal advice tailored to your situation.</p>
 
-        <div className="bia-back-to-top-container">
-          <button 
-            onClick={scrollToTop}
-            className="bia-back-to-top-button"
-            title="Back to Top"
-          >
-            ↑ Back to Top
-          </button>
-        </div>
+        <BackToTopButton />
 
         <p><hr /></p>
       </div>
