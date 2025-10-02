@@ -5,15 +5,43 @@ import * as XLSX from "xlsx";
  * Exports entries to a structured Excel file with guidance and data sheets
  */
 
-const VERSION = "v0.1.1";
-
 export const exportBIAToExcel = (entries) => {
-  if (!entries || entries.length === 0) {
-    return;
-  }
+  try {
+    // Create a new workbook
+    const workbook = XLSX.utils.book_new();
 
-  // --- BIA Guidance content as an array of arrays (rows) ---
-  const guidanceRows = [
+    // Add a worksheet for BIA Guidance
+    const guidanceData = createGuidanceWorksheet();
+    const guidanceWorkSheet = XLSX.utils.aoa_to_sheet(guidanceData);
+    XLSX.utils.book_append_sheet(workbook, guidanceWorkSheet, "BIA Guidance");
+
+    // Add a worksheet for BIA Entries
+    const entriesData = createEntriesWorksheet(entries);
+    const entriesWorkSheet = XLSX.utils.aoa_to_sheet(entriesData);
+        
+    // Set column widths for entries worksheet - make them wider for better readability
+    const entriesColWidths = Array(entriesData[0]?.length || 0).fill({ width: 30 });
+    entriesWorkSheet['!cols'] = entriesColWidths;
+    XLSX.utils.book_append_sheet(workbook, entriesWorkSheet, "BIA Entries");
+
+    // Generate timestamp for filename
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, -5); // Format: YYYY-MM-DDTHH-MM-SS
+    const filename = `SC3_BIA_Export_${timestamp}.xlsx`;
+
+    // Export the workbook
+    XLSX.writeFile(workbook, filename);
+        
+    console.log(`Excel file "${filename}" has been generated and downloaded successfully.`);
+
+  } catch (error) {
+    console.error('Error creating Excel export:', error);
+        alert('An error occurred while creating the Excel file. Please try again.');
+  }
+}
+
+const createGuidanceWorksheet = () => {
+  return [
     ["BIA Guidance and Preparation"],
     [""],
     ["Also see:"],
@@ -72,12 +100,29 @@ export const exportBIAToExcel = (entries) => {
     ["Disclaimer: The information provided here is for general informational purposes only and will require adaptation for specific businesses and maturity capabilities and is not intended as legal advice. Please consult with a qualified legal professional for specific legal advice tailored to your situation."],
     [""],
     [
-      `BIA Assessment Form ${VERSION} - Generated on ${new Date().toLocaleDateString()}`
+      `BIA Assessment Form - Generated on ${new Date().toLocaleDateString()}`
     ]
   ];
+};
 
-  // Create guidance worksheet
-  const wsGuidance = XLSX.utils.aoa_to_sheet(guidanceRows);
+const createEntriesWorksheet = (entries) => {
+  if (!entries || entries.length === 0) {
+      return [
+          ['No AI Risk Assessment entries found'],
+          ['Please create some risk assessments first before exporting.']
+      ];
+  }
+
+  const sectionHeaders = [
+    'Business Process Details',
+    '', '', '', '', '', '', '', '', //{9}
+    'Impact Assessment',
+    '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',  //{20}
+    'Process Criticality',
+    '', '', '', '', '', '', '', '', //{9}
+    'Dependencies and Obligations',
+    '', '', '', '', '', '' //{7}
+  ];
 
   // Transform entries data for export with proper column ordering
   const data = entries.map((entry) => ({
@@ -203,18 +248,5 @@ export const exportBIAToExcel = (entries) => {
     });
   }
 
-  // Create workbook and append both sheets
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, wsGuidance, "BIA Guidance");
-  XLSX.utils.book_append_sheet(wb, wsEntries, "BIA Entries");
-
-  // Generate filename with current date and time
-  const now = new Date();
-  const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, 19);
-  const filename = `bia-entries-${timestamp}.xlsx`;
-
-  // Export with cell styles (requires xlsx-style or SheetJS Pro)
-  XLSX.writeFile(wb, filename, { cellStyles: true });
+  return [sectionHeaders, ...XLSX.utils.sheet_to_json(wsEntries, { header: 1 })];
 };
-
-export default exportBIAToExcel;
