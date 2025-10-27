@@ -6,7 +6,7 @@ import BIAReport from "./BIAReport";
 import { exportBIAToExcel } from "./ExcelExport";
 import "./BIA.css";
 
-const VERSION = "v0.2.5"; // Update as needed
+const VERSION = "v0.2.6"; // Update as needed
 
 // Helper to get today's date in YYYY-MM-DD format
 const getToday = () => {
@@ -49,6 +49,8 @@ const initialForm = {
   infosecImpactScore: "1",
   infosecImpact: "",
   criticality: "1",
+  // When true, user explicitly set Impact of Disruption (impactScore) and it should override others
+  impactScoreUserOverride: false,
   sla: "90%",
   slaPeriod: "Month",
   slaIncludesPlanned: false,
@@ -113,42 +115,35 @@ const BIAForm = () => {
 
   // Helper to calculate process criticality fields
   const calculateCriticalityFields = (f) => {
-    // If Impact of Disruption is set and not "1", use it for criticality
-    let criticality;
-    if (f.impactScore && f.impactScore !== "1") {
-      criticality = f.impactScore;
-    } else {
-      // Otherwise, use the average of the other impact scores
-      const scores = [
-        f.financialImpactScore,
-        f.operationalImpactScore,
-        f.ohsImpactScore,
-        f.environmentalImpactScore,
-        f.staffImpactScore,
-        f.sitesImpactScore,
-        f.reputationalImpactScore,
-        f.statutoryImpactScore,
-        f.infosecImpactScore
-      ].map(s => parseInt(s || "1", 10));
-      const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-      if (avg <= 1.5) criticality = "1";
-      else if (avg <= 2.5) criticality = "2";
-      else if (avg <= 3.5) criticality = "3";
-      else if (avg <= 4.5) criticality = "4";
-      else criticality = "5";
-    }
-    // Calculate processImpactScore as sum of all impact scores
-    const impactSum =
-      Number(f.impactScore) +
-      Number(f.financialImpactScore) +
-      Number(f.operationalImpactScore) +
-      Number(f.ohsImpactScore) +
-      Number(f.environmentalImpactScore) +
-      Number(f.staffImpactScore) +
-      Number(f.sitesImpactScore) +
-      Number(f.reputationalImpactScore) +
-      Number(f.statutoryImpactScore) +
-      Number(f.infosecImpactScore);
+    // Treat Impact of Disruption (impactScore) as an override.
+    // Only use it as an override if the user explicitly changed it (impactScoreUserOverride === true)
+    // and it's not the neutral value "1". Otherwise use MAX of the other impact scores.
+    const parseOrOne = (s) => {
+      const n = parseInt(s, 10);
+      return Number.isFinite(n) ? n : 1;
+    };
+
+    const impactOverride = parseOrOne(f.impactScore ?? "1");
+
+    const otherScores = [
+      f.financialImpactScore,
+      f.operationalImpactScore,
+      f.ohsImpactScore,
+      f.environmentalImpactScore,
+      f.staffImpactScore,
+      f.sitesImpactScore,
+      f.reputationalImpactScore,
+      f.statutoryImpactScore,
+      f.infosecImpactScore,
+    ].map((s) => parseOrOne(s ?? "1"));
+
+  const derivedMax = Math.max(...otherScores);
+  const shouldOverride = !!f.impactScoreUserOverride && impactOverride !== 1;
+  const criticality = String(shouldOverride ? impactOverride : derivedMax);
+
+    // Calculate processImpactScore as sum of all impact scores (including impactScore)
+    const impactSum = [impactOverride, ...otherScores].reduce((a, b) => a + b, 0);
+
     const defaults = criticalityDefaults[criticality] || {};
     return {
       processImpactScore: impactSum.toString(),
@@ -191,12 +186,16 @@ const BIAForm = () => {
         reputationalImpactScore: "1",
         statutoryImpactScore: "1",
         infosecImpactScore: "1",
+        // Mark override if user set a value other than neutral "1"
+        impactScoreUserOverride: value !== "1",
       };
     }
 
     // If any other Impact Assessment field changes, reset impactScore to "1"
     if (impactFields.includes(name) && name !== "impactScore") {
       updatedForm.impactScore = "1";
+      // Clear override when other scores are edited
+      updatedForm.impactScoreUserOverride = false;
     }
 
     // If criticality is changed, update SLA, RTO, and RPO from defaults

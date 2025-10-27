@@ -14,6 +14,19 @@ const InputForm = ({
   viewMode,
   setViewMode
 }) => {
+  // Highlight selects in Impact Assessment when value > 1
+  const getImpactHighlightClass = (val) => {
+    const n = parseInt(val, 10);
+    if (!Number.isFinite(n) || n <= 1) return "";
+    return `bia-impact-select-highlight bia-impact-select-level-${n}`;
+  };
+
+  // Highlight criticality select for all levels (1-5)
+  const getCriticalityHighlightClass = (val) => {
+    const n = parseInt(val, 10);
+    if (!Number.isFinite(n) || n < 1 || n > 5) return "";
+    return `bia-criticality-color-${n}`;
+  };
   return (
     <form onSubmit={handleSubmit}>
       <details open={fieldsOpen} onToggle={e => setFieldsOpen(e.target.open)}>
@@ -187,7 +200,7 @@ const InputForm = ({
                             name="impactScore"
                             value={form.impactScore}
                             onChange={handleChange}
-                            className="bia-select"
+                            className={`bia-select ${getImpactHighlightClass(form.impactScore)}`}
                           >
                             <option value="1">1 (Neglible Impact)</option>
                             <option value="2">2 (Low Impact)</option>
@@ -221,7 +234,7 @@ const InputForm = ({
                               name="financialImpactScore"
                               value={form.financialImpactScore}
                               onChange={handleChange}
-                              className="bia-select"
+                              className={`bia-select ${getImpactHighlightClass(form.financialImpactScore)}`}
                             >
                               <option value="1">1 (Neglible Impact)</option>
                               <option value="2">2 (Low Impact)</option>
@@ -254,7 +267,7 @@ const InputForm = ({
                               onChange={handleChange}
                               min="0"
                               step="any"
-                              placeholder="Amount"
+                              placeholder="Currency Amount"
                               className="bia-input"
                             />
                           </div>
@@ -268,7 +281,7 @@ const InputForm = ({
                             name="operationalImpactScore"
                             value={form.operationalImpactScore}
                             onChange={handleChange}
-                            className="bia-select bia-select-impact"
+                            className={`bia-select bia-select-impact ${getImpactHighlightClass(form.operationalImpactScore)}`}
                           >
                             <option value="1">1 (Neglible Impact)</option>
                             <option value="2">2 (Low Impact)</option>
@@ -293,7 +306,7 @@ const InputForm = ({
                               name="ohsImpactScore"
                               value={form.ohsImpactScore}
                               onChange={handleChange}
-                              className="bia-select bia-select-impact"
+                              className={`bia-select bia-select-impact ${getImpactHighlightClass(form.ohsImpactScore)}`}
                             >
                               <option value="1">1 (Negligible Impact)</option>
                               <option value="2">2 (Low Impact)</option>
@@ -318,7 +331,7 @@ const InputForm = ({
                               name="environmentalImpactScore"
                               value={form.environmentalImpactScore}
                               onChange={handleChange}
-                              className="bia-select bia-select-impact"
+                              className={`bia-select bia-select-impact ${getImpactHighlightClass(form.environmentalImpactScore)}`}
                             >
                               <option value="1">1 (Negligible Impact)</option>
                               <option value="2">2 (Low Impact)</option>
@@ -343,7 +356,7 @@ const InputForm = ({
                               name="staffImpactScore"
                               value={form.staffImpactScore}
                               onChange={handleChange}
-                              className="bia-select bia-select-impact"
+                              className={`bia-select bia-select-impact ${getImpactHighlightClass(form.staffImpactScore)}`}
                             >
                               <option value="1">1 (Negligible Impact)</option>
                               <option value="2">2 (Low Impact)</option>
@@ -371,7 +384,7 @@ const InputForm = ({
                               name="sitesImpactScore"
                               value={form.sitesImpactScore}
                               onChange={handleChange}
-                              className="bia-select bia-select-impact"
+                              className={`bia-select bia-select-impact ${getImpactHighlightClass(form.sitesImpactScore)}`}
                             >
                               <option value="1">1 (Negligible Impact)</option>
                               <option value="2">2 (Low Impact)</option>
@@ -399,7 +412,7 @@ const InputForm = ({
                               name="reputationalImpactScore"
                               value={form.reputationalImpactScore}
                               onChange={handleChange}
-                              className="bia-select bia-select-impact"
+                              className={`bia-select bia-select-impact ${getImpactHighlightClass(form.reputationalImpactScore)}`}
                             >
                               <option value="1">1 (Negligible Impact)</option>
                               <option value="2">2 (Low Impact)</option>
@@ -424,7 +437,7 @@ const InputForm = ({
                               name="statutoryImpactScore"
                               value={form.statutoryImpactScore}
                               onChange={handleChange}
-                              className="bia-select bia-select-impact"
+                              className={`bia-select bia-select-impact ${getImpactHighlightClass(form.statutoryImpactScore)}`}
                             >
                               <option value="1">1 (Negligible Impact)</option>
                               <option value="2">2 (Low Impact)</option>
@@ -449,7 +462,7 @@ const InputForm = ({
                               name="infosecImpactScore"
                               value={form.infosecImpactScore}
                               onChange={handleChange}
-                              className="bia-select bia-select-impact"
+                              className={`bia-select bia-select-impact ${getImpactHighlightClass(form.infosecImpactScore)}`}
                             >
                               <option value="1">1 (Negligible Impact)</option>
                               <option value="2">2 (Low Impact)</option>
@@ -486,7 +499,7 @@ const InputForm = ({
                             name="criticality"
                             value={form.criticality}
                             onChange={handleChange}
-                            className="bia-select-criticality"
+                            className={`bia-select-criticality ${getCriticalityHighlightClass(form.criticality)}`}
                           >
                             <option value="1">1 (None)</option>
                             <option value="2">2 (Bronze)</option>

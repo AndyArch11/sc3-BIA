@@ -716,6 +716,7 @@
   border: 1px solid var(--sc3-secondary);
   font-size: 1rem;
   margin-right: 0.5rem;
+  background: #fff;
 }
 
 .bia-select-criticality {
@@ -2140,6 +2141,35 @@
 .bia-impact-color-1 {
   background-color: #e8f5e8 !important; /* 1 - Green (Negligible) */
   color: #2e7d32 !important;
+}
+
+/* Highlight selects when impact value > 1 (levels 2-5) */
+.bia-impact-select-highlight {
+  border-width: 2px !important;
+}
+
+.bia-impact-select-level-2 {
+  background-color: #e3f2fd !important; /* Blue light */
+  color: #1565c0 !important;
+  border-color: #1565c0 !important;
+}
+
+.bia-impact-select-level-3 {
+  background-color: #f3e5f5 !important; /* Purple light */
+  color: #6a1b9a !important;
+  border-color: #6a1b9a !important;
+}
+
+.bia-impact-select-level-4 {
+  background-color: #fff8e1 !important; /* Yellow/Gold light */
+  color: #f57f17 !important;
+  border-color: #f57f17 !important;
+}
+
+.bia-impact-select-level-5 {
+  background-color: #ffebee !important; /* Red light */
+  color: #c62828 !important;
+  border-color: #c62828 !important;
 }
 
 .bia-intro-section {

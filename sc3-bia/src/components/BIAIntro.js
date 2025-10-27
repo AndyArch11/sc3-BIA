@@ -59,6 +59,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="bia-intro-link"
+                  id="bia-intro-iso22301"
                 >
                   ISO/TS 22301
                 </a>
@@ -71,6 +72,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="bia-intro-link"
+                  id="bia-intro-iso22313"
                 >
                   ISO/TS 22313
                 </a>
@@ -83,6 +85,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="bia-intro-link"
+                  id="bia-intro-iso22317"
                 >
                   ISO/TS 22317
                 </a>
@@ -136,23 +139,24 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
               {/* Outer wrapper for horizontal scroll so that scroll bar does not hide the last row - works for Chrome and Edge, not for Firefox */}
               <div className="bia-intro-table-scroll">
                 <table className="bia-intro-table">
+                  <caption>Criticality Defaults</caption>
                   <thead>
                     <tr className="bia-intro-table-header">
-                      <th className="bia-intro-table-th">Criticality</th>
-                      <th className="bia-intro-table-th">MTPD (hours)</th>
-                      <th className="bia-intro-table-th">RTO (hours)</th>
-                      <th className="bia-intro-table-th">RPO (hours)</th>
-                      <th className="bia-intro-table-th">SLA (%)</th>
-                      <th className="bia-intro-table-th">Period</th>
-                      <th className="bia-intro-table-th">Incl. Planned?</th>
+                      <th scope="col" className="bia-intro-table-th">Criticality</th>
+                      <th scope="col" className="bia-intro-table-th">MTPD (hours)</th>
+                      <th scope="col" className="bia-intro-table-th">RTO (hours)</th>
+                      <th scope="col" className="bia-intro-table-th">RPO (hours)</th>
+                      <th scope="col" className="bia-intro-table-th">SLA (%)</th>
+                      <th scope="col" className="bia-intro-table-th">Period</th>
+                      <th scope="col" className="bia-intro-table-th">Incl. Planned?</th>
                     </tr>
                   </thead>
                   <tbody>
                   {Object.entries(criticalityDefaults).reverse().map(([level, defaults]) => (
                     <tr key={level} className="bia-intro-table-row">
-                      <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
+                      <th scope="row" className={`bia-criticality-color-${level} bia-intro-table-td`}>
                         {level} ({level === "1" ? "None / Tier 5" : level === "2" ? "Bronze / Tier 4" : level === "3" ? "Silver / Tier 3" : level === "4" ? "Gold / Tier 2" : "Platinum / Tier 1"})
-                      </td>
+                      </th>
                       <td className={`bia-criticality-color-${level} bia-intro-table-td`}>
                         <div className="bia-intro-cell-content">
                           <select
@@ -162,6 +166,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                               [level]: { ...prev[level], mtpdSymbol: e.target.value }
                             }))}
                             className="bia-intro-symbol-select"
+                            id={`bia-intro-mtpd-symbol-${level}`}
                           >
                             <option value="<">&lt;</option>
                             <option value="≤">&#8804;</option>
@@ -177,6 +182,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                               [level]: { ...prev[level], mtpd: e.target.value }
                             }))}
                             className="bia-intro-input"
+                            id={`bia-intro-mtpd-${level}`}
                           />
                         </div>
                       </td>
@@ -189,6 +195,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                               [level]: { ...prev[level], rtoSymbol: e.target.value }
                             }))}
                             className="bia-intro-symbol-select"
+                            id={`bia-intro-rto-symbol-${level}`}
                           >
                             <option value="<">&lt;</option>
                             <option value="≤">&#8804;</option>
@@ -204,6 +211,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                               [level]: { ...prev[level], rto: e.target.value }
                             }))}
                             className="bia-intro-input"
+                            id={`bia-intro-rto-${level}`}
                           />
                         </div>
                       </td>
@@ -216,6 +224,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                               [level]: { ...prev[level], rpoSymbol: e.target.value }
                             }))}
                             className="bia-intro-symbol-select"
+                            id={`bia-intro-rpo-symbol-${level}`}
                           >
                             <option value="<">&lt;</option>
                             <option value="≤">&#8804;</option>
@@ -231,6 +240,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                               [level]: { ...prev[level], rpo: e.target.value }
                             }))}
                             className="bia-intro-input"
+                            id={`bia-intro-rpo-${level}`}
                           />
                         </div>
                       </td>
@@ -243,6 +253,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                               [level]: { ...prev[level], slaSymbol: e.target.value }
                             }))}
                             className="bia-intro-symbol-select"
+                            id={`bia-intro-sla-symbol-${level}`}
                           >
                             <option value="<">&lt;</option>
                             <option value="≤">&#8804;</option>
@@ -258,6 +269,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                               [level]: { ...prev[level], sla: e.target.value }
                             }))}
                             className="bia-intro-input"
+                            id={`bia-intro-sla-${level}`}
                           />
                         </div>
                       </td>
@@ -269,6 +281,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                             [level]: { ...prev[level], slaPeriod: e.target.value }
                           }))}
                           className="bia-intro-select"
+                          id={`bia-intro-sla-period-${level}`}
                         >
                           <option value="Day">Day</option>
                           <option value="Week">Week</option>
@@ -286,6 +299,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                             [level]: { ...prev[level], slaIncludesPlanned: e.target.checked }
                           }))}
                           className="bia-intro-checkbox"
+                          id={`bia-intro-sla-includes-planned-${level}`}
                         />
                       </td>
                     </tr>
@@ -299,6 +313,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
             type="button"
             onClick={() => setCriticalityDefaults(initialCriticalityDefaults)}
             className="bia-intro-reset-button"
+            id="bia-intro-reset-button"
           >
             Reset to Initial Defaults
           </button>
@@ -322,31 +337,32 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
           <p><b>Service Level Objectives (SLO) vs Service Level Agreements (SLA):</b></p>
           <div className="bia-guidance-table-container">
             <table className="bia-comparison-table">
+              <caption>Service Level Objectives (SLO) vs Service Level Agreements (SLA)</caption>
               <thead>
                 <tr className="bia-comparison-table-header">
-                  <th className="bia-comparison-table th">Aspect</th>
-                  <th className="bia-comparison-table th">SLO (Service Level Objective)</th>
-                  <th className="bia-comparison-table th">SLA (Service Level Agreement)</th>
+                  <th scope="col" className="bia-comparison-table th">Aspect</th>
+                  <th scope="col" className="bia-comparison-table th">SLO (Service Level Objective)</th>
+                  <th scope="col" className="bia-comparison-table th">SLA (Service Level Agreement)</th>
                 </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="bia-comparison-table td bia-comparison-table-bold">Definition</td>
+                <th scope="row" className="bia-comparison-table td bia-comparison-table-bold">Definition</th>
                 <td className="bia-comparison-table td">Internal target for service reliability</td>
                 <td className="bia-comparison-table td">External commitment with consequences</td>
               </tr>
               <tr className="bia-comparison-table-row-alt">
-                <td className="bia-comparison-table td bia-comparison-table-bold">Audience</td>
+                <th scope="row" className="bia-comparison-table td bia-comparison-table-bold">Audience</th>
                 <td className="bia-comparison-table td">Internal teams and stakeholders</td>
                 <td className="bia-comparison-table td">External customers or clients</td>
               </tr>
               <tr>
-                <td className="bia-comparison-table td bia-comparison-table-bold">Consequences</td>
+                <th scope="row" className="bia-comparison-table td bia-comparison-table-bold">Consequences</th>
                 <td className="bia-comparison-table td">Performance management and process improvement</td>
                 <td className="bia-comparison-table td">Financial penalties, credits, or legal consequences</td>
               </tr>
               <tr className="bia-comparison-table-row-alt">
-                <td className="bia-comparison-table td bia-comparison-table-bold">Flexibility</td>
+                <th scope="row" className="bia-comparison-table td bia-comparison-table-bold">Flexibility</th>
                 <td className="bia-comparison-table td">Can be adjusted based on operational needs</td>
                 <td className="bia-comparison-table td">Contractually binding, harder to change</td>
               </tr>
@@ -357,59 +373,60 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
           <p><b>SLA Percentage Downtime Reference:</b></p>
           <div className="bia-guidance-table-container">
             <table className="bia-downtime-table">
-            <thead>
-              <tr className="bia-downtime-table-header">
-                <th className="bia-downtime-table th">SLA Percentage</th>
-                <th className="bia-downtime-table th">Common Name</th>
-                <th className="bia-downtime-table th">Downtime Per Day</th>
-                <th className="bia-downtime-table th">Downtime Per Week</th>
-                <th className="bia-downtime-table th">Downtime Per Month</th>
-                <th className="bia-downtime-table th">Downtime Per Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="bia-downtime-table td bia-downtime-table-bold">90%</td>
-                <td className="bia-downtime-table td">"one nine"</td>
-                <td className="bia-downtime-table td">2.4 hours</td>
-                <td className="bia-downtime-table td">16.8 hours</td>
-                <td className="bia-downtime-table td">73 hours</td>
-                <td className="bia-downtime-table td">36.5 days</td>
-              </tr>
-              <tr className="bia-downtime-table-row-alt">
-                <td className="bia-downtime-table td bia-downtime-table-bold">95%</td>
-                <td className="bia-downtime-table td">"one nine five"</td>
-                <td className="bia-downtime-table td">1.2 hours</td>
-                <td className="bia-downtime-table td">8.4 hours</td>
-                <td className="bia-downtime-table td">36.5 hours</td>
-                <td className="bia-downtime-table td">18.3 days</td>
-              </tr>
-              <tr>
-                <td className="bia-downtime-table td bia-downtime-table-bold">99%</td>
-                <td className="bia-downtime-table td">"two nines"</td>
-                <td className="bia-downtime-table td">14.4 minutes</td>
-                <td className="bia-downtime-table td">1.68 hours</td>
-                <td className="bia-downtime-table td">7.3 hours</td>
-                <td className="bia-downtime-table td">3.65 days</td>
-              </tr>
-              <tr className="bia-downtime-table-row-alt">
-                <td className="bia-downtime-table td bia-downtime-table-bold">99.9%</td>
-                <td className="bia-downtime-table td">"three nines"</td>
-                <td className="bia-downtime-table td">1.44 minutes</td>
-                <td className="bia-downtime-table td">10.08 minutes</td>
-                <td className="bia-downtime-table td">43.8 minutes</td>
-                <td className="bia-downtime-table td">8.77 hours</td>
-              </tr>
-              <tr>
-                <td className="bia-downtime-table td bia-downtime-table-bold">99.95%</td>
-                <td className="bia-downtime-table td">"three nines five"</td>
-                <td className="bia-downtime-table td">43.2 seconds</td>
-                <td className="bia-downtime-table td">5.04 minutes</td>
-                <td className="bia-downtime-table td">21.92 minutes</td>
-                <td className="bia-downtime-table td">4.38 hours</td>
-              </tr>
-            </tbody>
-          </table>
+              <caption>SLA Downtime Reference</caption>
+              <thead>
+                <tr className="bia-downtime-table-header">
+                  <th scope="col" className="bia-downtime-table th">SLA Percentage</th>
+                  <th scope="col" className="bia-downtime-table th">Common Name</th>
+                  <th scope="col" className="bia-downtime-table th">Downtime Per Day</th>
+                  <th scope="col" className="bia-downtime-table th">Downtime Per Week</th>
+                  <th scope="col" className="bia-downtime-table th">Downtime Per Month</th>
+                  <th scope="col" className="bia-downtime-table th">Downtime Per Year</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">90%</th>
+                  <td className="bia-downtime-table td">"one nine"</td>
+                  <td className="bia-downtime-table td">2.4 hours</td>
+                  <td className="bia-downtime-table td">16.8 hours</td>
+                  <td className="bia-downtime-table td">73 hours</td>
+                  <td className="bia-downtime-table td">36.5 days</td>
+                </tr>
+                <tr className="bia-downtime-table-row-alt">
+                  <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">95%</th>
+                  <td className="bia-downtime-table td">"one nine five"</td>
+                  <td className="bia-downtime-table td">1.2 hours</td>
+                  <td className="bia-downtime-table td">8.4 hours</td>
+                  <td className="bia-downtime-table td">36.5 hours</td>
+                  <td className="bia-downtime-table td">18.3 days</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99%</th>
+                  <td className="bia-downtime-table td">"two nines"</td>
+                  <td className="bia-downtime-table td">14.4 minutes</td>
+                  <td className="bia-downtime-table td">1.68 hours</td>
+                  <td className="bia-downtime-table td">7.3 hours</td>
+                  <td className="bia-downtime-table td">3.65 days</td>
+                </tr>
+                <tr className="bia-downtime-table-row-alt">
+                  <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99.9%</th>
+                  <td className="bia-downtime-table td">"three nines"</td>
+                  <td className="bia-downtime-table td">1.44 minutes</td>
+                  <td className="bia-downtime-table td">10.08 minutes</td>
+                  <td className="bia-downtime-table td">43.8 minutes</td>
+                  <td className="bia-downtime-table td">8.77 hours</td>
+                </tr>
+                <tr>
+                  <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99.95%</th>
+                  <td className="bia-downtime-table td">"three nines five"</td>
+                  <td className="bia-downtime-table td">43.2 seconds</td>
+                  <td className="bia-downtime-table td">5.04 minutes</td>
+                  <td className="bia-downtime-table td">21.92 minutes</td>
+                  <td className="bia-downtime-table td">4.38 hours</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
           <p><i>Note: Availability SLOs (and SLAs) should explicitly define the measurement window; the period during which service availability is tracked, along with the reset cadence for the metric. This is often missing in Availability SLOs and SLAs.</i></p>
@@ -434,67 +451,68 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
 
                 <div className="bia-guidance-table-container">
                   <table className="bia-downtime-table">
-                  <thead>
-                    <tr className="bia-downtime-table-header">
-                      <th className="bia-downtime-table th">SLA Range</th>
-                      <th className="bia-downtime-table th">RTO Range</th>
-                      <th className="bia-downtime-table th">RPO Range</th>
-                      <th className="bia-downtime-table th">Recommended Strategy</th>
-                      <th className="bia-downtime-table th">Technical Implementation</th>
-                      <th className="bia-downtime-table th">Cost/Complexity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="bia-downtime-table td bia-downtime-table-bold">90-95%</td>
-                      <td className="bia-downtime-table td">24-72 hours</td>
-                      <td className="bia-downtime-table td">12-48 hours</td>
-                      <td className="bia-downtime-table td">Basic Backup & Restore</td>
-                      <td className="bia-downtime-table td">Daily/weekly backups, manual restore procedures, single-site deployment</td>
-                      <td className="bia-downtime-table td">Low</td>
-                    </tr>
-                    <tr className="bia-downtime-table-row-alt">
-                      <td className="bia-downtime-table td bia-downtime-table-bold">95-99%</td>
-                      <td className="bia-downtime-table td">4-24 hours</td>
-                      <td className="bia-downtime-table td">4-12 hours</td>
-                      <td className="bia-downtime-table td">Cold Standby</td>
-                      <td className="bia-downtime-table td">Automated backups, documented runbooks, spare hardware available, DR site prepared</td>
-                      <td className="bia-downtime-table td">Low-Medium</td>
-                    </tr>
-                    <tr>
-                      <td className="bia-downtime-table td bia-downtime-table-bold">99-99.5%</td>
-                      <td className="bia-downtime-table td">1-4 hours</td>
-                      <td className="bia-downtime-table td">1-4 hours</td>
-                      <td className="bia-downtime-table td">Warm Standby</td>
-                      <td className="bia-downtime-table td">Hot/warm HA cluster, automated failover, regular data synchronisation, load balancers</td>
-                      <td className="bia-downtime-table td">Medium</td>
-                    </tr>
-                    <tr className="bia-downtime-table-row-alt">
-                      <td className="bia-downtime-table td bia-downtime-table-bold">99.5-99.9%</td>
-                      <td className="bia-downtime-table td">15min-1 hour</td>
-                      <td className="bia-downtime-table td">15min-1 hour</td>
-                      <td className="bia-downtime-table td">Hot Standby</td>
-                      <td className="bia-downtime-table td">Hot/hot HA cluster, real-time replication, automatic failover, redundant network paths</td>
-                      <td className="bia-downtime-table td">Medium-High</td>
-                    </tr>
-                    <tr>
-                      <td className="bia-downtime-table td bia-downtime-table-bold">99.9-99.95%</td>
-                      <td className="bia-downtime-table td">5-15 minutes</td>
-                      <td className="bia-downtime-table td">5-15 minutes</td>
-                      <td className="bia-downtime-table td">Cross-Site Failover</td>
-                      <td className="bia-downtime-table td">Multi-site deployment, synchronous replication, automated orchestration, health monitoring</td>
-                      <td className="bia-downtime-table td">High</td>
-                    </tr>
-                    <tr className="bia-downtime-table-row-alt">
-                      <td className="bia-downtime-table td bia-downtime-table-bold">99.95%+</td>
-                      <td className="bia-downtime-table td">&lt;5 minutes</td>
-                      <td className="bia-downtime-table td">&lt;5 minutes</td>
-                      <td className="bia-downtime-table td">Regional Failover</td>
-                      <td className="bia-downtime-table td">Multi-region deployment, consensus algorithms, chaos engineering, advanced monitoring</td>
-                      <td className="bia-downtime-table td">Very High</td>
-                    </tr>
-                  </tbody>
-                </table>
+                    <caption>Technical Implementation Strategies for SLA/RTO/RPO Thresholds</caption>
+                    <thead>
+                      <tr className="bia-downtime-table-header">
+                        <th scope="col" className="bia-downtime-table th">SLA Range</th>
+                        <th scope="col" className="bia-downtime-table th">RTO Range</th>
+                        <th scope="col" className="bia-downtime-table th">RPO Range</th>
+                        <th scope="col" className="bia-downtime-table th">Recommended Strategy</th>
+                        <th scope="col" className="bia-downtime-table th">Technical Implementation</th>
+                        <th scope="col" className="bia-downtime-table th">Cost/Complexity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">90-95%</th>
+                        <td className="bia-downtime-table td">24-72 hours</td>
+                        <td className="bia-downtime-table td">12-48 hours</td>
+                        <td className="bia-downtime-table td">Basic Backup & Restore</td>
+                        <td className="bia-downtime-table td">Daily/weekly backups, manual restore procedures, single-site deployment</td>
+                        <td className="bia-downtime-table td">Low</td>
+                      </tr>
+                      <tr className="bia-downtime-table-row-alt">
+                        <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">95-99%</th>
+                        <td className="bia-downtime-table td">4-24 hours</td>
+                        <td className="bia-downtime-table td">4-12 hours</td>
+                        <td className="bia-downtime-table td">Cold Standby</td>
+                        <td className="bia-downtime-table td">Automated backups, documented runbooks, spare hardware available, DR site prepared</td>
+                        <td className="bia-downtime-table td">Low-Medium</td>
+                      </tr>
+                      <tr>
+                        <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99-99.5%</th>
+                        <td className="bia-downtime-table td">1-4 hours</td>
+                        <td className="bia-downtime-table td">1-4 hours</td>
+                        <td className="bia-downtime-table td">Warm Standby</td>
+                        <td className="bia-downtime-table td">Hot/warm HA cluster, automated failover, regular data synchronisation, load balancers</td>
+                        <td className="bia-downtime-table td">Medium</td>
+                      </tr>
+                      <tr className="bia-downtime-table-row-alt">
+                        <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99.5-99.9%</th>
+                        <td className="bia-downtime-table td">15min-1 hour</td>
+                        <td className="bia-downtime-table td">15min-1 hour</td>
+                        <td className="bia-downtime-table td">Hot Standby</td>
+                        <td className="bia-downtime-table td">Hot/hot HA cluster, real-time replication, automatic failover, redundant network paths</td>
+                        <td className="bia-downtime-table td">Medium-High</td>
+                      </tr>
+                      <tr>
+                        <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99.9-99.95%</th>
+                        <td className="bia-downtime-table td">5-15 minutes</td>
+                        <td className="bia-downtime-table td">5-15 minutes</td>
+                        <td className="bia-downtime-table td">Cross-Site Failover</td>
+                        <td className="bia-downtime-table td">Multi-site deployment, synchronous replication, automated orchestration, health monitoring</td>
+                        <td className="bia-downtime-table td">High</td>
+                      </tr>
+                      <tr className="bia-downtime-table-row-alt">
+                        <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99.95%+</th>
+                        <td className="bia-downtime-table td">&lt;5 minutes</td>
+                        <td className="bia-downtime-table td">&lt;5 minutes</td>
+                        <td className="bia-downtime-table td">Regional Failover</td>
+                        <td className="bia-downtime-table td">Multi-region deployment, consensus algorithms, chaos engineering, advanced monitoring</td>
+                        <td className="bia-downtime-table td">Very High</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
 
                 <p><i><b>Important:</b> The technical solutions and strategies outlined above are subject to organisational budget constraints and resource availability. 

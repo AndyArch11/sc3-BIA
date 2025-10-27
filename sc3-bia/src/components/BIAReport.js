@@ -53,7 +53,7 @@ const BIAReport = ({ entries }) => {
   // RTO statistics
   const rtoValues = entries.map(entry => parseFloat(entry.recoveryTimeObjective)).filter(val => !isNaN(val));
   const avgRTO = rtoValues.length > 0 ? formatNumber((rtoValues.reduce((sum, val) => sum + val, 0) / rtoValues.length)) : "N/A";
-  const maxRTO = rtoValues.length > 0 ? formatNumber(Math.max(...rtoValues)) : "N/A";
+  const minRTO = rtoValues.length > 0 ? formatNumber(Math.min(...rtoValues)) : "N/A";
 
   // RTA statistics - include all entries, treat empty as 0
   const rtaValues = entries.map(entry => {
@@ -61,18 +61,18 @@ const BIAReport = ({ entries }) => {
     return isNaN(val) ? 0 : val;
   });
   const avgRTA = rtaValues.length > 0 ? formatNumber((rtaValues.reduce((sum, val) => sum + val, 0) / rtaValues.length)) : "N/A";
-  const maxRTA = entries.map(entry => parseFloat(entry.recoveryTimeActual)).filter(val => !isNaN(val));
-  const maxRTAValue = maxRTA.length > 0 ? formatNumber(Math.max(...maxRTA)) : "N/A";
+  const minRTA = entries.map(entry => parseFloat(entry.recoveryTimeActual)).filter(val => !isNaN(val));
+  const minRTAValue = minRTA.length > 0 ? formatNumber(Math.min(...minRTA)) : "N/A";
 
   // MTPD statistics
   const mtpdValues = entries.map(entry => parseFloat(entry.mtpd)).filter(val => !isNaN(val));
   const avgMTPD = mtpdValues.length > 0 ? formatNumber((mtpdValues.reduce((sum, val) => sum + val, 0) / mtpdValues.length)) : "N/A";
-  const maxMTPD = mtpdValues.length > 0 ? formatNumber(Math.max(...mtpdValues)) : "N/A";
+  const minMTPD = mtpdValues.length > 0 ? formatNumber(Math.min(...mtpdValues)) : "N/A";
 
   // RPO statistics
   const rpoValues = entries.map(entry => parseFloat(entry.recoveryPointObjective)).filter(val => !isNaN(val));
   const avgRPO = rpoValues.length > 0 ? formatNumber((rpoValues.reduce((sum, val) => sum + val, 0) / rpoValues.length)) : "N/A";
-  const maxRPO = rpoValues.length > 0 ? formatNumber(Math.max(...rpoValues)) : "N/A";
+  const minRPO = rpoValues.length > 0 ? formatNumber(Math.min(...rpoValues)) : "N/A";
 
   // RPA statistics - include all entries, treat empty as 0
   const rpaValues = entries.map(entry => {
@@ -80,8 +80,13 @@ const BIAReport = ({ entries }) => {
     return isNaN(val) ? 0 : val;
   });
   const avgRPA = rpaValues.length > 0 ? formatNumber((rpaValues.reduce((sum, val) => sum + val, 0) / rpaValues.length)) : "N/A";
-  const maxRPA = entries.map(entry => parseFloat(entry.recoveryPointActual)).filter(val => !isNaN(val));
-  const maxRPAValue = maxRPA.length > 0 ? formatNumber(Math.max(...maxRPA)) : "N/A";
+  const minRPA = entries.map(entry => parseFloat(entry.recoveryPointActual)).filter(val => !isNaN(val));
+  const minRPAValue = minRPA.length > 0 ? formatNumber(Math.min(...minRPA)) : "N/A";
+
+  // SLA statistics
+  const slaValues = entries.map(entry => parseFloat(entry.sla)).filter(val => !isNaN(val));
+  const avgSLA = slaValues.length > 0 ? formatNumber((slaValues.reduce((sum, val) => sum + val, 0) / slaValues.length)) : "N/A";
+  const maxSLA = slaValues.length > 0 ? formatNumber(Math.max(...slaValues)) : "N/A";
 
   // Helper function to format criticality rating
   const formatCriticalityRating = (rating) => {
@@ -571,44 +576,52 @@ const BIAReport = ({ entries }) => {
               <h4 className="bia-report-section-title">Recovery Time Analysis</h4>
               <div className="bia-report-rto-grid">
                 <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Average MTPD:</span>
+                  <span className="bia-report-metric-value">{avgMTPD} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Minimum MTPD:</span>
+                  <span className="bia-report-metric-value">{minMTPD} hours</span>
+                </div>
+                <div className="bia-report-metric">
                   <span className="bia-report-metric-label">Average RTO:</span>
                   <span className="bia-report-metric-value">{avgRTO} hours</span>
                 </div>
                 <div className="bia-report-metric">
-                  <span className="bia-report-metric-label">Maximum RTO:</span>
-                  <span className="bia-report-metric-value">{maxRTO} hours</span>
+                  <span className="bia-report-metric-label">Minimum RTO:</span>
+                  <span className="bia-report-metric-value">{minRTO} hours</span>
                 </div>
                 <div className="bia-report-metric">
                   <span className="bia-report-metric-label">Average RTA:</span>
                   <span className="bia-report-metric-value">{avgRTA} hours</span>
                 </div>
                 <div className="bia-report-metric">
-                  <span className="bia-report-metric-label">Maximum RTA:</span>
-                  <span className="bia-report-metric-value">{maxRTAValue} hours</span>
-                </div>
-                <div className="bia-report-metric">
-                  <span className="bia-report-metric-label">Average MTPD:</span>
-                  <span className="bia-report-metric-value">{avgMTPD} hours</span>
-                </div>
-                <div className="bia-report-metric">
-                  <span className="bia-report-metric-label">Maximum MTPD:</span>
-                  <span className="bia-report-metric-value">{maxMTPD} hours</span>
+                  <span className="bia-report-metric-label">Minimum RTA:</span>
+                  <span className="bia-report-metric-value">{minRTAValue} hours</span>
                 </div>
                 <div className="bia-report-metric">
                   <span className="bia-report-metric-label">Average RPO:</span>
                   <span className="bia-report-metric-value">{avgRPO} hours</span>
                 </div>
                 <div className="bia-report-metric">
-                  <span className="bia-report-metric-label">Maximum RPO:</span>
-                  <span className="bia-report-metric-value">{maxRPO} hours</span>
+                  <span className="bia-report-metric-label">Minimum RPO:</span>
+                  <span className="bia-report-metric-value">{minRPO} hours</span>
                 </div>
                 <div className="bia-report-metric">
                   <span className="bia-report-metric-label">Average RPA:</span>
                   <span className="bia-report-metric-value">{avgRPA} hours</span>
                 </div>
                 <div className="bia-report-metric">
-                  <span className="bia-report-metric-label">Maximum RPA:</span>
-                  <span className="bia-report-metric-value">{maxRPAValue} hours</span>
+                  <span className="bia-report-metric-label">Minimum RPA:</span>
+                  <span className="bia-report-metric-value">{minRPAValue} hours</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Average SLA:</span>
+                  <span className="bia-report-metric-value">{avgSLA}%</span>
+                </div>
+                <div className="bia-report-metric">
+                  <span className="bia-report-metric-label">Maximum SLA:</span>
+                  <span className="bia-report-metric-value">{maxSLA}%</span>
                 </div>
               </div>
             </div>
@@ -733,9 +746,9 @@ const BIAReport = ({ entries }) => {
                     <strong>Critical Process Focus:</strong> {criticalProcesses} critical processes require immediate attention for business continuity planning.
                   </div>
                 )}
-                {avgRTO !== "N/A" && parseFloat(avgRTO) > 24 && (
+                {minRTO !== "N/A" && parseFloat(minRTO) < 4 && (
                   <div className="bia-report-recommendation">
-                    <strong>Recovery Time Concern:</strong> Average RTO of {avgRTO} hours may be too high for critical business operations.
+                    <strong>Aggressive Recovery Target:</strong> Minimum RTO of {minRTO} hours indicates highly time-sensitive critical processes requiring robust recovery capabilities.
                   </div>
                 )}
                 {avgRTA !== "N/A" && avgRTO !== "N/A" && parseFloat(avgRTA) > parseFloat(avgRTO) && (
@@ -743,14 +756,19 @@ const BIAReport = ({ entries }) => {
                     <strong>Performance Gap:</strong> Average RTA ({avgRTA}h) exceeds average RTO ({avgRTO}h), indicating recovery performance issues.
                   </div>
                 )}
-                {avgRPO !== "N/A" && parseFloat(avgRPO) > 24 && (
+                {minRPO !== "N/A" && parseFloat(minRPO) < 1 && (
                   <div className="bia-report-recommendation">
-                    <strong>Data Loss Risk:</strong> Average RPO of {avgRPO} hours may result in significant data loss for critical processes.
+                    <strong>Critical Data Protection:</strong> Minimum RPO of {minRPO} hours indicates critical processes requiring near-continuous data protection or replication.
                   </div>
                 )}
                 {avgRPA !== "N/A" && avgRPO !== "N/A" && parseFloat(avgRPA) > parseFloat(avgRPO) && (
                   <div className="bia-report-recommendation">
                     <strong>Data Recovery Gap:</strong> Average RPA ({avgRPA}h) exceeds average RPO ({avgRPO}h), indicating data recovery performance issues.
+                  </div>
+                )}
+                {maxSLA !== "N/A" && parseFloat(maxSLA) >= 99.9 && (
+                  <div className="bia-report-recommendation">
+                    <strong>High Availability Required:</strong> Maximum SLA of {maxSLA}% demands enterprise-grade availability and fault tolerance measures.
                   </div>
                 )}
                 {businessUnits.length < totalProcesses / 2 && (
