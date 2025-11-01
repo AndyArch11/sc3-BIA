@@ -6,7 +6,7 @@ import BIAReport from "./BIAReport";
 import { exportBIAToExcel } from "./ExcelExport";
 import "./BIA.css";
 
-const VERSION = "v0.2.6"; // Update as needed
+const VERSION = "v0.2.7"; // Update as needed
 
 // Helper to get today's date in YYYY-MM-DD format
 const getToday = () => {
