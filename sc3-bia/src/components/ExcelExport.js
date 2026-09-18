@@ -1,44 +1,86 @@
-import * as XLSX from "xlsx";
+import * as ExcelJS from 'exceljs';
+
+const processCols = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+const impactCols = ["J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA"];
+const criticalCols = ["AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ"];
+const depCols = ["AK", "AL", "AM", "AN", "AO", "AP", "AQ"];
 
 /**
  * Excel Export Utility for BIA (Business Impact Assessment) data
  * Exports entries to a structured Excel file with guidance and data sheets
  */
 
-export const exportBIAToExcel = (entries) => {
+export const exportBIAToExcel = async (entries) => {
   try {
     // Create a new workbook
-    const workbook = XLSX.utils.book_new();
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'SC3 Business Impact Assessment Tool';
+    workbook.lastModifiedBy = 'SC3 Business Impact Assessment Tool';
+    workbook.created = new Date();
+    workbook.modified = new Date();
 
     // Add a worksheet for BIA Guidance
     const guidanceData = createGuidanceWorksheet();
-    const guidanceWorkSheet = XLSX.utils.aoa_to_sheet(guidanceData);
-    XLSX.utils.book_append_sheet(workbook, guidanceWorkSheet, "BIA Guidance");
+    const guidanceWorksheet = workbook.addWorksheet('BIA Guidance');
+    guidanceWorksheet.addRows(guidanceData);
+    guidanceWorksheet.getColumn(1).width = 100;
+    styleGuidanceWorksheet(guidanceWorksheet);
 
     // Add a worksheet for BIA Entries
     const entriesData = createEntriesWorksheet(entries);
-    const entriesWorkSheet = XLSX.utils.aoa_to_sheet(entriesData);
-        
-    // Set column widths for entries worksheet - make them wider for better readability
-    const entriesColWidths = Array(entriesData[0]?.length || 0).fill({ width: 30 });
-    entriesWorkSheet['!cols'] = entriesColWidths;
-    XLSX.utils.book_append_sheet(workbook, entriesWorkSheet, "BIA Entries");
+    const entriesWorksheet = workbook.addWorksheet('BIA Entries');
+    entriesWorksheet.addRows(entriesData);
+    autoSizeWorksheetColumns(entriesWorksheet, entriesData);
+    styleEntriesWorksheet(entriesWorksheet, entriesData);
 
     // Generate timestamp for filename
     const now = new Date();
     const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, -5); // Format: YYYY-MM-DDTHH-MM-SS
     const filename = `SC3_BIA_Export_${timestamp}.xlsx`;
 
-    // Export the workbook
-    XLSX.writeFile(workbook, filename);
-        
-    console.log(`Excel file "${filename}" has been generated and downloaded successfully.`);
-
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   } catch (error) {
     console.error('Error creating Excel export:', error);
-        alert('An error occurred while creating the Excel file. Please try again.');
+    alert('An error occurred while creating the Excel file. Please try again.');
   }
-}
+};
+
+const styleGuidanceWorksheet = (worksheet) => {
+  if (worksheet.getRow(1).cellCount > 0) {
+    const headerCell = worksheet.getRow(1).getCell(1);
+    headerCell.font = { bold: true, size: 16, color: { rgb: 'FFFFFF' } };
+    headerCell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { rgb: '2F5233' }
+    };
+    headerCell.alignment = { horizontal: 'center' };
+  }
+};
+
+const autoSizeWorksheetColumns = (worksheet, worksheetData) => {
+  if (worksheetData.length > 0 && worksheetData[0]) {
+    const maxWidth = worksheetData[0].length;
+    for (let i = 1; i <= maxWidth; i++) {
+      let maxLength = 10;
+      worksheetData.forEach(row => {
+        if (row[i - 1] && row[i - 1].toString().length > maxLength) {
+          maxLength = row[i - 1].toString().length;
+        }
+      });
+      worksheet.getColumn(i).width = Math.min(Math.max(maxLength + 2, 10), 50);
+    }
+  }
+};
 
 const createGuidanceWorksheet = () => {
   return [
@@ -76,8 +118,6 @@ const createGuidanceWorksheet = () => {
     ["2: Low - may cause minor disruptions"],
     ["3: Moderate - likely to have a noticeable impact"],
     ["4: High - highly probable to have a significant impact"],
-    ["5: Critical - will have a major impact on the organisation"],
-    [""],
     [
       "It is important to note that the BIA is an iterative process and should be revisited regularly to ensure it remains aligned with the business objectives and the changing environment. These requirements feed into the overall risk assessment process and the Business Continuity Planning (BCP) process."
     ],
@@ -184,69 +224,38 @@ const createEntriesWorksheet = (entries) => {
     "Process": entry.processDependencies,
   }));
 
-  const wsEntries = XLSX.utils.json_to_sheet(data);
+  const headerRow = Object.keys(data[0] || {});
+  const dataRows = data.map(row => Object.values(row));
 
-  // Define column keys for styling groups
-  const processCols = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]; 
-  const impactCols = ["J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y","Z", "AA"];
-  const criticalCols = ["AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ"]; 
-  const depCols = ["AK", "AL", "AM", "AN", "AO", "AP", "AQ"];
+  return [sectionHeaders, headerRow, ...dataRows];
+};
 
-  // Style definitions - Excel colour styling not working with xlsx, requires xlsx-style or SheetJS Pro
-  const headerStyle = {
-    font: { bold: true, color: { rgb: "003366" } },
-    fill: { fgColor: { rgb: "e5eef5" } }
-  };
-  const processStyle = {
-    fill: { fgColor: { rgb: "f5faff" } }
-  };
-  const impactStyle = {
-    fill: { fgColor: { rgb: "f8fff5" } }
-  };
-  // Updated: Use purple for Process Criticality columns to match UI
-  const criticalStyle = {
-    fill: { fgColor: { rgb: "ede7f6" } }, // Light purple background
-    font: { color: { rgb: "4a148c" }, bold: true } // Dark purple text, bold
-  };
-  const depStyle = {
-    fill: { fgColor: { rgb: "fffbea" } }
+const styleEntriesWorksheet = (worksheet, worksheetData) => {
+  const columnGroups = [
+    { columns: processCols, fill: 'F5FAFF' },
+    { columns: impactCols, fill: 'F8FFF5' },
+    { columns: criticalCols, fill: 'EDE7F6', font: '7B1FA2' },
+    { columns: depCols, fill: 'FFFBEA' }
+  ];
+
+  const applyCellStyle = (cell, fill, font) => {
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: `FF${fill}` } };
+    cell.alignment = { vertical: 'top', wrapText: true };
+    if (font) cell.font = { color: { argb: `FF${font}` }, bold: true };
   };
 
-  // Apply styles to header row
-  for (let col = 0; col < processCols.length + impactCols.length + criticalCols.length + depCols.length; col++) {
-    const colLetter = XLSX.utils.encode_col(col);
-    const cell = wsEntries[`${colLetter}1`];
-    if (cell) {
-      cell.s = { ...headerStyle };
-      if (processCols.includes(colLetter)) cell.s.fill = { fgColor: { rgb: "f5faff" } };
-      if (impactCols.includes(colLetter)) cell.s.fill = { fgColor: { rgb: "f8fff5" } };
-      if (criticalCols.includes(colLetter)) {
-        cell.s.fill = { fgColor: { rgb: "ede7f6" } };
-        cell.s.font = { color: { rgb: "7b1fa2" }, bold: true }; // Deep purple header
+  columnGroups.forEach(({ columns, fill, font }) => {
+    columns.forEach((column) => {
+      const columnNumber = column.split('').reduce((value, character) => value * 26 + character.charCodeAt(0) - 64, 0);
+      for (let rowNumber = 1; rowNumber <= worksheetData.length; rowNumber++) {
+        applyCellStyle(worksheet.getCell(rowNumber, columnNumber), fill, rowNumber <= 2 ? (font || '003366') : font);
       }
-      if (depCols.includes(colLetter)) cell.s.fill = { fgColor: { rgb: "fffbea" } };
-    }
-  }
+    });
+  });
 
-  // Apply styles to data rows
-  for (let row = 2; row <= entries.length + 1; row++) {
-    processCols.forEach((col) => {
-      const cell = wsEntries[`${col}${row}`];
-      if (cell) cell.s = { ...processStyle };
-    });
-    impactCols.forEach((col) => {
-      const cell = wsEntries[`${col}${row}`];
-      if (cell) cell.s = { ...impactStyle };
-    });
-    criticalCols.forEach((col) => {
-      const cell = wsEntries[`${col}${row}`];
-      if (cell) cell.s = { ...criticalStyle };
-    });
-    depCols.forEach((col) => {
-      const cell = wsEntries[`${col}${row}`];
-      if (cell) cell.s = { ...depStyle };
-    });
-  }
-
-  return [sectionHeaders, ...XLSX.utils.sheet_to_json(wsEntries, { header: 1 })];
+  worksheet.getRow(1).eachCell((cell) => {
+    cell.font = { bold: true, color: { rgb: 'FFFFFF' } };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { rgb: '2F5233' } };
+    cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+  });
 };

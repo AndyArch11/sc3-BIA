@@ -257,7 +257,7 @@ const BIAReport = ({ entries }) => {
       <div className="bia-donut-chart" style={{ position: 'relative' }}>
         <div className="bia-donut-content">
           <svg width={size} height={size} className="bia-donut-svg">
-            {segments.map((segment, index) => {
+            {segments.map((segment) => {
               const tooltipContent = `${formatCriticalityRating(segment.rating)}: ${segment.count} processes (${segment.percentage}%)`;
               return (
                 <path
@@ -467,7 +467,7 @@ const BIAReport = ({ entries }) => {
       <div className="bia-donut-chart" style={{ position: 'relative' }}>
         <div className="bia-donut-content">
           <svg width={size} height={size} className="bia-donut-svg">
-            {segments.map((segment, index) => {
+            {segments.map((segment) => {
               const tooltipContent = `${formatImpactScore(segment.score)}: ${segment.count} processes (${segment.percentage}%)`;
               return (
                 <path
