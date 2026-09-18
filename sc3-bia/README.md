@@ -11,37 +11,38 @@ This project provides a Business Impact Assessment (BIA) form in a simple Single
 
 ```
 sc3-bia
-├── build
-│   ├── static        
-│   │   ├── css  
-│   │   │    ├── main.xxxx.css         # CSS styles for the application
-│   │   │    └── main.xxxx.css.map     # CSS minifier map file
-│   │   └── js 
-│   │        ├── main.xxxx.js          # React compiled Javascript file
-│   │        └── main.xxxx.LICENSE.txt # React MIT licensing
-│   │        └── main.xxxx.js.map      # JavaScript minifier map file
-│   ├── asset-manifest.json            # Manifest of files in build
-│   └── index.html.json                # Main HTML file
-│   └── robots.txt                     # web crawler directives
+├── dist
+│   ├── assets
+│   │   ├── index-xxxx.css           # Compiled CSS styles
+│   │   ├── index-xxxx.js            # Main application bundle
+│   │   ├── vendor-xxxx.js           # Core vendor libraries bundle
+│   │   ├── ExcelExport-xxxx.js      # Lazy-loaded Excel export bundle
+│   │   └── rolldown-runtime-xxxx.js # Module runtime helper
+│   └── index.html                   # Compiled root HTML file
 │ 
 ├── node-modules           # supporting JavaScript libraries
 │ 
 ├── public
-│   ├── index.html         # Main HTML file
-│   └── robots.txt         # web crawler directives
+│   └── robots.txt         # Web crawler directives
 ├── src
-│   ├── index.js           # Entry point for the React application, imports App.js
+│   ├── index.jsx          # Entry point for the React application, mounts App
 │   ├── index.css          # CSS styles for the React application
-│   ├── App.js             # Main App component, imports BIAForm
+│   ├── App.jsx             # Main App component, imports BIAForm
 │   ├── App.css            # CSS styles for the application
 │   └── components
 │       └── BIA.css         # Stylesheets
-│       └── BIAForm.js      # BIA SPA form
-│       └── BIAInputForm.js # Captures BIA details
-│       └── BIAIntro.js     # Guidance on performing a BIA
-│       └── BIAReport.js    # BIA report
-│       └── BIATable.js     # BIA table
-│       └── ExcelExport.js  # Excel export of BIAs
+│       └── BIAForm.jsx     # BIA SPA form
+│       └── BIAInputForm.jsx # Captures BIA details
+│       └── BIAIntro.jsx     # Guidance on performing a BIA
+│       └── BIAReport.jsx    # BIA report
+│       └── BIATable.jsx     # BIA table
+│       └── ExcelExport.js   # ExcelJS workbook generator, lazy-loaded on export
+│   ├── App.test.jsx         # App-level rendering tests
+│   └── setupTests.js        # Vitest and Testing Library test configuration
+├── index.html               # Vite root entry HTML template
+├── vite.config.mjs          # Vite and Vitest configuration
+├── eslint.config.mjs        # ESLint flat configuration
+├── .stylelintrc.json        # Stylelint configuration
 ├── package.json           # npm configuration file
 └── README.md              # Project documentation
 ```
@@ -62,7 +63,7 @@ change to the project directory
 In the project folder
 
 ### `npm install`
-### `npm install xlsx --save`
+### `npm install exceljs`
 ### `npm install react-router-dom`
 
 ## Available Scripts
@@ -71,7 +72,7 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the Vite development server.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
@@ -79,23 +80,82 @@ You may also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Launches the Vitest test runner.
+
+### `npm run test:watch`
+
+Runs Vitest in interactive watch mode for active development.
+
+### `npm run lint`
+
+Performs a lint parse across the project.
+
+### `npm run lint:css`
+
+Performs a lint parse across the project's CSS files.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app for production to the `dist` folder using Vite.\
+It correctly bundles React in production mode and optimises the build for the best performance.
+The build process bundles the deployment package into separate chunks for faster downloads. The Excel bundle is lazy loaded at the time of requesting an Excel extract.
 
-The build is minified and the filenames include the hashes.\
+When making updates to the code, ensure that you update the `Version` number in `BIAForm.jsx`.
+
+The build is minified and the filenames include hashes for cache busting.\
 Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+If launching as an embedded SPA, configure the following entry points in the host HTML page:
 
-### `npm run eject`
+```html
+<!-- 1. Include CSS -->
+<link rel="stylesheet" href="./assets/index-dqPTFezv.css">
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+<!-- 2. Target container -->
+<div id="root"></div>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<!-- 3. Entrypoint script (loads all other modules automatically) -->
+<script type="module" src="./assets/index-7ldPnS8V.js"></script>
+```
+Or embedded as an `<iframe>` for CSS/JS isolation
+```html
+<iframe
+	src="/path-to-app/index.html"
+	width="100%"
+	height="900px"
+	style="border: none;">
+</iframe>
+```
+N.B. Current Vite build generates a new hash with each build
+
+```pwsh
+npm run build
+
+> sc3-bia@0.1.0 build
+> vite build
+
+vite v8.3.0 building client environment for production...
+✓ 33 modules transformed.
+computing gzip size...
+dist/index.html                             0.80 kB │ gzip:   0.41 kB
+dist/assets/index-dqPTFezv.css             34.43 kB │ gzip:   6.14 kB
+dist/assets/rolldown-runtime-W7wSyTde.js    0.97 kB │ gzip:   0.56 kB
+dist/assets/index-7ldPnS8V.js             102.52 kB │ gzip:  19.18 kB
+dist/assets/vendor-DSNEASXB.js            218.83 kB │ gzip:  68.25 kB
+dist/assets/ExcelExport-Bw_TE2Oq.js       937.79 kB │ gzip: 259.82 kB
+```
+To not have the file names being regenerated with each build, update `vite.config.mjs` with:
+```js
+build: {
+	chunkSizeWarningLimit: 1200,
+	rollupOptions: {
+		output: {
+			entryFileNames: 'assets/sc3-app.js',
+			chunkFileNames: 'assets/[name].js',
+			assetFileNames: 'assets/[name].[ext]',
+		},
+	},
+}
+```
 
 

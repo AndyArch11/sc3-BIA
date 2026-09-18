@@ -318,7 +318,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
             Reset to Initial Defaults
           </button>
 
-          <p><b>Note:</b> These Non-Functional Requirements (NFRs) are naive blunt instruments that do not usually account for the scenarios that they are meant to address or those that they don't address, 
+          <p><b>Note:</b> These Non-Functional Requirements (NFRs) are naive blunt instruments that do not usually account for the scenarios that they are meant to address or those that they don&apos;t address, 
           whether they are applicable equally or not for nodal scoped events, locale scoped events, or regional scoped events, or for outages vs data corruption, etc.</p>
 
           <p><b>MTPD (Maximum Tolerable Period of Disruption):</b> The maximum time that an organisation can tolerate a disruption to a business process before the impact becomes unacceptable. 
@@ -387,7 +387,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
               <tbody>
                 <tr>
                   <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">90%</th>
-                  <td className="bia-downtime-table td">"one nine"</td>
+                  <td className="bia-downtime-table td">&quot;one nine&quot;</td>
                   <td className="bia-downtime-table td">2.4 hours</td>
                   <td className="bia-downtime-table td">16.8 hours</td>
                   <td className="bia-downtime-table td">73 hours</td>
@@ -395,7 +395,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                 </tr>
                 <tr className="bia-downtime-table-row-alt">
                   <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">95%</th>
-                  <td className="bia-downtime-table td">"one nine five"</td>
+                  <td className="bia-downtime-table td">&quot;one nine five&quot;</td>
                   <td className="bia-downtime-table td">1.2 hours</td>
                   <td className="bia-downtime-table td">8.4 hours</td>
                   <td className="bia-downtime-table td">36.5 hours</td>
@@ -403,7 +403,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                 </tr>
                 <tr>
                   <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99%</th>
-                  <td className="bia-downtime-table td">"two nines"</td>
+                  <td className="bia-downtime-table td">&quot;two nines&quot;</td>
                   <td className="bia-downtime-table td">14.4 minutes</td>
                   <td className="bia-downtime-table td">1.68 hours</td>
                   <td className="bia-downtime-table td">7.3 hours</td>
@@ -411,7 +411,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                 </tr>
                 <tr className="bia-downtime-table-row-alt">
                   <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99.9%</th>
-                  <td className="bia-downtime-table td">"three nines"</td>
+                  <td className="bia-downtime-table td">&quot;three nines&quot;</td>
                   <td className="bia-downtime-table td">1.44 minutes</td>
                   <td className="bia-downtime-table td">10.08 minutes</td>
                   <td className="bia-downtime-table td">43.8 minutes</td>
@@ -419,7 +419,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                 </tr>
                 <tr>
                   <th scope="row" className="bia-downtime-table td bia-downtime-table-bold">99.95%</th>
-                  <td className="bia-downtime-table td">"three nines five"</td>
+                  <td className="bia-downtime-table td">&quot;three nines five&quot;</td>
                   <td className="bia-downtime-table td">43.2 seconds</td>
                   <td className="bia-downtime-table td">5.04 minutes</td>
                   <td className="bia-downtime-table td">21.92 minutes</td>
@@ -607,7 +607,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
                   <li><b>Shared Dependencies:</b> Common infrastructure (power, network, storage) can negate redundancy benefits</li>
                   <li><b>Failover Time:</b> Detection and switchover time affects actual experienced availability</li>
                   <li><b>Maintenance Windows:</b> Planned maintenance can be performed on redundant systems without service impact</li>
-                  <li><b>Cost vs Benefit:</b> Diminishing returns as availability approaches 100% - each additional "nine" typically doubles costs</li>
+                  <li><b>Cost vs Benefit:</b> Diminishing returns as availability approaches 100% - each additional &quot;nine&quot; typically doubles costs</li>
                 </ul>
 
                 <p><i><b>Note:</b> These calculations assume independent failures and perfect failover mechanisms. Real-world scenarios may include correlated failures, partial degradation, and cascading failures that can significantly impact actual availability.</i></p>
@@ -680,7 +680,7 @@ const BIAIntro = ({ criticalityDefaults, setCriticalityDefaults, initialCritical
 
           <p><b>Disclaimer:</b> The information provided here is for general informational purposes only and will require adaptation for specific businesses and maturity capabilities and is not intended as legal advice. 
             Please consult with a qualified legal professional for specific legal advice tailored to your situation.</p>
-          <p><hr /></p>
+          <hr />
         </div>
       </details>
       <BackToTopButton />

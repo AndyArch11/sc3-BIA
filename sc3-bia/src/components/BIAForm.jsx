@@ -3,7 +3,6 @@ import BIAInputForm from "./BIAInputForm";
 import BIAIntro from "./BIAIntro";
 import BIATable from "./BIATable";
 import BIAReport from "./BIAReport";
-import { exportBIAToExcel } from "./ExcelExport";
 import "./BIA.css";
 
 const VERSION = "v0.2.7"; // Update as needed
@@ -245,8 +244,14 @@ const BIAForm = () => {
     setFieldsOpen(true); // Expand form fields when returning to form
   };
 
-  const handleExport = () => {
-    exportBIAToExcel(entries);
+  const handleExport = async () => {
+    try {
+      const { exportBIAToExcel } = await import('./ExcelExport');
+      exportBIAToExcel(entries);
+    } catch (error) {
+      console.error('Failed to load export module:', error);
+      alert('Failed to load export module. Please try again.');
+    }
   };
 
   const handleRowClick = (idx) => {
@@ -308,13 +313,9 @@ const BIAForm = () => {
   
   // Drag and drop state for reordering risks
   const [draggedEntryIndex, setDraggedEntryIndex] = useState(null);
-  const [dragOverIndex, setDragOverIndex] = useState(null);
   const [dropTargetIndex, setDropTargetIndex] = useState(null);
 
   const [selectedEntryIndex, setSelectedEntryIndex] = useState(null);
-
-  const updatedEntries = [...entries];
-  const draggedEntry= updatedEntries[draggedEntryIndex];
 
   // Drag and drop handlers for reordering processes
   const handleMoveProcess = (fromIndex, toIndex) => {
@@ -341,67 +342,6 @@ const BIAForm = () => {
     }
   };
     
-  const handleDragStart = (e, index) => {
-    setDraggedEntryIndex(index);
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/html", e.target.outerHTML);
-    e.target.style.opacity = "0.5";
-  };
-
-  const handleDragEnd = (e) => {
-    e.target.style.opacity = "1";
-    setDraggedEntryIndex(null);
-    setDragOverIndex(null);
-  };
-
-  const handleDragOver = (e, index) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-    setDragOverIndex(index);
-  };
-
-  const handleDragLeave = () => {
-    setDragOverIndex(null);
-  };
-
-  const handleDrop = (e, dropIndex) => {
-    e.preventDefault();
-
-    if (draggedEntryIndex === null || draggedEntryIndex === dropIndex) {
-      return;
-    }
-
-    // Remove the dragged item
-    updatedEntries.splice(draggedEntryIndex, 1);
-
-    // Insert it at the new position
-    const insertIndex =
-      draggedEntryIndex < dropIndex ? dropIndex - 1 : dropIndex;
-    updatedEntries.splice(insertIndex, 0, draggedEntry);
-
-    setEntries(updatedEntries);
-
-    // Update selected entry index if needed
-    if (selectedEntryIndex === draggedEntryIndex) {
-      setSelectedEntryIndex(insertIndex);
-    } else if (selectedEntryIndex !== null) {
-      if (
-        draggedEntryIndex < selectedEntryIndex &&
-        insertIndex >= selectedEntryIndex
-      ) {
-        setSelectedEntryIndex(selectedEntryIndex - 1);
-      } else if (
-        draggedEntryIndex > selectedEntryIndex &&
-        insertIndex <= selectedEntryIndex
-      ) {
-        setSelectedEntryIndex(selectedEntryIndex + 1);
-      }
-    }
-
-    setDraggedEntryIndex(null);
-    setDragOverIndex(null);
-  };
-
   return (
     <div className="bia-main-container">
       <h2 className="bia-main-heading">
