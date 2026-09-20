@@ -27,18 +27,19 @@ sc3-bia
 ├── src
 │   ├── index.jsx          # Entry point for the React application, mounts App
 │   ├── index.css          # CSS styles for the React application
-│   ├── App.jsx             # Main App component, imports BIAForm
+│   ├── App.jsx            # Main App component, imports BIAForm
 │   ├── App.css            # CSS styles for the application
+|   ├── App.test.jsx       # App-level rendering tests
+|   ├── setupTests.js      # Vitest and Testing Library test configuration
 │   └── components
-│       └── BIA.css         # Stylesheets
-│       └── BIAForm.jsx     # BIA SPA form
+│       └── BIA.css          # Stylesheets
+│       └── BIAForm.jsx      # BIA SPA form
 │       └── BIAInputForm.jsx # Captures BIA details
 │       └── BIAIntro.jsx     # Guidance on performing a BIA
 │       └── BIAReport.jsx    # BIA report
 │       └── BIATable.jsx     # BIA table
 │       └── ExcelExport.js   # ExcelJS workbook generator, lazy-loaded on export
-│   ├── App.test.jsx         # App-level rendering tests
-│   └── setupTests.js        # Vitest and Testing Library test configuration
+|
 ├── index.html               # Vite root entry HTML template
 ├── vite.config.mjs          # Vite and Vitest configuration
 ├── eslint.config.mjs        # ESLint flat configuration
@@ -109,13 +110,13 @@ If launching as an embedded SPA, configure the following entry points in the hos
 
 ```html
 <!-- 1. Include CSS -->
-<link rel="stylesheet" href="./assets/index-dqPTFezv.css">
+<link rel="stylesheet" href="./assets/index-xxxx.css">
 
 <!-- 2. Target container -->
 <div id="root"></div>
 
 <!-- 3. Entrypoint script (loads all other modules automatically) -->
-<script type="module" src="./assets/index-7ldPnS8V.js"></script>
+<script type="module" src="./assets/index-xxxx.js"></script>
 ```
 Or embedded as an `<iframe>` for CSS/JS isolation
 ```html

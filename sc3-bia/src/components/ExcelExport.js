@@ -118,6 +118,7 @@ const createGuidanceWorksheet = () => {
     ["2: Low - may cause minor disruptions"],
     ["3: Moderate - likely to have a noticeable impact"],
     ["4: High - highly probable to have a significant impact"],
+    ["5: Critical - will have a major impact on the organisation"],
     [
       "It is important to note that the BIA is an iterative process and should be revisited regularly to ensure it remains aligned with the business objectives and the changing environment. These requirements feed into the overall risk assessment process and the Business Continuity Planning (BCP) process."
     ],
@@ -234,7 +235,7 @@ const styleEntriesWorksheet = (worksheet, worksheetData) => {
   const columnGroups = [
     { columns: processCols, fill: 'F5FAFF' },
     { columns: impactCols, fill: 'F8FFF5' },
-    { columns: criticalCols, fill: 'EDE7F6', font: '7B1FA2' },
+    { columns: criticalCols, fill: 'EDE7F6', font: '4A148C' },
     { columns: depCols, fill: 'FFFBEA' }
   ];
 
