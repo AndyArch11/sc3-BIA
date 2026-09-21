@@ -5,7 +5,7 @@ import BIATable from "./BIATable";
 import BIAReport from "./BIAReport";
 import "./BIA.css";
 
-const VERSION = "v0.2.8"; // Update as needed
+const VERSION = "v0.3.0"; // Update as needed
 
 // Helper to get today's date in YYYY-MM-DD format
 const getToday = () => {
